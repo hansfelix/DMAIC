@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///C:/Users/hfelix/Desktop/DMAIC/public/index.html -->
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style_dashboard.css">
+
+
+  <title>DMAIC</title>
+</head>
+
+<body>
+  <div class="principal2">
+    <!-- NAV BAR -->
+    <nav class="azul">
+      <div class="nav-wrapper container">
+        <a href="#" class="brand-logo">DMAIC</a>
+        <ul id="nav-mobile" class="right">
+          <li>
+            <a href="dashboard.html">Dash.</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <!-- Parte superior -->
+    <div class="total">
+      <div class="container">
+        <br>
+        <h4>Toma de datos</h4>
+        <div class="row">
+          <div class="col s12 m8">
+            <p>Siéntase libre de añadir una actividad o un obrero en cualquier momento, para comenzar dé clic en el boton iniciar.</p>
+          </div>
+          <div class="col s12 m4">
+            <button id="btn_iniciar" class="btn right btn-large">
+              <i class="material-icons left">play_arrow</i>Iniciar</button>
+          </div>
+        </div>
+
+
+
+
+        <!-- <div style="overflow-y: scroll"> -->
+          <!-- Tabla -->
+          <div id="tabla">
+
+
+            <!-- MASTER GRID -->
+            <div class="" id="grid-master" style="display: none;">
+              <div class="grid-hora"></div>
+            </div>
+
+            <!-- MASTER GRID-ITEM -->
+            <div class="grid-item hide" id="grid-item"></div>
+
+            <div class="grid-cabecera" id="grid-cabecera">
+              <div class="grid-item grid-hora">HORA</div>
+            </div>
+          </div>
+
+        <!-- </div> -->
+
+
+
+        <button class="play btn cyan darken-3 waves-effect waves-light" style="display: none">
+          <i class="material-icons left">play_arrow</i>Play</button>
+        <button class="pause btn cyan darken-3 waves-effect waves-light">
+          <i class="material-icons left">pause</i>Pausa</button>
+
+        <button id="btn_column" href="#mdl_añadirColumna" class="waves-effect waves-light btn modal-trigger">
+          <i class="material-icons left">plus_one</i>Obrero</button>
+
+
+
+        <button id="btn_row" class="btn hide">
+          <i class="material-icons left">plus_one</i>Fila</button>
+
+        <button id="btn_guardar" class="btn">
+          <i class="material-icons left">save</i>Guardar</button>
+
+        <p id="temporizador">
+
+        </p>
+      </div>
+
+
+    </div>
+
+
+    <div class="footer azul">
+      <!-- master actividad -->
+      <div class="element-drag item-footer tooltipped hide" tittle="PA - Pausa Activa" data-position="top" data-delay="50" data-tipo="TP"
+        id="master_actividad">
+        PA
+      </div>
+      <div class="grid-actividades" id="grid-actividades">
+
+        <div class="item-footer tooltipped new-item modal-trigger" data-tooltip="Añade una nueva actividad" data-position="top" data-delay="50"
+          href="#mdl_añadirActividad">
+          NEW
+        </div>
+
+
+        <!-- 
+        <div class=" element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="D - Descanso" data-position="top" data-delay="50"
+            data-tooltip="Descanso" data-tipo="TP">
+            D
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class=" element-drag item-footer valign-wrapper tooltipped" tittle="I - Indicaciones" data-position="top" data-delay="50"
+            data-tooltip="Indicaciones" data-tipo="TP">
+            I
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="TM - Traslado de Materiales, herramientas" data-position="top"
+            data-delay="50" data-tooltip="Traslado de Materiales, herramientas" data-tipo="TP">
+            TM
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="A - Armado de Caja de Gavión" data-position="top"
+            data-delay="50" data-tooltip="Armado de Caja de Gavión" data-tipo="TC">
+            A
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="T - Colocado de Tirantes" data-position="top" data-delay="50"
+            data-tooltip="Colocado de Tirantes" data-tipo="TC">
+            T
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="E - Esperas" data-position="top" data-delay="50"
+            data-tooltip="Esperas" data-tipo="TC">
+            E
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="M - Mediciones" data-position="top" data-delay="50"
+            data-tooltip="Mediciones" data-tipo="TC">
+            M
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="TP - Traslado de Piedras " data-position="top" data-delay="50"
+            data-tooltip="Traslado de Piedras" data-tipo="TNC">
+            TP
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="EN - Encofrado " data-position="top" data-delay="50"
+            data-tooltip="Encofrado" data-tipo="TNC">
+            EN
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="CS - Costura de Aristas" data-position="top" data-delay="50"
+            data-tooltip="Costura de Aristas" data-tipo="TNC">
+            CS
+          </div>
+        </div>
+        <div class="element-drag ui-draggable ui-draggable-handle">
+          <div class="element-drag item-footer valign-wrapper tooltipped" tittle="G - Llenado de Gavión" data-position="top" data-delay="50"
+            data-tooltip="Llenado de Gavión" data-tipo="TNC">
+            G
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+
+  </div>
+  </div>
+
+
+
+
+  <!-- Modal Trigger -->
+  <!-- <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a> -->
+
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4 id="mdl_titulo_actividad">Eliminar Actividad</h4>
+      <p>¿Desea eliminar esta actividad?</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+    </div>
+  </div>
+
+
+
+  <!-- Modal Structure -->
+  <div id="mdl_añadirColumna" class="modal">
+    <div class="modal-content">
+      <h4>Nuevo Obrero</h4>
+      <p>Llene los siguientes campos, luego de click en el botón añadir.</p>
+      <div class="input-field">
+        <input type="text" placeholder="Ej. Peón 1" id="txt_nuevoObrero_nombre">
+        <label for="txt_nuevoObrero_nombre">Nombre del nuevo obrero</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">CANCELAR</a>
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" id="btn_nuevoObrero_añadir">AÑADIR</a>
+    </div>
+  </div>
+
+
+  <!-- Modal Nueva ACtividad -->
+  <div id="mdl_añadirActividad" class="modal">
+    <div class="modal-content">
+      <h4>Nueva Actividad</h4>
+      <p>Llene los siguientes campos, luego de click en el botón añadir.</p>
+      <div class="input-field ">
+        <input id="txt_nombreActividad" type="text" class="inputActividad">
+        <label for="txt_nombreActividad">Nombre de la actividad</label>
+      </div>
+      <div class="input-field ">
+        <input id="txt_abrevActividad" type="text" class="inputActividad">
+        <label for="txt_abrevActividad">Abreviatura de la actividad</label>
+      </div>
+      <div class="input-field">
+        <select id="slc_tipoActividad">
+          <option value="" disabled selected>Escoje el tipo de la actividad</option>
+          <option value="TP">ACTIVIDADES PRODUCTIVAS</option>
+          <option value="TC">ACTIVIDADES CONTRIBUTORIAS</option>
+          <option value="TNC">ACTIVIDADES NO CONTRIBUTORIAS</option>
+        </select>
+        <label>Tipo de actividad</label>
+      </div>
+      <br>
+      <br>
+      <br>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">CANCELAR</a>
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" id="btn_anadirActividad">AÑADIR</a>
+    </div>
+  </div>
+
+
+  <!-- Jquery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+
+  <!-- Jquery UI -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+    crossorigin="anonymous"></script>
+
+  <!-- Jquery Punch -->
+  <script type="text/javascript" src="jquery.ui.touch-punch.min.js"></script>
+
+  <!-- Hammer-->
+  <script type="text/javascript" src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+  <script type="text/javascript" src="jquery.hammer.js"></script>
+
+  <!-- moment -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+
+  <!-- Materialize Css -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+  <!-- Firebase  -->
+  <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+
+
+  <!-- custom -->
+  <script src="index.js"></script>
+
+</body>
+
+</html>
