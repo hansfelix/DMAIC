@@ -26,249 +26,364 @@
               </p>
             </v-flex>
           
-           <!-- Card Datos Generales -->
-            <v-flex xs6 justify-start>
-               <v-card>
-                 <v-toolbar dense color="white" class="elevation-0">
-                    <v-toolbar-title>Datos Generales </v-toolbar-title>
-                    <v-spacer></v-spacer>
-                      <v-btn icon @click="dialogs.dialog_datosGenerales.show = true" >
-                        <v-icon>edit</v-icon>
-                      </v-btn>           
-                  </v-toolbar>
-
-                  <v-card-title primary-title>
-                    <v-layout row wrap>    
-                      
-                      <v-flex xs6>
-                        <p>Duración de la medición: {{medicionActual.dataMedicionActual.duracion}} seg.</p>
-                      </v-flex>    
-
-                       <!-- Dialog Datos Generales -->
-                      <template>
-                        <v-layout row justify-center>
-                          <v-dialog v-model="dialogs.dialog_datosGenerales.show"  max-width="600px">                           
-                            <v-card>
-                              <v-card-title>
-                                <span class="headline">Editar Datos</span>
-                              </v-card-title>
-                              <v-card-text>
-                                <v-container grid-list-md>
-                                  <v-layout wrap>
-                                      <v-flex xs12>
-                                          <v-text-field
-                                          name="input-3"
-                                          label="Ingrese la nueva duración del intervalo (en segundos)"
-                                          v-model="duracion"
-                                          ></v-text-field>                                                                             
-                                      </v-flex>
-                                      <v-flex xs12>
-                                        <small>*Campos obligatorios</small>
-                                      </v-flex>
-
-                                  </v-layout>
-                                </v-container>
-                              </v-card-text>
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="secondary" flat @click.native="dialogs.dialog_datosGenerales.show = false">Cancelar</v-btn>
-                                <v-btn color="secondary" flat @click="actualizarDuracion()">Añadir obrero</v-btn> 
-                              </v-card-actions>
-                            </v-card>                            
-                          </v-dialog>
-                        </v-layout>
-                      </template> 
-
-                    </v-layout>
-                  </v-card-title>
-                </v-card>
-              </v-flex>
-
-              <br>
- 
-              <!-- Card Obreros --> 
-              <v-flex xs6>
-                <v-card>
-                  <v-toolbar dense color="white" class="elevation-0">
-                    <v-toolbar-title>Obreros </v-toolbar-title>
-                    <v-spacer></v-spacer>                    
-                    <v-btn icon @click="dialogs.dialog_obreros.show = true" >
-                      <v-icon >add_circle</v-icon>
-                    </v-btn>         
-                  </v-toolbar>
-
-                  <v-card-title primary-title>
-                    <v-layout row wrap>
-
-                        <v-flex xs12 v-if="obreros.length===0">
-                          Aún no se ha registrado ningun obrero.
-                        </v-flex>                      
-                       
-                        <v-flex v-if="!(obreros.length===0)">
-                            <v-chip close text-color="grey darken-2" v-for="obrero in obreros" :key="obrero.id"  @input="borrarObrero(obrero.id)">
-                            <v-avatar>
-                                <v-icon>account_circle</v-icon>
-                            </v-avatar>
-                            {{obrero.dataObrero.nombre}}
-                            </v-chip>
-                        </v-flex>      
-
-                        <!-- Dialog Obreros -->  
-                        <template>
-                          <v-layout row justify-center>
-                            <v-dialog v-model="dialogs.dialog_obreros.show"  max-width="600px">                           
-                              <v-card>
-                                <v-card-title>
-                                  <span class="headline">Nuevo Obrero</span>
-                                </v-card-title>
-                                <v-card-text>
-                                  <v-container grid-list-md>
-                                    <v-layout wrap>
-                                        <v-flex xs12>
-                                          <v-text-field
-                                          name="txt_nombreObrero"
-                                          label="Nombre del Obrero"
-                                          value=""
-                                          v-model="txt_nombreObrero"
-                                          ></v-text-field>                                                                                   
-                                        </v-flex>
-                                        <v-flex xs12>
-                                          <small>*Campos obligatorios</small>
-                                        </v-flex>
-
-                                    </v-layout>
-                                  </v-container>
-                                </v-card-text>
-                                <v-card-actions>
-                                  <v-spacer></v-spacer>
-                                  <v-btn color="secondary" flat @click.native="dialogs.dialog_obreros.show = false">Cancelar</v-btn>
-                                  <v-btn color="secondary" flat @click="anadirObrero()">Añadir obrero</v-btn> 
-                                </v-card-actions>
-                              </v-card>                            
-                            </v-dialog>
-                          </v-layout>
-                        </template> 
-
-                    </v-layout>
-                  </v-card-title>
-                </v-card>
-            </v-flex>
-
-            <br>
-
-            <!-- Card Actividades --> 
             <v-flex xs12>
-              <v-card>
-                <v-toolbar dense color="white" class="elevation-0">
-                <v-toolbar-title>Actividades</v-toolbar-title>
-                <v-spacer></v-spacer>
-                  <v-btn icon @click="dialogs.dialog_actividades.show=true" >
-                    <v-icon >add_circle</v-icon>
-                  </v-btn>           
-                </v-toolbar>
+              <template>
+                <v-expansion-panel popout>
+                  <v-expansion-panel-content>
+                    <div slot="header">Datos Generales</div>
+                    <v-card>
+                      <v-card-title primary-title>  
+                        <v-layout row wrap>
+                          <v-flex xs6>
+                            <p>Duración de la medición: {{medicionActual.dataMedicionActual.duracion}} seg.</p>
+                          </v-flex> 
+                            <!-- Dialog Datos Generales -->
+                          <template>
+                            <v-layout row justify-center>
+                              <v-dialog v-model="dialogs.dialog_datosGenerales.show"  max-width="600px">                           
+                                <v-card>
+                                  <v-card-title>
+                                    <span class="headline">Editar Datos</span>
+                                  </v-card-title>
+                                  <v-card-text>
+                                    <v-container grid-list-md>
+                                      <v-layout wrap>
+                                          <v-flex xs12>
+                                              <v-text-field
+                                              name="input-3"
+                                              label="Ingrese la nueva duración del intervalo (en segundos)"
+                                              v-model="duracion"
+                                              ></v-text-field>                                                                             
+                                          </v-flex>
+                                          <v-flex xs12>
+                                            <small>*Campos obligatorios</small>
+                                          </v-flex>
 
-                  <v-card-title primary-title>
-                    <v-layout row wrap>   
-                      
-                        <v-flex xs12 v-if="actividades.length===0">
-                          Aún no se ha registrado ninguna actividad.
-                        </v-flex>
-                      
-                        <v-flex xs12 md4 v-if="!(actividades.length===0)">
-                          <p>Actividades productivas (TP)</p>
-                          <v-divider></v-divider><br>
+                                      </v-layout>
+                                    </v-container>
+                                  </v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="secondary" flat @click.native="dialogs.dialog_datosGenerales.show = false">Cancelar</v-btn>
+                                    <v-btn color="secondary" flat @click="actualizarDuracion()">Actualizar</v-btn> 
+                                  </v-card-actions>
+                                </v-card>                            
+                              </v-dialog>
+                            </v-layout>
+                          </template> 
 
-                          <v-chip color="indigo" text-color="white" v-for="actividad in actividadesTP" :key="actividad.id">
-                            <v-avatar>
-                                <v-icon>bubble_chart</v-icon>
-                            </v-avatar>
-                            {{actividad.nombre}}
-                            </v-chip>
-                        </v-flex>
+                        </v-layout>
+                      </v-card-title>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                         <v-btn flat @click="dialogs.dialog_datosGenerales.show = true" >
+                              <v-icon left >edit</v-icon>
+                              Editar
+                            </v-btn>  
+                      </v-card-actions>
+                    </v-card>
+                  </v-expansion-panel-content>
 
-                        <v-flex xs12 md4 v-if="!(actividades.length===0)">
-                          <p>Actividades contributorias (TC)</p>
-                          <v-divider></v-divider><br>
+                  <v-expansion-panel-content>
+                    <div slot="header">Obreros</div>
+                    <v-card>
+                      <v-card-title primary-title>
+                        <v-layout row wrap>
 
-                          <v-chip color="teal" text-color="white" v-for="actividad in actividadesTC" :key="actividad.id">
-                            <v-avatar>
-                                <v-icon>bubble_chart</v-icon>
-                            </v-avatar>
-                            {{actividad.nombre}}
-                          </v-chip>
-                        </v-flex>
+                            <v-flex xs12 v-if="obreros.length===0">
+                              Aún no se ha registrado ningun obrero.
+                            </v-flex>                      
+                          
+                            <v-flex v-if="!(obreros.length===0)">
+                                <v-chip close text-color="grey darken-2" v-for="(obrero,index) in obreros" :key="obrero.id"  @input="borrarObrero(obrero.id,index)">
+                                <v-avatar>
+                                    <v-icon>account_circle</v-icon>
+                                </v-avatar>
+                                {{obrero.dataObrero.nombre}}
+                                </v-chip>
+                            </v-flex>      
 
-                        <v-flex xs12 md4 v-if="!(actividades.length===0)">                            
-                          <p>Actividades no contributorias (TNC)</p>
-                          <v-divider></v-divider><br>
+                            <!-- Dialog Obrero -->  
+                            <template>
+                              <v-layout row justify-center>
+                                <v-dialog v-model="dialogs.dialog_obrero.show"  max-width="600px">                           
+                                  <v-card>
+                                    <v-card-title>
+                                      <span class="headline">Nuevo Obrero</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                      <v-container grid-list-md>
+                                        <v-layout wrap>
+                                            <v-flex xs12>
+                                              <v-text-field
+                                              name="txt_nombreObrero"
+                                              label="Nombre del Obrero"
+                                              value=""
+                                              v-model="txt_nombreObrero"
+                                              ></v-text-field>                                                                                   
+                                            </v-flex>
+                                            <v-flex xs12>
+                                              <small>*Campos obligatorios</small>
+                                            </v-flex>
 
-                          <v-chip color="red" text-color="white" v-for="actividad in actividadesTNC" :key="actividad.id">
-                            <v-avatar>
-                                <v-icon>bubble_chart</v-icon>
-                            </v-avatar>
-                            {{actividad.nombre}}
-                            </v-chip>
-                        </v-flex>
+                                        </v-layout>
+                                      </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                      <v-spacer></v-spacer>
+                                      <v-btn color="secondary" flat @click.native="dialogs.dialog_obrero.show = false">Cancelar</v-btn>
+                                      <v-btn color="secondary" flat @click="anadirObrero()">Añadir obrero</v-btn> 
+                                    </v-card-actions>
+                                  </v-card>                            
+                                </v-dialog>
+                              </v-layout>
+                            </template> 
 
-                        <!-- Dialog Actividades -->  
-                        <template>
-                          <v-layout row justify-center>
-                            <v-dialog v-model="dialogs.dialog_actividades.show"  max-width="600px">                           
-                              <v-card>
-                                <v-card-title>
-                                  <span class="headline">Añadir Actividad</span>
-                                </v-card-title>
-                                <v-card-text>
-                                  <v-container grid-list-md>
-                                    <v-layout wrap>
-                                        <v-flex xs12>
-                                          <v-text-field
-                                            name="input-3"
-                                            label="Nombre de la actividad"
-                                            value=""
-                                            v-model="dialogs.dialog_actividades.txt_nombreActividad"
-                                          ></v-text-field>
+                            <!-- Dialog Obreros -->  
+                            <template>
+                              <v-layout row justify-center>
+                                <v-dialog v-model="dialogs.dialog_obreros.show"  max-width="600px">                           
+                                  <v-card>
+                                    <v-card-title>
+                                      <span class="headline">Nuevos Obreros</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                      <v-container grid-list-md>
+                                        <v-layout wrap>
+                                            <v-flex xs9>
+                                              <v-text-field
+                                              name="txt_nombreObrero"
+                                              label="Prefijo"
+                                              value=""
+                                              v-model="dialogs.dialog_obreros.prefijo"
+                                              ></v-text-field>                                                                                   
+                                            </v-flex>
+                                            <v-flex xs3>
+                                              <v-select
+                                                :items="dialogs.dialog_obreros.numbers"
+                                                v-model="dialogs.dialog_obreros.number"
+                                                label="Cantidad de obreros"
+                                                single-line
+                                                bottom
+                                              ></v-select>
+                                            </v-flex>
+                                            <v-flex xs12>
+                                              <small>*Campos obligatorios</small>
+                                            </v-flex>
 
-                                          <v-text-field
-                                            name="input-3"
-                                            label="Abreviatura de la actividad"
-                                            value=""
-                                            v-model="dialogs.dialog_actividades.txt_abreviaturaActividad"
-                                          ></v-text-field>
+                                        </v-layout>
+                                      </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                      <v-spacer></v-spacer>
+                                      <v-btn color="secondary" flat @click.native="dialogs.dialog_obreros.show = false">Cancelar</v-btn>
+                                      <v-btn color="secondary" flat @click="anadirObreros()">Añadir obreros</v-btn> 
+                                    </v-card-actions>
+                                  </v-card>                            
+                                </v-dialog>
+                              </v-layout>
+                            </template> 
 
-                                          <v-select
-                                            :items="dialogs.dialog_actividades.itemsActividad"
-                                            v-model="dialogs.dialog_actividades.txt_tipoActividad"
-                                            label="Tipo de la actividad"
-                                            single-line
-                                            bottom
-                                          ></v-select>                                                                                
-                                        </v-flex>
-                                        <v-flex xs12>
-                                          <small>*Campos obligatorios</small>
-                                        </v-flex>
-                                    </v-layout>
-                                  </v-container>
-                                </v-card-text>
-                                <v-card-actions>
-                                  <v-spacer></v-spacer>
-                                  <v-btn color="secondary" flat @click.native="dialogs.dialog_actividades.show = false">Cancelar</v-btn>
-                                  <v-btn color="secondary" flat @click="anadirActividad()">Añadir actividad</v-btn> 
-                                </v-card-actions>
-                              </v-card>                            
-                            </v-dialog>
-                          </v-layout>
-                        </template> 
+                        </v-layout>
+                      </v-card-title>
 
-                    </v-layout>
-                  </v-card-title>
-                </v-card>
-              </v-flex>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn flat @click="dialogs.dialog_obreros.show = true" >
+                          <v-icon left>group_add</v-icon>
+                          Añadir Obreros
+                        </v-btn>  
+                        <v-btn flat @click="dialogs.dialog_obrero.show = true" >
+                          <v-icon left>person_add</v-icon>
+                          Añadir Obrero
+                        </v-btn>    
+                      </v-card-actions>
+                    </v-card>
+                  </v-expansion-panel-content>
+
+                  <v-expansion-panel-content>
+                    <div slot="header">Actividades</div>
+                    <v-card>
+                      <v-card-title primary-title>
+                        <v-layout row wrap>   
+                          
+                            <v-flex xs12 v-if="actividades.length===0">
+                              Aún no se ha registrado ninguna actividad.
+                            </v-flex>
+                          
+                            <v-flex xs12 md4 v-if="!(actividades.length===0)">
+                              <p>Actividades productivas (TP)</p>
+                              <v-divider></v-divider><br>
+
+                              <v-chip color="indigo" text-color="white" v-for="actividad in actividadesTP" :key="actividad.id">
+                                <v-avatar>
+                                    <v-icon>bubble_chart</v-icon>
+                                </v-avatar>
+                                {{actividad.nombre}}
+                                </v-chip>
+                            </v-flex>
+
+                            <v-flex xs12 md4 v-if="!(actividades.length===0)">
+                              <p>Actividades contributorias (TC)</p>
+                              <v-divider></v-divider><br>
+
+                              <v-chip color="teal" text-color="white" v-for="actividad in actividadesTC" :key="actividad.id">
+                                <v-avatar>
+                                    <v-icon>bubble_chart</v-icon>
+                                </v-avatar>
+                                {{actividad.nombre}}
+                              </v-chip>
+                            </v-flex>
+
+                            <v-flex xs12 md4 v-if="!(actividades.length===0)">                            
+                              <p>Actividades no contributorias (TNC)</p>
+                              <v-divider></v-divider><br>
+
+                              <v-chip color="red" text-color="white" v-for="actividad in actividadesTNC" :key="actividad.id">
+                                <v-avatar>
+                                    <v-icon>bubble_chart</v-icon>
+                                </v-avatar>
+                                {{actividad.nombre}}
+                                </v-chip>
+                            </v-flex>
+
+                            <!-- Dialog Actividades -->  
+                            <template>
+                              <v-layout row justify-center>
+                                <v-dialog v-model="dialogs.dialog_actividades.show"  max-width="600px">                           
+                                  <v-card>
+                                    <v-card-title>
+                                      <span class="headline">Añadir Actividad</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                      <v-container grid-list-md>
+                                        <v-layout wrap>
+                                            <v-flex xs12>
+                                              <v-text-field
+                                                name="input-3"
+                                                label="Nombre de la actividad"
+                                                value=""
+                                                v-model="dialogs.dialog_actividades.txt_nombreActividad"
+                                              ></v-text-field>
+
+                                              <v-text-field
+                                                name="input-3"
+                                                label="Abreviatura de la actividad"
+                                                value=""
+                                                v-model="dialogs.dialog_actividades.txt_abreviaturaActividad"
+                                              ></v-text-field>
+
+                                              <v-select
+                                                :items="dialogs.dialog_actividades.itemsActividad"
+                                                v-model="dialogs.dialog_actividades.txt_tipoActividad"
+                                                label="Tipo de la actividad"
+                                                single-line
+                                                bottom
+                                              ></v-select>                                                                                
+                                            </v-flex>
+                                            <v-flex xs12>
+                                              <small>*Campos obligatorios</small>
+                                            </v-flex>
+                                        </v-layout>
+                                      </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                      <v-spacer></v-spacer>
+                                      <v-btn color="secondary" flat @click.native="dialogs.dialog_actividades.show = false">Cancelar</v-btn>
+                                      <v-btn color="secondary" flat @click="anadirActividad()">Añadir actividad</v-btn> 
+                                    </v-card-actions>
+                                  </v-card>                            
+                                </v-dialog>
+                              </v-layout>
+                            </template> 
+
+                            <!-- Dialog Importar Actividades -->  
+                            <template>
+                              <v-layout row justify-center>
+                                <v-dialog v-model="dialogs.dialog_importarActividades.show"  max-width="600px">                           
+                                  <v-card>
+                                    <v-card-title>
+                                      <span class="headline">Impotar Actividades</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                      <v-container grid-list-md>
+                                        <v-layout wrap>
+                                            <v-flex xs12>                                             
+                                              <v-select
+                                                :items="dialogs.dialog_importarActividades.librerias"
+                                                v-model="dialogs.dialog_importarActividades.libreria"
+                                                label="Escoja una librería"
+                                                single-line
+                                                bottom
+                                              ></v-select>                                                                                
+                                            </v-flex>
+                                            <v-flex xs12>
+                                              <small>*Campos obligatorios</small>
+                                            </v-flex>
+                                        </v-layout>
+                                      </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                      <v-spacer></v-spacer>
+                                      <v-btn color="secondary" flat @click.native="dialogs.dialog_importarActividades.show = false">Cancelar</v-btn>
+                                      <v-btn color="secondary" flat @click="anadirActividades()">Importar Actividades</v-btn> 
+                                    </v-card-actions>
+                                  </v-card>                            
+                                </v-dialog>
+                              </v-layout>
+                            </template> 
+
+                        </v-layout>
+                      </v-card-title>
+
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                         <v-btn flat @click="dialogs.dialog_importarActividades.show=true" >
+                            <v-icon left>vertical_align_bottom</v-icon>
+                            Importar Actividades
+                          </v-btn> 
+                          <v-btn flat @click="dialogs.dialog_actividades.show=true" >
+                            <v-icon left>add_circle</v-icon>
+                            Añadir Actividad
+                          </v-btn>        
+                      </v-card-actions>
+                    </v-card>
+                  </v-expansion-panel-content>
+
+                </v-expansion-panel>
+              </template>
+            </v-flex>
+ 
 
               <v-flex xs12 md9 align-center>
                 <h1 display-3 class="tittle_H">Toma de datos</h1>
                 <p>Dé click en el botón de abajo para iniciar la toma de datos.</p>
-                <v-spacer></v-spacer>      
+                <v-spacer></v-spacer>  
+
+                <v-btn ripple color="primary" @click="crearTomaDatos()" >
+                    Crear nueva toma de datos
+                  <v-icon right dark>update</v-icon>
+                </v-btn>
+
+                <v-flex v-for="value in tomaDatos" :key="value.id">
+                  <p>{{value.nombre}}</p>
+                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id" >
+                      tomar datos
+                    <v-icon right dark>update</v-icon>
+                  </v-btn>
+
+                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id" >
+                      generar reporte
+                    <v-icon right dark>update</v-icon>
+                  </v-btn>
+
+                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id" >
+                      ver reporte
+                    <v-icon right dark>update</v-icon>
+                  </v-btn>
+
+                </v-flex>
+
                 <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id" >
                     Iniciar toma de datos
                   <v-icon right dark>update</v-icon>
@@ -364,8 +479,14 @@ export default {
         dialog_datosGenerales: {
           show: false
         },
-        dialog_obreros: {
+        dialog_obrero: {
           show: false
+        },
+        dialog_obreros: {
+          show: false,
+          number: "",
+          numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+          prefijo: ""
         },
         dialog_actividades: {
           show: false,
@@ -373,6 +494,137 @@ export default {
           txt_abreviaturaActividad: "",
           txt_tipoActividad: "",
           itemsActividad: [{ text: "TC" }, { text: "TP" }, { text: "TNC" }]
+        },
+        dialog_importarActividades: {
+          show: false,
+          libreria: "",
+          librerias: [
+            {
+              text: "Encofrado",
+              lista: [
+                {
+                  nombre: "Medir",
+                  TipoActividad: "TP",
+                  abreviatura: "MD"
+                },
+                {
+                  nombre: "Ajustar",
+                  TipoActividad: "TP",
+                  abreviatura: "AJ"
+                },
+                {
+                  nombre: "Golpear",
+                  TipoActividad: "TP",
+                  abreviatura: "GOL"
+                },
+                {
+                  nombre: "Colocar Punteal",
+                  TipoActividad: "TP",
+                  abreviatura: "PP"
+                },
+                {
+                  nombre: "Echufar/Desenchufar",
+                  TipoActividad: "TC",
+                  abreviatura: "Ele"
+                },
+                {
+                  nombre: "Buscar herramientas",
+                  TipoActividad: "TC",
+                  abreviatura: "TH"
+                },
+                {
+                  nombre: "Coordinar",
+                  TipoActividad: "TC",
+                  abreviatura: "COR"
+                },
+                {
+                  nombre: "Sostener Accesorios",
+                  TipoActividad: "TC",
+                  abreviatura: "SOS"
+                },
+                {
+                  nombre: "Subir escaleras con el material",
+                  TipoActividad: "TC",
+                  abreviatura: "SE"
+                },
+                {
+                  nombre: "Esperas",
+                  TipoActividad: "TNC",
+                  abreviatura: "E"
+                },
+                {
+                  nombre: "Descanso",
+                  TipoActividad: "TNC",
+                  abreviatura: "D"
+                },
+                {
+                  nombre: "Viajes",
+                  TipoActividad: "TNC",
+                  abreviatura: "V"
+                },
+                {
+                  nombre: "Pausa Activa",
+                  TipoActividad: "TNC",
+                  abreviatura: "PA"
+                }
+              ]
+            },
+            {
+              text: "Vaciado",
+              lista: [
+                {
+                  nombre: "Colocación de Concreto",
+                  TipoActividad: "TP",
+                  abreviatura: "MG"
+                },
+                {
+                  nombre: "Vibrar Concreto",
+                  TipoActividad: "TC",
+                  abreviatura: "VB"
+                },
+                {
+                  nombre: "Trasladar manguera",
+                  TipoActividad: "TC",
+                  abreviatura: "TG"
+                },
+                {
+                  nombre: "Dar Indicaciones",
+                  TipoActividad: "TC",
+                  abreviatura: "I"
+                },
+                {
+                  nombre: "Limpieza",
+                  TipoActividad: "TC",
+                  abreviatura: "L"
+                },
+                {
+                  nombre: "Descanso",
+                  TipoActividad: "TNC",
+                  abreviatura: "D"
+                },
+                {
+                  nombre: "Retrabajo (picado)",
+                  TipoActividad: "TNC",
+                  abreviatura: "R"
+                },
+                {
+                  nombre: "Viajes",
+                  TipoActividad: "TNC",
+                  abreviatura: "V"
+                },
+                {
+                  nombre: "Esperas",
+                  TipoActividad: "TNC",
+                  abreviatura: "E"
+                },
+                {
+                  nombre: "Pausa Activa",
+                  TipoActividad: "TNC",
+                  abreviatura: "PA"
+                }
+              ]
+            }
+          ]
         }
       },
       showanadirActividad: false,
@@ -446,6 +698,9 @@ export default {
     },
     actividadesTNC() {
       return this.$store.getters.actividadesTNC;
+    },
+    tomaDatos(){
+      return this.$store.getters.tomaDatos;
     }
   },
   methods: {
@@ -465,12 +720,29 @@ export default {
         }
       };
       this.$store.dispatch("crear_obrero", obj);
+      this.dialogs.dialog_obrero.show = false;
+    },
+    anadirObreros() {
+      var numObreros = Number(this.dialogs.dialog_obreros.number);
+      var prefijo = this.dialogs.dialog_obreros.prefijo;
+
+      for (var i = 0; i < numObreros; i++) {
+        const obj = {
+          idPyt: this.pytActual.id,
+          idMedicion: this.medicionActual.id,
+          obrero: {
+            nombre: prefijo + (i + 1)
+          }
+        };
+        this.$store.dispatch("crear_obrero", obj);
+      }
       this.dialogs.dialog_obreros.show = false;
     },
-    borrarObrero(idObrero) {
+    borrarObrero(idObrero, index) {
       const obj = {
         idPyt: this.pytActual.id,
         idMedicion: this.medicionActual.id,
+        index: index,
         obrero: {
           idObrero: idObrero
         }
@@ -496,6 +768,28 @@ export default {
       this.dialogs.dialog_actividades.txt_tipoActividad = "";
       this.dialogs.dialog_actividades.txt_abreviaturaActividad = "";
     },
+    anadirActividades() {
+      var seleccionado = this.dialogs.dialog_importarActividades.libreria;
+
+      for (var i = 0; i < seleccionado.lista.length; i++) {
+        const obj = {
+          idPyt: this.pytActual.id,
+          idMedicion: this.medicionActual.id,
+          actividad: {
+            nombre: seleccionado.lista[i].nombre,
+            TipoActividad: seleccionado.lista[i].TipoActividad,
+            abreviatura: seleccionado.lista[i].abreviatura
+          }
+        };
+
+        this.$store.dispatch("crear_actividad", obj);
+      }
+
+      this.dialogs.dialog_importarActividades.show = false;
+
+      //blanquear models
+      this.dialogs.dialog_importarActividades.libreria = "";
+    },
     actualizarDuracion() {
       const payload = {
         idPyt: this.$route.params.idPyt,
@@ -504,6 +798,17 @@ export default {
       };
       this.$store.dispatch("actualizarDuracion", payload);
       this.dialogs.dialog_datosGenerales.show = false;
+    },
+    crearTomaDatos() {
+      const payload = {
+        idPyt: this.$route.params.idPyt,
+        idMedicion: this.$route.params.idMedicion,
+        tomaDatos: {
+          nombre: "Hans"
+        }
+      };
+
+      this.$store.dispatch("crear_TomaDatos", payload);
     },
     openDialogGenerarReporte(idMedicion) {
       const payload = {
@@ -868,6 +1173,8 @@ export default {
     this.$store.dispatch("loadObreros", payload);
 
     this.$store.dispatch("cargar_actividades", payload);
+
+    this.$store.dispatch("cargar_tomaDatos", payload);
     //llenar la duración
     //this.duracion = this.$store.state.medicionActual.dataMedicionActual.duracion;
   }

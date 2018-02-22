@@ -26,6 +26,9 @@ export const moduloObreros = {
     },
     setLoading_anadirObrero(state, payload) {
       state.loading_anadirObrero = payload;
+    },
+    delObrero(state, index) {
+      state.obreros.splice(index, 1);
     }
   },
   /*======================= ACTIONS =======================*/
@@ -91,6 +94,8 @@ export const moduloObreros = {
             obj.obrero.idObrero
         )
         .remove();
+      // optoimizar
+      commit("delObrero", obj.index);
     }
   }
 };
