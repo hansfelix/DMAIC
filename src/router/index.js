@@ -58,7 +58,7 @@ export default new Router({
       component: Configuracion
     },
     {
-      path: '/TomaDatos/:idPyt/:idMedicion',
+      path: '/TomaDatos/:idPyt/:idMedicion/:idTomaDatos',
       name: 'TomaDatos',
       component: TomaDatos
     },

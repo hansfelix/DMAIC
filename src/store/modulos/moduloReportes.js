@@ -66,7 +66,9 @@ export const moduloReportes = {
             payload.idPyt +
             "/" +
             payload.idMedicion +
-            "/reporte/"
+            "/tomaDatos/"+
+            payload.idTomaDatos +
+            "/reporte"
         )
         .set(payload.reporte)
         .then(data => {
@@ -91,7 +93,9 @@ export const moduloReportes = {
             payload.idPyt +
             "/" +
             payload.idMedicion +
-            "/reporte/"
+            "/tomaDatos/"+
+            payload.idTomaDatos +
+            "/reporte"
         )
         .once("value")
         .then(data => {

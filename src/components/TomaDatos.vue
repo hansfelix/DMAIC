@@ -1,7 +1,10 @@
 <template>
 
 
-    <iframe id="myframe" width="100%" style="height: 100%; border: 0;" :src="'https://dmaic-db196.firebaseapp.com/dmaic.html?cr='+ this.$route.params.idPyt +'&medicion=' +this.$route.params.idMedicion " fill-height></iframe>
+    <iframe id="myframe" width="100%" style="height: 100%; border: 0;" 
+    :src="'https://dmaic-db196.firebaseapp.com/dmaic.html?cr='+ this.$route.params.idPyt 
+    +'&medicion=' +this.$route.params.idMedicion
+    +'&tomaDatos=' +this.$route.params.idTomaDatos " fill-height></iframe>
 
 </template>
 

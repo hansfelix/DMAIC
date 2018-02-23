@@ -367,17 +367,17 @@
 
                 <v-flex v-for="value in tomaDatos" :key="value.id">
                   <p>{{value.nombre}}</p>
-                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id" >
+                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id +'/' + value.id">
                       tomar datos
                     <v-icon right dark>update</v-icon>
                   </v-btn>
 
-                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id" >
+                  <v-btn ripple color="primary" @click="openDialogGenerarReporte(value.id)">
                       generar reporte
                     <v-icon right dark>update</v-icon>
                   </v-btn>
 
-                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id" >
+                  <v-btn ripple color="primary" :to="'/Reporte/' +pytActual.id +'/' +medicionActual.id +'/' + value.id" >
                       ver reporte
                     <v-icon right dark>update</v-icon>
                   </v-btn>
@@ -390,7 +390,9 @@
                 </v-btn>
               </v-flex>
 
-             <v-flex xs12 md9 align-center>
+<!-- REportes -->
+
+             <!-- <v-flex xs12 md9 align-center>
             <h1 display-3 class="tittle_H">Generar Reporte</h1>
             <p>Dé click en el botón de abajo para generar/ver el reporte.</p>
             <v-spacer></v-spacer>    
@@ -403,7 +405,7 @@
             Ver reporte
             </v-btn> 
             
-            </v-flex>
+            </v-flex> -->
 
 
 
@@ -627,6 +629,7 @@ export default {
           ]
         }
       },
+      idTomaDatos:"",
       showanadirActividad: false,
       showanadirObrero: false,
       showEditarDatosMedicion: false,
@@ -810,7 +813,7 @@ export default {
 
       this.$store.dispatch("crear_TomaDatos", payload);
     },
-    openDialogGenerarReporte(idMedicion) {
+    openDialogGenerarReporte(idTomaDatos) {
       const payload = {
         idPyt: this.$route.params.idPyt,
         idMedicion: this.$route.params.idMedicion,
@@ -818,13 +821,18 @@ export default {
       };
 
       this.dialog_generarReporte = true;
+
+      //
+      this.idTomaDatos = idTomaDatos;
+      
       this.$store.dispatch("loadMedicionActual", payload);
       // this.txt_idMedicion = idMedicion;
     },
     onCalcularData() {
       const payload = {
         idPyt: this.$route.params.idPyt,
-        idMedicion: this.txt_idMedicion,
+        idMedicion: this.$route.params.idMedicion,
+        idTomaDatos: this.idTomaDatos,
         reporte: {
           tipoReporte: this.txt_tipoReporte.text,
           ados: this.txt_metrados,
@@ -835,7 +843,8 @@ export default {
       };
       console.log(
         this.$route.params.idPyt,
-        this.txt_idMedicion,
+        this.$route.params.idMedicion,
+        this.idTomaDatos,
         this.txt_tipoReporte.text,
         this.txt_metrados,
         this.txt_hhReal,
@@ -847,6 +856,7 @@ export default {
 
       var idPyt = this.$route.params.idPyt;
       var idMedicion = this.medicionActual.id;
+      var idTomaDatos = this.idTomaDatos;
       var totalIntervaloHoras = this.medicionActual.dataMedicionActual
         .totalIntervaloHoras;
 
@@ -892,8 +902,10 @@ export default {
           "datos-proyecto/" +
             this.$route.params.idPyt +
             "/" +
-            idMedicion +
-            "/datos"
+            this.$route.params.idMedicion +
+            "/tomaDatos/"+
+            this.idTomaDatos +
+            "/datos/"
         )
         .once("value")
         .then(data => {
@@ -1146,6 +1158,7 @@ export default {
           const payload = {
             idPyt: idPyt,
             idMedicion: idMedicion,
+            idTomaDatos: idTomaDatos,
             reporte: reporte
           };
 
@@ -1154,6 +1167,7 @@ export default {
           const payload2 = {
             idPyt: idPyt,
             idMedicion: idMedicion,
+            idTomaDatos: idTomaDatos,
             dashboard: true
           };
 
