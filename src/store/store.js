@@ -14,34 +14,42 @@ import { moduloTomaDatos } from "./modulos/moduloTomaDatos";
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
+  /**
+   * 
+   * STATE
+   *
+   * State(estado) general de la Aplicación.
+   *
+   */
   state: {
-    // medicionActual: null,
     reporte: null,
-
-    // loading_mediciones: false,
-
     loading: false
   },
+  /**
+   * 
+   * MUTATIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación.
+   *
+   */
   mutations: {
     setLoading(state, payload) {
       state.loading = payload;
     },
-    //   PROYECTOS
-
-    // MEDICIONES
-
-    //OBRERO
-
-    //USERS
-
-    //REPORTE
     pushReporte(state, payload) {
       state.reporte = payload;
     },
     setErrorIngreso(state, payload) {
       state.ErrorIngreso = payload;
     }
-  },
+  },  
+  /**
+   * 
+   * MUTATIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación.
+   *
+   */
   actions: {
     // Cargar los proyectos de FIREBASE
 
