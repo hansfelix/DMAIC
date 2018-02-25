@@ -1,31 +1,45 @@
-import Vuex from "vuex";
+//Importación de librerías
 import * as firebase from "firebase";
 
 export const moduloActividades = {
-  /*======================= STATE =======================*/
+  /**
+   *
+   * == STATE
+   *
+   * State(estado) general de la Aplicación.
+   *
+   */
   state: {
     actividades: []
   },
-  /*======================= GETTERS =======================*/
+
+  /**
+   *
+   * == GETTERS
+   *
+   * Funciones reutilizables que obtienen datos parciales del state.
+   * Evita dependencias.
+   *
+   */
   getters: {
     actividades(state) {
       return state.actividades;
     },
     actividadesTP(state) {
       var filter = state.actividades.filter(function(el) {
-        return (el.TipoActividad === "TP");
+        return el.TipoActividad === "TP";
       });
       return filter;
     },
     actividadesTC(state) {
       var filter = state.actividades.filter(function(el) {
-        return (el.TipoActividad === "TC");
+        return el.TipoActividad === "TC";
       });
       return filter;
     },
     actividadesTNC(state) {
       var filter = state.actividades.filter(function(el) {
-        return (el.TipoActividad === "TNC");
+        return el.TipoActividad === "TNC";
       });
       return filter;
     }

@@ -1,4 +1,4 @@
-import Vuex from "vuex";
+//Importación de librerías
 import * as firebase from "firebase";
 
 export const moduloMediciones = {

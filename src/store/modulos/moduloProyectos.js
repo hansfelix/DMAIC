@@ -1,14 +1,28 @@
-import Vuex from "vuex";
+//Importación de librerías
 import * as firebase from "firebase";
 
 export const moduloProyectos = {
-  /*======================= STATE =======================*/
+  /**
+   *
+   * == STATE
+   *
+   * State(estado) general de la Aplicación.
+   *
+   */
   state: {
     proyectos: [],
     pytActual: null,
     loading_proyectos: false
   },
-  /*======================= GETTERS =======================*/
+
+  /**
+   *
+   * == GETTERS
+   *
+   * Funciones reutilizables que obtienen datos parciales del state.
+   * Evita dependencias.
+   *
+   */
   getters: {
     pytActual(state) {
       return state.pytActual;
@@ -20,7 +34,15 @@ export const moduloProyectos = {
       return state.loading_proyectos;
     }
   },
-  /*======================= MUTATIONS =======================*/
+
+  /**
+   *
+   * == MUTATIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación.
+   * Operaciones síncronas.
+   *
+   */
   mutations: {
     setLoadedPytActual(state, payload) {
       var idPyt = payload.idPyt;
@@ -52,15 +74,39 @@ export const moduloProyectos = {
       state.proyectos.push(payload);
     }
   },
-  /*======================= ACTIONS =======================*/
+
+  /**
+   *
+   * == ACTIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
+   * Operaciones asíncronas.
+   *
+   */
   actions: {
-    // Cargar los proyectos de FIREBASE
+    /**
+     * @description Cargar el proyecto actual
+     * @param { commit } payload
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
     loadPytActual({ commit }, payload) {
       commit("setLoadedPytActual", payload);
     },
-    // Cargar los proyectos de FIREBASE
-    loadProyectos({ commit }) {
+
+    /**
+     * @description Cargar los proyectos de FIREBASE 🔥
+     * @param { commit }
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
+    cargar_proyectos({ commit }) {
+      //set LoadingProyectos
       commit("setLoadingProyectos", true);
+      //Llamada a Firebase 
+      //Obtiene los proyectos, el id lo pone como propiedad del objeto
       firebase
         .database()
         .ref("proyectos")
@@ -75,19 +121,25 @@ export const moduloProyectos = {
               nombrePyt: obj[key].nombrePyt
             });
           }
+          //cargar los proyectos al state
           commit("setLoadedProyectos", proyectos);
+          //set LoadingProyectos
           commit("setLoadingProyectos", false);
         })
         .catch(error => {
           console.log(error);
+          //set LoadingProyectos
           commit("setLoadingProyectos", false);
         });
     },
-    //
-    //
-    //
- 
-    // Guardar los Proyectos en FIREBASE
+
+    /**
+     * @description Crea un proyecto en FIREBASE 🔥
+     * @param { commit, getters } payload
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
     createProyecto({ commit, getters }, payload) {
       const proyecto = {
         cr: payload.cr,
@@ -106,7 +158,14 @@ export const moduloProyectos = {
         });
       // Reach out to firebase and store it
     },
-    // Actualizar Proyecto en FIREBASE
+
+    /**
+     * @description Actualiza un proyecto en FIREBASE
+     * @param { commit } proyecto
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
     actualizarProyecto({ commit }, proyecto) {
       var idPyt = proyecto.id;
       delete proyecto.id;

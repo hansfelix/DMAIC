@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import * as firebase from "firebase";
 
-//modulos
+//Importación de modulos
 import { moduloActividades } from "./modulos/moduloActividades";
 import { moduloReportes } from "./modulos/moduloReportes";
 import { moduloMediciones } from "./modulos/moduloMediciones";
@@ -15,8 +15,8 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   /**
-   * 
-   * STATE
+   *
+   * == STATE
    *
    * State(estado) general de la Aplicación.
    *
@@ -25,11 +25,23 @@ export const store = new Vuex.Store({
     reporte: null,
     loading: false
   },
+
   /**
-   * 
-   * MUTATIONS
+   *
+   * == GETTERS
+   *
+   * Funciones reutilizables que obtienen datos parciales del state.
+   * Evita dependencias.
+   *
+   */
+  getters: {},
+
+  /**
+   *
+   * == MUTATIONS
    *
    * Funciones encargadas de cambiar el STATE de la Aplicación.
+   * Operaciones síncronas.
    *
    */
   mutations: {
@@ -42,25 +54,17 @@ export const store = new Vuex.Store({
     setErrorIngreso(state, payload) {
       state.ErrorIngreso = payload;
     }
-  },  
+  },
+
   /**
-   * 
-   * MUTATIONS
    *
-   * Funciones encargadas de cambiar el STATE de la Aplicación.
+   * == ACTIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
+   * Operaciones asíncronas.
    *
    */
   actions: {
-    // Cargar los proyectos de FIREBASE
-
-    // loadMedicionActual({ commit }, payload) {
-    //   commit("setLoadedMedicionActual", payload);
-    // },
-
-    // FIREBASE GET DATA
-    // MEDICIONES
-
-    //REPORTE
     createReporte({ commit, getters }, payload) {
       firebase
         .database()
@@ -108,14 +112,15 @@ export const store = new Vuex.Store({
         });
       // Reach out to firebase and store it
     }
-
-    //ACTIVIDADEs
-    // CREA UNA ACTIVIDAD
-
-    // FIREBASE AUTH
-    // INGRESAR
   },
-  getters: {},
+
+  /**
+   *
+   * == MODULES
+   *
+   * Modularización de la aplicación para un mejor orden.
+   *
+   */
   modules: {
     mod_actividades: moduloActividades,
     mod_reportes: moduloReportes,

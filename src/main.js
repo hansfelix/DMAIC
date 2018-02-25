@@ -94,7 +94,7 @@ new Vue({
       storageBucket: "dmaic-b6e44.appspot.com",
       messagingSenderId: "201730548149"
     });
-    this.$store.dispatch("loadProyectos");
+    this.$store.dispatch("cargar_proyectos");
 
     // Auth
     firebase.auth().onAuthStateChanged(user => {
@@ -105,6 +105,6 @@ new Vue({
       }
     });
     // this.$store.dispatch("setAutenticado"); // esta arriba en autoDignIn
-    this.$store.dispatch("loadProyectos");
+    this.$store.dispatch("cargar_proyectos");
   }
 });
