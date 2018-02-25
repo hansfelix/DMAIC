@@ -96,6 +96,10 @@ new Vue({
     });
     this.$store.dispatch("cargar_proyectos");
 
+
+
+    this.$store.dispatch("cargar_authApp");
+
     // Auth
     firebase.auth().onAuthStateChanged(user => {
       if (user) {

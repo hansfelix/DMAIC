@@ -8,7 +8,7 @@
                                 <v-container fluid>    
                                     <v-layout row wrap> 
                                         <v-flex xs6>  
-                                            <img src="https://randomuser.me/api/portraits/men/85.jpg"  class="avatar_navigationDrawer elevation-3"/> 
+                                            <img :src="user.foto"  class="avatar_navigationDrawer elevation-3"/> 
                                         </v-flex>
                                         <v-flex xs6>  
                                             <h3>{{user.nombre}}</h3> 
