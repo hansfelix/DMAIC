@@ -365,19 +365,19 @@
                   <v-icon right dark>update</v-icon>
                 </v-btn>
 
-                <v-flex v-for="value in tomaDatos" :key="value.id">
-                  <p>{{value.nombre}}</p>
-                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id +'/' + value.id">
+                <v-flex v-for="tomaDato in tomaDatos" :key="tomaDato.id" :v-if="!loading_tomaDatos">
+                  <p>{{tomaDato.nombre}}</p>
+                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id +'/' + tomaDato.id">
                       tomar datos
                     <v-icon right dark>update</v-icon>
                   </v-btn>
 
-                  <v-btn ripple color="primary" @click="openDialogGenerarReporte(value.id)">
+                  <v-btn ripple color="primary" @click="openDialogGenerarReporte(tomaDato.id)">
                       generar reporte
                     <v-icon right dark>update</v-icon>
                   </v-btn>
 
-                  <v-btn ripple color="primary" :to="'/Reporte/' +pytActual.id +'/' +medicionActual.id +'/' + value.id" >
+                  <v-btn ripple color="primary" :to="'/Reporte/' +pytActual.id +'/' +medicionActual.id +'/' + tomaDato.id" >
                       ver reporte
                     <v-icon right dark>update</v-icon>
                   </v-btn>
@@ -704,6 +704,9 @@ export default {
     },
     tomaDatos(){
       return this.$store.getters.tomaDatos;
+    },
+    loading_tomaDatos(){
+      return this.$store.getters.loading_tomaDatos;
     }
   },
   methods: {

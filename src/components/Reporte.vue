@@ -254,6 +254,50 @@
                    </v-container>
               </v-flex>
 
+     <v-flex xs12>
+       <div class="rowCuadro">
+                  <div class="bold cell greycell">Obrero</div>
+                  <div v-for="item in reporte.cuadroResumen.arrayObreros" :key="item" class="cell">
+                    {{item}} 
+                  </div>                  
+                </div>
+      <div v-for='(tomaDato,key) in tomaDatosActual_modificado' :key="key" class="rowCuadro">
+          <div class="bold cell greycell">
+          {{key}}
+          </div>
+
+          <div v-for='element in tomaDato' :key="element" class="cell">
+          {{ element.actividad}}
+          </div>
+
+      </div>
+    </v-flex>
+  <v-flex xs12>
+<br><br><br><br>
+ </v-flex>
+     <v-flex xs12>
+      
+      <div v-for='(tomaDato,key) in tomaDatosActual_modificado' :key="key" class="rowCuadro_cartaBalance">
+          <div class="bold cell_cartaBalance greycell">
+          {{key}}
+          </div>
+
+          <div v-for='element in tomaDato' :key="element" :class="'cell_cartaBalance '+element.actividad ">
+ 
+          </div>
+      </div>
+
+
+       <div class="rowCuadro_cartaBalance">
+                  <div class="bold cell_cartaBalance_obrero"></div>
+                  <div v-for="item in reporte.cuadroResumen.arrayObreros" :key="item" :class="'cell_cartaBalance cell_cartaBalance_obrero'">
+                    {{item}} 
+                  </div>                  
+        </div>
+
+    </v-flex>
+
+
 <!-- dialog NOTA -->
 <v-dialog v-model="dialog" max-width="320px">
       <v-card>
@@ -352,6 +396,28 @@ export default {
     medicionActual() {
       return this.$store.getters.medicionActual;
     },
+    tomaDatosActual() {
+      return this.$store.getters.tomaDatosActual;
+    },
+    tomaDatosActual_modificado() {
+      var arrayTomaDatos = [];
+      var result = [];
+
+      arrayTomaDatos = this.$store.getters.tomaDatosActual;
+
+      if (arrayTomaDatos !== undefined) {
+        result = arrayTomaDatos.reduce(function(r, a) {
+          r[a.hora] = r[a.hora] || [];
+          r[a.hora].push(a);
+          return r;
+        }, Object.create(null));
+      }
+
+      return result;
+
+      console.log("tomaDatosActual_modificado es : " + result);
+    },
+    //BORRAAAAAAAAAAAR
     dataPie() {
       return this.$store.getters.dataPie;
     },
@@ -397,10 +463,12 @@ export default {
   created() {
     const payload = {
       idPyt: this.$route.params.idPyt,
-      idMedicion: this.$route.params.idMedicion
+      idMedicion: this.$route.params.idMedicion,
+      idTomaDatos: this.$route.params.idTomaDatos
     };
     this.$store.dispatch("cargar_reporte", payload);
     this.$store.dispatch("loadMedicionActual", payload);
+    this.$store.dispatch("cargar_tomaDatosActual", payload);
   }
 };
 </script>
@@ -437,5 +505,48 @@ export default {
 }
 .bold {
   font-weight: bold;
+}
+
+.rowCuadro_cartaBalance {
+  /* height: 55px; */
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(70px, 1fr);
+}
+
+.cell_cartaBalance {
+  padding: 5px;
+  /* border: 0.5px solid rgba(0, 0, 0, 0.12); */
+  color: #3f4144;
+  text-align: center;
+      margin: 0 15px;
+  /* background-color: white; */
+}
+
+.cell_cartaBalance_obrero{
+ margin: 0; 
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.RL{
+background-image: url('https://1.bp.blogspot.com/-J-PT7yxd4gM/U7g1b0YdHZI/AAAAAAAAGaA/_o83vZXouBs/s1600/striped-fabric-pattern.jpg')
+}
+.M{
+background-image: url('https://4.bp.blogspot.com/-WjdfVcDAuv4/U_Bm-bWHcuI/AAAAAAAAGdk/jHkG35om5uA/s1600/gray-textile-background.jpg')
+}
+.TB{
+background-image: url('http://www.goaleisure.com/blog/wp-content/uploads/2016/08/corner-pattern-background-light-grey-color-squared-90-degrees-lines-seamless-wallpaper-texture.jpg')
+}
+
+.R{
+background-image: url('https://s-media-cache-ak0.pinimg.com/originals/ce/41/06/ce4106d3c0d4b0573b4b2917cf7a0c5e.jpg')
+}
+
+.P{
+background-image: url('https://1.bp.blogspot.com/-fk69YKLvVz0/UYFGiUnWTCI/AAAAAAAAFK0/u3FvFC4fKWY/s1600/wide-stripe-wallpaper-seamless-pattern.jpg')
+}
+
+.f{
+background-image: url('https://2.bp.blogspot.com/-EMxv2y0VND0/V31zB1ujaCI/AAAAAAAAG_Y/NcSp76GGbzczPTihK-1XU5CWxHfKK4tSgCLcB/s1600/seamless-vector-with-faded-diagonal-stripes.jpg')
 }
 </style>

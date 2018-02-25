@@ -4,7 +4,7 @@ import * as firebase from "firebase";
 export const moduloTomaDatos = {
   /*======================= STATE =======================*/
   state: {
-    tomaDatos: [{}],
+    tomaDatos: [{ad:"a"}],
     tomaDatosActual: {},
     loading_tomaDatos: false
   },
@@ -27,9 +27,8 @@ export const moduloTomaDatos = {
       //////////
       state.medicionActual.dataMedicionActual.duracion = payload;
     },
-    setMedicionActual(state, payload) {
-      ////////
-      state.medicionActual = payload;
+    setTomaDatosActual(state, payload) {
+      state.tomaDatosActual = payload;
     },
     setLoadedTomaDatos(state, payload) {
       state.tomaDatos = payload;
@@ -101,27 +100,36 @@ export const moduloTomaDatos = {
         });
       // Reach out to firebase and store it
     },
-    loadTomaDatosActual({ commit }, payload) {
+    cargar_tomaDatosActual({ commit }, payload) {
       ////////////////
       console.log("cargando medición actual");
       commit("setLoading", true);
       firebase
         .database()
-        .ref("mediciones/" + payload.idPyt + "/" + payload.idMedicion + "/")
+        .ref(
+          "datos-proyecto/" +
+          payload.idPyt +
+          "/" +
+          payload.idMedicion +
+          "/tomaDatos/" +
+          payload.idTomaDatos +
+          "/datos")
         .once("value")
         .then(data => {
-          //const key = data.key;
-          const medicion = {
-            id: data.key,
-            dataMedicionActual: data.val()
-          };
+          const tomaDatosActual = [];
+          const obj = data.val();
 
-          commit("setMedicionActual", medicion);
+          for (let key in obj) {
+            obj[key].id = key;
+            tomaDatosActual.push(obj[key]);
+          }
+
+          commit("setTomaDatosActual", tomaDatosActual);
 
           // commit("setLoadedMediciones", mediciones);
           commit("setLoading", false);
 
-          console.log("se cargo medición actual", medicion);
+          console.log("se cargo medición actual", tomaDatosActual);
         })
         .catch(error => {
           console.log(error);

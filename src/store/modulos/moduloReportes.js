@@ -48,7 +48,7 @@ export const moduloReportes = {
     setLoadingReporte(state, reporte) {
       state.loadingReporte = reporte;
     },
-    setNota(state, nota){
+    setNota(state, nota) {
       state.reporte.nota = nota;
     }
   },
@@ -66,7 +66,7 @@ export const moduloReportes = {
             payload.idPyt +
             "/" +
             payload.idMedicion +
-            "/tomaDatos/"+
+            "/tomaDatos/" +
             payload.idTomaDatos +
             "/reporte"
         )
@@ -93,13 +93,12 @@ export const moduloReportes = {
             payload.idPyt +
             "/" +
             payload.idMedicion +
-            "/tomaDatos/"+
+            "/tomaDatos/" +
             payload.idTomaDatos +
             "/reporte"
         )
         .once("value")
         .then(data => {
-
           if (data.val() !== null) {
             commit("setReporte", data.val());
           }
@@ -116,7 +115,7 @@ export const moduloReportes = {
         });
       // Reach out to firebase and store it
     },
-        //
+    //
     //ACTUALZIAR REPORTE NOTA
     //
     actualizar_reporte_nota({ commit }, payload) {
@@ -128,16 +127,19 @@ export const moduloReportes = {
             payload.idPyt +
             "/" +
             payload.idMedicion +
-            "/reporte/nota"
+            "/tomaDatos/" +
+            payload.idTomaDatos +
+            "/reporte"
         )
         .set(payload.nota)
         .then(data => {
-           commit("setNota", payload.nota);
+          commit("setNota", payload.nota);
           // console.log("reporte actualizado:", payload.reporte);
         })
         .catch(error => {
           console.log(error);
         });
     },
+    
   }
 };

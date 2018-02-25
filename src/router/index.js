@@ -43,7 +43,7 @@ export default new Router({
       component: Medicion_configuracion
     },
     {
-      path: '/Reporte/:idPyt/:idMedicion',
+      path: '/Reporte/:idPyt/:idMedicion/:idTomaDatos',
       name: 'Reporte',
       component: Reporte
     },
