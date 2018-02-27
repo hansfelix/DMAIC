@@ -96,7 +96,7 @@ export const moduloProyectos = {
     },
 
     /**
-     * @description Cargar los proyectos de FIREBASE 🔥
+     * @description Cargar todos los proyectos de FIREBASE 🔥
      * @param { commit }
      * @returns -
      * @author Hans Felix
@@ -115,11 +115,43 @@ export const moduloProyectos = {
           const proyectos = [];
           const obj = data.val();
           for (let key in obj) {
-            proyectos.push({
-              id: key,
-              cr: obj[key].cr,
-              nombrePyt: obj[key].nombrePyt
-            });
+            obj.id = key;
+            proyectos.push(obj[key]);
+          }
+          //cargar los proyectos al state
+          commit("setLoadedProyectos", proyectos);
+          //set LoadingProyectos
+          commit("setLoadingProyectos", false);
+        })
+        .catch(error => {
+          console.log(error);
+          //set LoadingProyectos
+          commit("setLoadingProyectos", false);
+        });
+    },
+
+    /**
+     * @description Cargar los proyectos según el Uid del usuario de FIREBASE 🔥
+     * @param { commit } user_uid
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
+    cargar_proyectosByUid({ commit }, user_uid) {
+      //set LoadingProyectos
+      commit("setLoadingProyectos", true);
+      //Llamada a Firebase 
+      //Obtiene los proyectos, el id lo pone como propiedad del objeto
+      firebase
+        .database()
+        .ref("proyectos").orderByChild('users/'+user_uid).equalTo(true)
+        .once("value")
+        .then(data => {
+          const proyectos = [];
+          const obj = data.val();
+          for (let key in obj) {
+            obj.id = key;
+            proyectos.push(obj[key]);
           }
           //cargar los proyectos al state
           commit("setLoadedProyectos", proyectos);
@@ -150,6 +182,7 @@ export const moduloProyectos = {
         .ref("proyectos")
         .push(proyecto)
         .then(data => {
+
           proyecto.id = data.key;
           commit("createProyecto", proyecto);
         })
@@ -175,6 +208,7 @@ export const moduloProyectos = {
         .set(proyecto)
         .then(data => {
           proyecto.id = idPyt;
+
           commit("actualizarProyecto", proyecto);
           // commit("createProyecto", proyecto);
         })

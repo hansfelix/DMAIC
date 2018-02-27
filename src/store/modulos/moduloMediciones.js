@@ -2,28 +2,28 @@
 import * as firebase from "firebase";
 
 export const moduloMediciones = {
-  /*======================= STATE =======================*/
+  /**
+   *
+   * == STATE
+   *
+   * State(estado) general de la Aplicación.
+   *
+   */
   state: {
-    mediciones: [
-      {
-        id: "sad",
-        nombreProceso: "asda",
-        herramientaUsada: "asda",
-        ingenieroCampo: "Hans",
-        jefeGrupo: "Seiko",
-        fecha: "20/20/20",
-        duracion: 60,
-        dashboard: false
-      }
-    ],
+    mediciones: [{}],
     medicionActual: {},
     loading_mediciones: false
   },
-  /*======================= GETTERS =======================*/
+
+  /**
+   *
+   * == GETTERS
+   *
+   * Funciones reutilizables que obtienen datos parciales del state.
+   * Evita dependencias.
+   *
+   */
   getters: {
-    MedicionActual(state) {
-      return state.medicionActual;
-    },
     mediciones(state) {
       return state.mediciones;
     },
@@ -34,7 +34,15 @@ export const moduloMediciones = {
       return state.medicionActual;
     }
   },
-  /*======================= MUTATIONS =======================*/
+
+  /**
+   *
+   * == MUTATIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación.
+   * Operaciones síncronas.
+   *
+   */
   mutations: {
     setLoadedMedicionActual(state, payload) {
       var idMedicion = payload.idMedicion;
@@ -68,11 +76,19 @@ export const moduloMediciones = {
     setMedicionActualConfigurado(state, payload) {
       state.medicionActual.configurado = payload;
     },
-    setMedicionActualDashboard(state, payload){
+    setMedicionActualDashboard(state, payload) {
       state.medicionActual.dashboard = payload;
     }
   },
-  /*======================= ACTIONS =======================*/
+
+  /**
+   *
+   * == ACTIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
+   * Operaciones asíncronas.
+   *
+   */
   actions: {
     loadMediciones({ commit }, payload) {
       commit("setLoadingMediciones", true);
@@ -95,7 +111,7 @@ export const moduloMediciones = {
         .catch(error => {
           console.log(error);
           commit("setLoadingMediciones", false);
-        })
+        });
     },
     // Guardar los Proyectos en FIREBASE
     createMedicion({ commit, getters }, payload) {

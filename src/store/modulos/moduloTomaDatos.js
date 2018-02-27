@@ -1,14 +1,28 @@
-import Vuex from "vuex";
+//Importación de librerías
 import * as firebase from "firebase";
 
 export const moduloTomaDatos = {
-  /*======================= STATE =======================*/
+   /**
+   *
+   * == STATE
+   *
+   * State(estado) general de la Aplicación.
+   *
+   */
   state: {
     tomaDatos: [{ad:"a"}],
     tomaDatosActual: {},
     loading_tomaDatos: false
   },
-  /*======================= GETTERS =======================*/
+
+  /**
+   *
+   * == GETTERS
+   *
+   * Funciones reutilizables que obtienen datos parciales del state.
+   * Evita dependencias.
+   *
+   */
   getters: {
     tomaDatosActual(state) {
       return state.tomaDatosActual;
@@ -20,7 +34,15 @@ export const moduloTomaDatos = {
       return state.loading_tomaDatos;
     }
   },
-  /*======================= MUTATIONS =======================*/
+
+  /**
+   *
+   * == MUTATIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación.
+   * Operaciones síncronas.
+   *
+   */
   mutations: {
 
     setMedicionActual_duracion(state, payload) {
@@ -48,7 +70,14 @@ export const moduloTomaDatos = {
       state.medicionActual.dashboard = payload;
     }
   },
-  /*======================= ACTIONS =======================*/
+  /**
+   *
+   * == ACTIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
+   * Operaciones asíncronas.
+   *
+   */
   actions: {
     cargar_tomaDatos({ commit }, payload) {
       commit("setLoadingTomaDatos", true);

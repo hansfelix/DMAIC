@@ -1,13 +1,27 @@
-import Vuex from "vuex";
+//Importación de librerías
 import * as firebase from "firebase";
 
 export const moduloObreros = {
-  /*======================= STATE =======================*/
+   /**
+   *
+   * == STATE
+   *
+   * State(estado) general de la Aplicación.
+   *
+   */
   state: {
     obreros: [],
     loading_anadirObrero: false
   },
-  /*======================= GETTERS =======================*/
+
+  /**
+   *
+   * == GETTERS
+   *
+   * Funciones reutilizables que obtienen datos parciales del state.
+   * Evita dependencias.
+   *
+   */
   getters: {
     obreros(state) {
       return state.obreros;
@@ -16,7 +30,15 @@ export const moduloObreros = {
       return state.loading_anadirObrero;
     }
   },
-  /*======================= MUTATIONS =======================*/
+
+  /**
+   *
+   * == MUTATIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación.
+   * Operaciones síncronas.
+   *
+   */
   mutations: {
     pushObrero(state, payload) {
       state.obreros.push(payload);
@@ -31,7 +53,14 @@ export const moduloObreros = {
       state.obreros.splice(index, 1);
     }
   },
-  /*======================= ACTIONS =======================*/
+  /**
+   *
+   * == ACTIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
+   * Operaciones asíncronas.
+   *
+   */
   actions: {
     // CREA UN OBRERO
     crear_obrero({ commit, getters }, obj) {

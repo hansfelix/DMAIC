@@ -65,7 +65,7 @@
             <form @submit.prevent="onCreateUser">
               <v-card>
                 <v-card-title>
-                  <span class="headline">Nuevo Proyecto</span>
+                  <span class="headline">Nuevo Usuario</span>
                 </v-card-title>
                 <v-card-text>
                   <v-container grid-list-md>

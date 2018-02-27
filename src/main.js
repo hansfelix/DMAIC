@@ -35,7 +35,8 @@ import {
   VSwitch,
   VSnackbar,
   VTabs,
-  VExpansionPanel
+  VExpansionPanel,
+  VAlert
 } from "vuetify";
 import "../node_modules/vuetify/src/stylus/app.styl";
 
@@ -66,7 +67,8 @@ Vue.use(Vuetify, {
     VSwitch,
     VSnackbar,
     VTabs,
-    VExpansionPanel
+    VExpansionPanel,
+    VAlert
   },
   theme: {
     primary: "#78909c",
@@ -94,7 +96,6 @@ new Vue({
       storageBucket: "dmaic-b6e44.appspot.com",
       messagingSenderId: "201730548149"
     });
-    this.$store.dispatch("cargar_proyectos");
 
 
 

@@ -44,7 +44,15 @@ export const moduloActividades = {
       return filter;
     }
   },
-  /*======================= MUTATIONS =======================*/
+
+  /**
+   *
+   * == MUTATIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación.
+   * Operaciones síncronas.
+   *
+   */
   mutations: {
     pushActividad(state, actividad) {
       state.actividades.push(actividad);
@@ -53,7 +61,14 @@ export const moduloActividades = {
       state.actividades = actividades;
     }
   },
-  /*======================= ACTIONS =======================*/
+  /**
+   *
+   * == ACTIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
+   * Operaciones asíncronas.
+   *
+   */
   actions: {
     //
     //CREAR ACTIVIDAD

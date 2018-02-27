@@ -477,6 +477,7 @@ import * as firebase from "firebase";
 export default {
   data() {
     return {
+   
       dialogs: {
         dialog_datosGenerales: {
           show: false
@@ -629,7 +630,7 @@ export default {
           ]
         }
       },
-      idTomaDatos:"",
+      idTomaDatos: "",
       showanadirActividad: false,
       showanadirObrero: false,
       showEditarDatosMedicion: false,
@@ -702,10 +703,10 @@ export default {
     actividadesTNC() {
       return this.$store.getters.actividadesTNC;
     },
-    tomaDatos(){
+    tomaDatos() {
       return this.$store.getters.tomaDatos;
     },
-    loading_tomaDatos(){
+    loading_tomaDatos() {
       return this.$store.getters.loading_tomaDatos;
     }
   },
@@ -827,7 +828,7 @@ export default {
 
       //
       this.idTomaDatos = idTomaDatos;
-      
+
       this.$store.dispatch("loadMedicionActual", payload);
       // this.txt_idMedicion = idMedicion;
     },
@@ -906,7 +907,7 @@ export default {
             this.$route.params.idPyt +
             "/" +
             this.$route.params.idMedicion +
-            "/tomaDatos/"+
+            "/tomaDatos/" +
             this.idTomaDatos +
             "/datos/"
         )

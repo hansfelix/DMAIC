@@ -246,14 +246,9 @@ export const moduloUsuarios = {
           const users = [];
           const obj = data.val();
           for (let key in obj) {
-            users.push({
-              id: key,
-              administrador: obj[key].administrador,
-              correo: obj[key].correo,
-              nombre: obj[key].nombre
-            });
+            users.push(obj);
           }
-          commit("setUsers", users);
+          commit("setUsers", obj);
           // commit("setLoadingMediciones", false);
         })
         .catch(error => {

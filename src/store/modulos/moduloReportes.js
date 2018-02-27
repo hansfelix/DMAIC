@@ -1,8 +1,14 @@
-import Vuex from "vuex";
+//Importación de librerías
 import * as firebase from "firebase";
 
 export const moduloReportes = {
-  /*======================= STATE =======================*/
+  /**
+   *
+   * == STATE
+   *
+   * State(estado) general de la Aplicación.
+   *
+   */
   state: {
     reporte: {
       barNGA: {
@@ -20,7 +26,15 @@ export const moduloReportes = {
     },
     loadingReporte: false
   },
-  /*======================= GETTERS =======================*/
+
+  /**
+   *
+   * == GETTERS
+   *
+   * Funciones reutilizables que obtienen datos parciales del state.
+   * Evita dependencias.
+   *
+   */
   getters: {
     LoadingReporte(state) {
       return state.loadingReporte;
@@ -40,7 +54,15 @@ export const moduloReportes = {
       };
     }
   },
-  /*======================= MUTATIONS =======================*/
+
+  /**
+   *
+   * == MUTATIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación.
+   * Operaciones síncronas.
+   *
+   */
   mutations: {
     setReporte(state, reporte) {
       state.reporte = reporte;
@@ -52,7 +74,15 @@ export const moduloReportes = {
       state.reporte.nota = nota;
     }
   },
-  /*======================= ACTIONS =======================*/
+
+  /**
+   *
+   * == ACTIONS
+   *
+   * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
+   * Operaciones asíncronas.
+   *
+   */
   actions: {
     //
     //CREAR REPORTE
