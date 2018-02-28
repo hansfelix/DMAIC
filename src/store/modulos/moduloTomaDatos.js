@@ -27,6 +27,10 @@ export const moduloTomaDatos = {
     tomaDatosActual(state) {
       return state.tomaDatosActual;
     },
+    tomaDatosActual_r(state) {
+      var reverse = state.tomaDatosActual.reverse()
+      return reverse;
+    },
     tomaDatos(state) {
       return state.tomaDatos;
     },

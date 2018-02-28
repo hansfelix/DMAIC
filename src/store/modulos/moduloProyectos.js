@@ -84,13 +84,7 @@ export const moduloProyectos = {
    *
    */
   actions: {
-    /**
-     * @description Cargar el proyecto actual
-     * @param { commit } payload
-     * @returns -
-     * @author Hans Felix
-     * @created 20/02/0218
-     */
+z
     loadPytActual({ commit }, payload) {
       commit("setLoadedPytActual", payload);
     },
