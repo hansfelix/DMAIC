@@ -273,7 +273,7 @@ export default {
         cr: this.txt_cr,
         nombrePyt: this.txt_nombrePyt
       };
-      this.$store.dispatch("createProyecto", proyecto);
+      this.$store.dispatch("crear_proyecto", proyecto);
       this.$router.push("/proyectos");
     },
     editarProyecto(proyecto) {

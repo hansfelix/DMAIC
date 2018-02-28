@@ -1,36 +1,56 @@
 <template>
   <v-slide-y-transition mode="out-in">
     <v-container fluid grid-list-xl>
-      <v-layout row wrap>
+      <v-layout row wrap id="home">
         <v-flex xs12 sm9 class="flex_cont">
           <div class="tituloApp">
             <h1>Aplicativo DMAIC</h1>
             <h4>Versión 0.0.1 - alpha</h4>
           </div>
-          <v-alert outline color="info" icon="info" :value="true">
+          <v-alert color="alert_info" icon="info" :value="true">
             El presente aplicativo tiene por objetivo brindar información relevante que contribuirá a mejorar la toma de datos para la
             generación de reportes y cartas d ebalance en los proyectos en los que participa Cosapi.
+            <br>
+            <br> Para mayo infromación, puede contactar a :
+            <strong>
+              <a href="mailto:jbarboza@cosapi.com.pe"> Ing. Jhonatan Barboza </a>
+            </strong>
           </v-alert>
 
           <!-- Botones -->
           <v-layout row wrap class="container_bnt-bienvenida">
             <v-flex class="xs12 sm4 cont_bnt-bienvenida">
-              <v-btn block color="primary" class="btn-bienvenida">Proyectos</v-btn>
+              <v-btn block color="primary" class="btn-bienvenida" to="Proyectos/">
+                <v-icon left>domain</v-icon>
+                Proyectos</v-btn>
             </v-flex>
             <v-flex class="xs12 sm4 cont_bnt-bienvenida">
-              <v-btn block color="primary" class="btn-bienvenida">FAQ</v-btn>
+              <v-btn block color="primary" class="btn-bienvenida" to="FAQ/">
+                <v-icon left>info</v-icon>
+                FAQ</v-btn>
             </v-flex>
             <v-flex class="xs12 sm4 cont_bnt-bienvenida">
-              <v-btn block color="primary" class="btn-bienvenida">mi perfil</v-btn>
+              <v-btn block color="primary" class="btn-bienvenida" to="Profile/">
+                <v-icon left>person</v-icon>
+                mi perfil</v-btn>
             </v-flex>
           </v-layout>
 
           <!-- Recursos -->
-          <h2>Novedades</h2>
-          <p>Novedades acerca del aplicativo.</p>
+          <br>
+          <v-layout row>
+            <v-flex>
+              <h2>Novedades</h2>
+              <p>Novedades acerca del aplicativo.</p>
+            </v-flex>
+            <v-flex text-xs-right>
+              <v-btn icon>
+                <v-icon>more_vert</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
           <v-card>
             <v-list three-line subheader>
-
               <v-divider></v-divider>
               <v-list-tile>
                 <v-list-tile-content>
@@ -77,13 +97,13 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  .layout.row {
+<style>
+  #home.layout.row {
     align-items: baseline;
   }
 
   .tituloApp {
-    margin: 15px auto;
+    margin: auto auto 15px auto;
   }
 
   .btn-bienvenida {
@@ -103,10 +123,12 @@
     font-weight: normal;
   }
 
+  .alert_info a {
+    color: white;
+  }
 
-
-  a {
-    color: #42b983;
+  .alert_info {
+    background-color: #5ea8e3;
   }
 
 </style>

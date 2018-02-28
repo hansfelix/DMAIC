@@ -84,7 +84,7 @@ export const moduloProyectos = {
    *
    */
   actions: {
-z
+
     loadPytActual({ commit }, payload) {
       commit("setLoadedPytActual", payload);
     },
@@ -166,7 +166,7 @@ z
      * @author Hans Felix
      * @created 20/02/0218
      */
-    createProyecto({ commit, getters }, payload) {
+    crear_proyecto({ commit, getters }, payload) {
       const proyecto = {
         cr: payload.cr,
         nombrePyt: payload.nombrePyt
