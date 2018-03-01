@@ -28,7 +28,7 @@
           
             <v-flex xs12>
               <template>
-                <v-expansion-panel popout>
+                <v-expansion-panel popout class="blue-grey lighten-5">
                   <v-expansion-panel-content>
                     <div slot="header">Datos Generales</div>
                     <v-card>

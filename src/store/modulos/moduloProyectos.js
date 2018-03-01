@@ -1,11 +1,20 @@
 //Importación de librerías
 import * as firebase from "firebase";
 
+// dmaic-b6e44
+//
+// ├── proyectos
+// │   └── { proyecto_uid }
+// │       ├── cr
+// │       ├── nombrePyt
+// │       └── users
+// │           └── { user_uid }
+// └── ...
+
 export const moduloProyectos = {
   /**
    *
    * == STATE
-   *
    * State(estado) general de la Aplicación.
    *
    */
@@ -18,7 +27,6 @@ export const moduloProyectos = {
   /**
    *
    * == GETTERS
-   *
    * Funciones reutilizables que obtienen datos parciales del state.
    * Evita dependencias.
    *
@@ -38,7 +46,6 @@ export const moduloProyectos = {
   /**
    *
    * == MUTATIONS
-   *
    * Funciones encargadas de cambiar el STATE de la Aplicación.
    * Operaciones síncronas.
    *
@@ -78,13 +85,11 @@ export const moduloProyectos = {
   /**
    *
    * == ACTIONS
-   *
    * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
    * Operaciones asíncronas.
    *
    */
   actions: {
-
     loadPytActual({ commit }, payload) {
       commit("setLoadedPytActual", payload);
     },
@@ -99,7 +104,7 @@ export const moduloProyectos = {
     cargar_proyectos({ commit }) {
       //set LoadingProyectos
       commit("setLoadingProyectos", true);
-      //Llamada a Firebase 
+      //Llamada a Firebase
       //Obtiene los proyectos, el id lo pone como propiedad del objeto
       firebase
         .database()
@@ -109,7 +114,7 @@ export const moduloProyectos = {
           const proyectos = [];
           const obj = data.val();
           for (let key in obj) {
-            obj.id = key;
+            obj[key].id = key;
             proyectos.push(obj[key]);
           }
           //cargar los proyectos al state
@@ -134,17 +139,19 @@ export const moduloProyectos = {
     cargar_proyectosByUid({ commit }, user_uid) {
       //set LoadingProyectos
       commit("setLoadingProyectos", true);
-      //Llamada a Firebase 
+      //Llamada a Firebase
       //Obtiene los proyectos, el id lo pone como propiedad del objeto
       firebase
         .database()
-        .ref("proyectos").orderByChild('users/'+user_uid).equalTo(true)
+        .ref("proyectos")
+        .orderByChild("users/" + user_uid)
+        .equalTo(true)
         .once("value")
         .then(data => {
           const proyectos = [];
           const obj = data.val();
           for (let key in obj) {
-            obj.id = key;
+            obj[key].id = key;
             proyectos.push(obj[key]);
           }
           //cargar los proyectos al state
@@ -166,7 +173,7 @@ export const moduloProyectos = {
      * @author Hans Felix
      * @created 20/02/0218
      */
-    crear_proyecto({ commit, getters }, payload) {
+    crear_proyecto({ commit, dispatch }, payload) {
       const proyecto = {
         cr: payload.cr,
         nombrePyt: payload.nombrePyt
@@ -176,9 +183,19 @@ export const moduloProyectos = {
         .ref("proyectos")
         .push(proyecto)
         .then(data => {
-
           proyecto.id = data.key;
           commit("createProyecto", proyecto);
+
+          // escribir ultimaModificacion
+          const ultimaModificacion = {
+            proyecto_uid: data.key,
+            medicion_uid: "",
+            tomaDato_uid: "",
+            tipo: "proyecto",
+            accion: "Has creado el proyecto " + proyecto.nombrePyt,
+            fecha: new Date().toLocaleDateString()
+          };
+          dispatch("escribir_ultimaModificacion", ultimaModificacion);
         })
         .catch(error => {
           console.log(error);

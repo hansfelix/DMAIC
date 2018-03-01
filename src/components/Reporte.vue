@@ -285,7 +285,7 @@
               <v-tabs-content id="tab-2">
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <div v-for='(tomaDato,key) in tomaDatosActual_modificado_reverse' :key="key" class="rowCuadro_cartaBalance">
+                    <div v-for='(tomaDato,key) in tomaDatosActual_modificado' :key="key" class="rowCuadro_cartaBalance">
                       <div class="bold cell_cartaBalance greycell">
                         {{key}}
                       </div>
@@ -415,25 +415,7 @@ export default {
       console.log("tomaDatosActual_modificado es : " + result);
     },
 
-    tomaDatosActual_modificado_reverse() {
-      let arrayTomaDatos2 = [];
-      let result = [];
-
-      arrayTomaDatos2 = this.$store.getters.tomaDatosActual_r;
-
-      //en una primera instancia el array es nulo, hasta que termine de cargar los datos del reporte
-      if (arrayTomaDatos2.length) {
-
-        result = arrayTomaDatos2.reduce(function(r, a) {
-          r[a.hora] = r[a.hora] || [];
-          r[a.hora].push(a);
-          return r;
-        }, Object.create(null));
-      }
-
-      return result;
-    },
-
+  
     //BORRAAAAAAAAAAAR
     dataPie() {
       return this.$store.getters.dataPie;

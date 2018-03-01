@@ -16,11 +16,17 @@
         <!-- Cabecera -->
         <v-flex xs12 md8 align-center>
           <h1 display-3 class="tittle_H">Proyectos</h1>
-          <span>Se listan a los proyectos resgistrados, para añadir uno nuevo, de click en el botón
+
+          <!-- Adminstrador -->
+          <span v-if="user.administrador">Se listan a los proyectos resgistrados, para añadir uno nuevo, de click en el botón
             <strong>AÑADIR PROYECTO</strong>:</span>
-          <v-spacer></v-spacer>
+          <!-- Ususario de Proyecto -->
+          <span v-if="!user.administrador">Se listan los proyectos en el que se encuentra registrado. dé click en alguno para ver su información.</span>
+
         </v-flex>
-        <v-flex xs12 md4 class="text-xs-center text-md-right">
+
+        <!-- Se muestra solo si es administrador -->
+        <v-flex xs12 md4 class="text-xs-center text-md-right" v-if="user.administrador">
           <v-btn color="secondary" dark @click.stop="dialog = true; txt_nombrePyt =''; txt_cr=''">
             Añadir Proyecto
             <v-icon right dark>queue</v-icon>
@@ -40,12 +46,17 @@
       <v-layout row wrap>
         <v-flex xs12 md3 v-for="proyecto in proyectos" :key="proyecto.id" v-if="!loading_proyectos">
           <v-card>
-            <v-card-title primary-title>
-              <div>
-                <router-link class="headline mb-0 card_tittle-CR" :to="'/Mediciones/' + proyecto.id">{{proyecto.cr}}</router-link>
-                <div class="grey--text two-lines">{{proyecto.nombrePyt}}</div>
-              </div>
-            </v-card-title>
+
+            <router-link :to="'/Mediciones/' + proyecto.id">
+              <v-card-title primary-title>
+                <div class="blue-grey--text darken-1"> 
+                  <h2 class="headline mb-0 card_tittle-CR">{{proyecto.cr}}</h2>
+                  <div class="grey--text two-lines">{{proyecto.nombrePyt}}</div>
+                </div>
+              </v-card-title>
+            </router-link>
+            <v-divider></v-divider>
+
             <v-card-actions>
               <v-btn flat color="primary" :to="'/Mediciones/' + proyecto.id">VER MEDICIONES</v-btn>
               <v-spacer></v-spacer>
@@ -56,6 +67,7 @@
                 <v-icon color="primary"> mode_edit</v-icon>
               </v-btn>
             </v-card-actions>
+
           </v-card>
         </v-flex>
 
@@ -154,7 +166,7 @@
                             <v-subheader>Usuarios</v-subheader>
                             <template v-for="(item, index) in proyecto">
                               <v-divider :key="index"></v-divider>
-                              <v-list-tile avatar :key="index" >
+                              <v-list-tile avatar :key="index">
                                 <v-list-tile-avatar>
                                   <img :src="item.users.foto">
                                 </v-list-tile-avatar>
@@ -250,7 +262,7 @@ export default {
    */
   computed: {
     // getters importados de vuex
-    ...mapGetters(["proyectos", "loading_proyectos"])
+    ...mapGetters(["proyectos", "loading_proyectos", "user"])
   },
 
   watch: {
@@ -346,14 +358,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.card_tittle-CR {
-  text-decoration: none;
-  color: black;
+.card {
+  transition: all 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0px 2px 6px 1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  transition: all 0.2s ease;
 }
 
-h1,
-h2 {
-  font-weight: normal;
+.card_tittle-CR {
+  text-decoration: none;
 }
 
 ul {
@@ -363,6 +378,7 @@ ul {
 
 a {
   color: #42b983;
+  text-decoration: none;
 }
 
 .two-lines {

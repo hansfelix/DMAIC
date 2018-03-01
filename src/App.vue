@@ -90,101 +90,110 @@
 </template>
 
 <script>
-  export default {
-    computed: {
-      autenticado() {
-        return this.$store.getters.autenticado;
-      },
-      user() {
-        return this.$store.getters.user;
-      },
-      items() {
-        let menuItems = [{
-            icon: "home",
-            title: "Inicio",
-            url: "/"
+export default {
+  computed: {
+    autenticado() {
+      return this.$store.getters.autenticado;
+    },
+    user() {
+      return this.$store.getters.user;
+    },
+    items() {
+      let menuItems = [
+        {
+          icon: "home",
+          title: "Inicio",
+          url: "/Inicio"
+        },
+        {
+          icon: "domain",
+          title: "Proyectos",
+          url: "/Proyectos"
+        },
+        {
+          icon: "person",
+          title: "Mi perfil",
+          url: "/Profile"
+        }
+      ];
+      return menuItems;
+    },
+    itemsAdminstrador() {
+      let menuItems = [];
+      if (this.user.administrador) {
+        menuItems = [
+          {
+            icon: "supervisor_account",
+            title: "Usuarios",
+            url: "/Usuarios"
           },
           {
-            icon: "domain",
-            title: "Proyectos",
-            url: "/Proyectos"
-          },
-          {
-            icon: "person",
-            title: "Mi perfil",
-            url: "/Profile"
-          },
+            icon: "settings",
+            title: "Configuración",
+            url: "/Configuracion"
+          }
         ];
-        return menuItems;
-      },
-      itemsAdminstrador() {
-        let menuItems = [];
-        if (this.user.administrador) {
-          menuItems = [{
-              icon: "supervisor_account",
-              title: "Usuarios",
-              url: "/Usuarios"
-            },
-            {
-              icon: "settings",
-              title: "Configuración",
-              url: "/Configuracion"
-            }
-          ];
-        }
-        return menuItems;
       }
-    },
-    watch: {
-      autenticado(value) {
-        if (value === true) {
-          this.$router.push("/");
-        }
-      }
-    },
-    data() {
-      return {
-        clipped: false,
-        drawer: true,
-        fixed: false,
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: "DMAIC"
-      };
-    },
-    name: "App",
-    methods: {
-      onLogout() {
-        this.$store.dispatch("logout");
-        this.$router.push("/LogIn");
-      }
+      return menuItems;
     }
-  };
-
+  },
+  // watch: {
+  //   autenticado(value) {
+  //     if (value === true) {
+  //       this.$router.push("/Inicio");
+  //     }
+  //   }
+  // },
+  data() {
+    return {
+      clipped: false,
+      drawer: true,
+      fixed: false,
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: "DMAIC"
+    };
+  },
+  name: "App",
+  methods: {
+    onLogout() {
+      this.$store.dispatch("logout");
+      this.$router.push("/LogIn");
+    }
+  }
+};
 </script>
 
 <style>
-  .navDrawer_email {
-    margin-top: -4px;
-  }
+h1,
+h2 {
+  font-weight: normal;
+}
 
-  .tittle_H {
-    margin-bottom: 10px
-  }
+.navDrawer_email {
+  margin-top: -4px;
+}
 
-  .img_background_navigationDrawer {
-    height: auto;
-    width: 100%;
-  }
+.tittle_H {
+  margin-bottom: 10px;
+}
 
-  .background_navigationDrawer {
-    background-image: url("./assets/background_navigationDrawer.jpg");
-    min-height: 158px;
-  }
+.img_background_navigationDrawer {
+  height: auto;
+  width: 100%;
+}
 
-  .avatar_navigationDrawer {
-    /* border: 1px solid white */
-  }
+.background_navigationDrawer {
+  background-image: url("./assets/background_navigationDrawer.jpg");
+  min-height: 158px;
+}
 
+.avatar_navigationDrawer {
+  /* border: 1px solid white */
+}
+
+.list__tile--active {
+  background-color: whitesmoke;
+}
 </style>

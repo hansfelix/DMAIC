@@ -1,11 +1,28 @@
-import Vuex from "vuex";
+//Importación de librerías
 import * as firebase from "firebase";
+
+// dmaic-b6e44
+//
+// ├── user
+// │   └── { user_uid }
+// │       ├── administrador
+// │       ├── correo
+// │       ├── nombre
+// │       ├── foto
+// │       └── ultimasModificaciones
+// │           └── { ultimaModificacion_uid }
+// │               └── { proyecto_uid }
+// │               └── { medicion_uid }
+// │               └── { tomaDato_uid }
+// │               └── tipo
+// │               └── fecha
+// │               └── accion
+// └── ...
 
 export const moduloUsuarios = {
   /**
    *
    * == STATE
-   *
    * State(estado) general de la Aplicación.
    *
    */
@@ -21,7 +38,6 @@ export const moduloUsuarios = {
   /**
    *
    * == GETTERS
-   *
    * Funciones reutilizables que obtienen datos parciales del state.
    * Evita dependencias.
    *
@@ -44,7 +60,6 @@ export const moduloUsuarios = {
   /**
    *
    * == MUTATIONS
-   *
    * Funciones encargadas de cambiar el STATE de la Aplicación.
    * Operaciones síncronas.
    *
@@ -70,7 +85,6 @@ export const moduloUsuarios = {
   /**
    *
    * == ACTIONS
-   *
    * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
    * Operaciones asíncronas.
    *
@@ -228,7 +242,7 @@ export const moduloUsuarios = {
           console.log(error);
         });
     },
-    
+
     /**
      * @description Carga los usuarios registrados en el sistema.
      * @param { commit } user
@@ -236,7 +250,7 @@ export const moduloUsuarios = {
      * @author Hans Felix
      * @created 20/02/0218
      */
-    cargar_usuarios({ commit }) {
+    cargar_usuarios({ commit, dispatch }) {
       // commit("setLoadingMediciones", true);
       firebase
         .database()
@@ -246,15 +260,40 @@ export const moduloUsuarios = {
           const users = [];
           const obj = data.val();
           for (let key in obj) {
-            obj.id = key
+            obj.id = key;
             users.push(obj[key]);
           }
           commit("setUsers", users);
           // commit("setLoadingMediciones", false);
+
+
         })
         .catch(error => {
           console.log(error);
           commit("setLoadingMediciones", false);
+        });
+    },
+
+    /**
+     * @description Carga los usuarios registrados en el sistema.
+     * @param { commit } user
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
+    escribir_ultimaModificacion({ commit, getters },ultimaModificacion) {
+      var user = getters.user;
+
+      firebase
+        .database()
+        .ref("users/" + user.id+ "/ultimasModificaciones")
+        .push(ultimaModificacion)
+        .then(data => {
+          //const key = data.key;
+          // commit("pushReporte", payload.reporte);
+        })
+        .catch(error => {
+          console.log(error);
         });
     }
   }

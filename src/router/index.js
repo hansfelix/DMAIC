@@ -23,7 +23,7 @@ export default new Router({
       component: Proyectos
     },
     {
-      path: '/',
+      path: '/Inicio',
       name: 'HelloWorld',
       component: HelloWorld
     },

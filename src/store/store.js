@@ -10,6 +10,7 @@ import { moduloObreros } from "./modulos/moduloObreros";
 import { moduloProyectos } from "./modulos/moduloProyectos";
 import { moduloUsuarios } from "./modulos/moduloUsuarios";
 import { moduloTomaDatos } from "./modulos/moduloTomaDatos";
+import { moduloConfiguracion } from "./modulos/moduloConfiguracion";
 
 Vue.use(Vuex);
 
@@ -128,6 +129,7 @@ export const store = new Vuex.Store({
     mod_obreros: moduloObreros,
     mod_proyectos: moduloProyectos,
     mod_usuarios: moduloUsuarios,
-    mod_tomaDatos: moduloTomaDatos
+    mod_tomaDatos: moduloTomaDatos,
+    mod_configracion: moduloConfiguracion
   }
 });
