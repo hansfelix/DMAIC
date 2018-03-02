@@ -13,11 +13,11 @@
           </v-breadcrumbs>
         </v-flex>
 
-        <v-flex xs12 md9 align-center>
+        <v-flex xs12 md9 align-center v-if="!loading_proyectoActual">
           <h1 display-3 class="tittle_H">Procesos</h1>
           <p>Se listan los procesos que tiene del proyecto
-            <strong>{{pytActual.cr}} - {{pytActual.nombrePyt}} </strong>, para añadir una nueva medición de click en el botón
-            <strong>AÑADIR MEDICIÓN</strong>:</p>
+            <strong>{{proyectoActual.cr}} - {{proyectoActual.nombrePyt}} </strong>, para añadir una nueva medición de click en el botón
+            <strong>AÑADIR PROCESO</strong>:</p>
           <v-spacer></v-spacer>
         </v-flex>
         <v-flex xs12 md3 class="text-xs-center text-md-right">
@@ -35,7 +35,7 @@
             <v-form v-model="valid" ref="form">
               <v-card>
                 <v-card-title>
-                  <span class="headline">Nueva Medición</span>
+                  <span class="headline">Nuevo Proceso</span>
                 </v-card-title>
                 <v-card-text>
                   <v-container grid-list-md>
@@ -97,7 +97,7 @@
                   <v-card-text class="grey lighten-3">
                     <v-layout>
                       <v-flex s12 class="text-xs-right">
-                        <v-btn color="secondary" right>Nueva Medición</v-btn>
+                        <v-btn color="secondary" right @click="anadirMedicion(proceso.id)">Nueva Medición</v-btn>
                       </v-flex>
                     </v-layout>
 
@@ -105,7 +105,7 @@
                     <v-layout>
                       <v-flex s12 class="text-xs-center">
                         <v-list two-line subheader>
-                          <v-list-tile v-for="proceso in proceso.procesos" :key="proceso.id" avatar class="procesoItem" :to="'/proceso_configuracion/' +pytActual.id +'/' +proceso.id">
+                          <v-list-tile v-for="proceso in proceso.procesos" :key="proceso.id" avatar class="procesoItem" :to="'/proceso_configuracion/' +proyectoActual.id +'/' +proceso.id">
                             <!-- <v-list-tile-avatar>
                           <v-icon v-bind:class="proceso.dashboard ? 'green lighten-1 white--text':'grey lighten-1 white--text'">{{ proceso.dashboard ? "assessment":"input" }}</v-icon>
                         </v-list-tile-avatar> -->
@@ -116,7 +116,7 @@
 
                             <v-list-tile-action v-if="proceso.dashboard">
                               <v-tooltip top>
-                                <v-btn slot="activator" icon ripple :to="'/Reporte/' +pytActual.id +'/' +proceso.id ">
+                                <v-btn slot="activator" icon ripple :to="'/Reporte/' +proyectoActual.id +'/' +proceso.id ">
                                   <v-icon color="grey lighten-1">insert_drive_file</v-icon>
                                 </v-btn>
                                 <span>Ver Reporte</span>
@@ -125,7 +125,7 @@
 
                             <v-list-tile-action>
                               <v-tooltip top>
-                                <v-btn slot="activator" icon ripple :to="'/proceso_configuracion/' +pytActual.id +'/' +proceso.id">
+                                <v-btn slot="activator" icon ripple :to="'/proceso_configuracion/' +proyectoActual.id +'/' +proceso.id">
                                   <v-icon color="grey lighten-1">settings</v-icon>
                                 </v-btn>
                                 <span>Configuración</span>
@@ -145,7 +145,7 @@
 
           <!-- <v-card v-if="!loading_procesos">
             <v-list two-line subheader>
-              <v-list-tile v-for="proceso in procesos" :key="proceso.id" avatar class="procesoItem" :to="'/proceso_configuracion/' +pytActual.id +'/' +proceso.id">
+              <v-list-tile v-for="proceso in procesos" :key="proceso.id" avatar class="procesoItem" :to="'/proceso_configuracion/' +proyectoActual.id +'/' +proceso.id">
                 <v-list-tile-avatar>
                   <v-icon v-bind:class="proceso.dashboard ? 'green lighten-1 white--text':'grey lighten-1 white--text'">{{ proceso.dashboard ? "assessment":"input" }}</v-icon>
                 </v-list-tile-avatar>
@@ -157,7 +157,7 @@
 
                 <v-list-tile-action v-if="proceso.dashboard">
                   <v-tooltip top>
-                    <v-btn slot="activator" icon ripple :to="'/Reporte/' +pytActual.id +'/' +proceso.id ">
+                    <v-btn slot="activator" icon ripple :to="'/Reporte/' +proyectoActual.id +'/' +proceso.id ">
                       <v-icon color="grey lighten-1">insert_drive_file</v-icon>
                     </v-btn>
                     <span>Ver Reporte</span>
@@ -168,7 +168,7 @@
 
                 <v-list-tile-action>
                   <v-tooltip top>
-                    <v-btn slot="activator" icon ripple :to="'/proceso_configuracion/' +pytActual.id +'/' +proceso.id">
+                    <v-btn slot="activator" icon ripple :to="'/proceso_configuracion/' +proyectoActual.id +'/' +proceso.id">
                       <v-icon color="grey lighten-1">settings</v-icon>
                     </v-btn>
                     <span>Configuración</span>
@@ -253,25 +253,13 @@ export default {
   computed: {
     // getters importados de vuex
     ...mapGetters([
-      "pytActual",
-      "loading_proyectos",
       "procesos",
-      "loading_procesos"
+      "loading_procesos",
+      "proyectos",
+      "proyectoActual",
+      "loading_proyectos",
+      "loading_proyectoActual"
     ])
-  },
-  created() {
-    var proyecto_uid = this.$route.params.proyecto_uid;
-    const payload = {
-      proyecto_uid: proyecto_uid,
-      Proyectos: this.$store.state.Proyectos
-    };
-    this.$store.dispatch("cargar_procesos", payload);
-    // this.$router.push("/procesos");
-
-    this.$store.dispatch("loadPytActual", payload);
-  },
-  destroyed() {
-    console.log("se destruyo");
   },
   methods: {
     crearProceso() {
@@ -292,17 +280,54 @@ export default {
             configurado: false
           }
         };
-
         // Crear proceso
         this.$store.dispatch("crear_proceso", payload);
-
         // reiniciar formulario
         this.$refs.form.reset();
-
         // cerrar dialogo
         this.dialog = false;
       }
+    },
+    anadirMedicion(proceso_uid) {
+      console.log(proceso_uid);
     }
+  },
+  watch: {
+    proyectos(val) {
+      if (val != undefined) {
+        var proyecto_uid = this.$route.params.proyecto_uid;
+        this.$store.dispatch("cargar_proyectoActual", proyecto_uid);
+      }
+    }
+  },
+  created() {
+    var proyecto_uid = this.$route.params.proyecto_uid;
+    // Si se han cargado los proyectos, se carga el proyecto actual
+    // - this.$store.getters.proyectos.length = 0 no hay proyectos FALSE
+    // - this.$store.getters.proyectos.length != 0 si hay proyectos TRUE
+    // si no hya proyectos lo carga del watch
+    if ( this.$store.getters.proyectos.length ) {
+      this.$store.dispatch("cargar_proyectoActual", proyecto_uid);
+    }
+    this.$store.dispatch("cargar_procesos", proyecto_uid);
+  },
+
+  /**
+   *
+   * == MOUNTED
+   *
+   */
+  mounted() {
+    let self = this;
+
+    //Detecta si presiona enter en un diálogo
+    window.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        if (self.dialog == true) {
+          self.crearProceso();
+        }
+      }
+    });
   }
 };
 </script>

@@ -265,16 +265,6 @@ export default {
   data() {
     return {
       loading: false,
-      states: [
-        {
-          id: "1",
-          nombre: "prosyectos"
-        },
-        {
-          id: "2",
-          nombre: "loasading_proyectos"
-        }
-      ],
       items: [],
       // search: null,
       select: [],
@@ -329,24 +319,6 @@ export default {
     ])
   },
 
-  watch: {
-    user(val) {
-      if (val != undefined) {
-        const user = val;
-        const uid = user.id; // uid del usuario
-        const administrador = user.administrador; // true o false
-
-        if (administrador) {
-          //Si es administrador carga todo los proyectos
-          this.$store.dispatch("cargar_proyectos");
-        } else {
-          //Si no es administrador solo carga lo filtrado por el id
-          this.$store.dispatch("cargar_proyectosByUid", user.id);
-        }
-      }
-    }
-  },
-
   /**
    *
    * == METHODS
@@ -363,13 +335,6 @@ export default {
         this.dialog = false;
       }
     },
-    opendialog_editarProyecto(proyecto) {
-      this.dialog_editarProyecto = true;
-
-      this.txt_nombrePyt = proyecto.nombrePyt;
-      this.txt_cr = proyecto.cr;
-      this.pyt_seleccionado = proyecto;
-    },
     actualizarProyecto() {
       const newPyt = {
         id: this.pyt_seleccionado.id,
@@ -381,7 +346,22 @@ export default {
     },
 
     /**
-     * @description Abrir dialogo AÑADIR USUSARIO
+     * @description Abrir dialogo EDITAR PROYECTO
+     * @param proyecto
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
+    opendialog_editarProyecto(proyecto) {
+      this.dialog_editarProyecto = true;
+
+      this.txt_nombrePyt = proyecto.nombrePyt;
+      this.txt_cr = proyecto.cr;
+      this.pyt_seleccionado = proyecto;
+    },
+
+    /**
+     * @description Abrir dialogo VER USUSARIOS
      * @param proyecto
      * @returns -
      * @author Hans Felix
@@ -403,6 +383,14 @@ export default {
         this.noUsers = true;
       }
     },
+
+    /**
+     * @description Abrir dialogo AÑADIR USUSARIO
+     * @param proyecto
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
     opendialog_anadirUsuarios(proyecto) {
       this.$store.commit("set_userBusqueda", []);
       this.proyecto = proyecto;

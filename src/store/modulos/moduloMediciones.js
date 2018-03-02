@@ -1,86 +1,70 @@
-//Importación de librerías
-import * as firebase from "firebase";
 
+import * as firebase from "firebase";
+var varx = "x";
 export const moduloMediciones = {
-   /**
+  /**
    *
    * == STATE
-   *
    * State(estado) general de la Aplicación.
    *
    */
   state: {
-    tomaDatos: [{ad:"a"}],
-    tomaDatosActual: {},
-    loading_tomaDatos: false
+    mediciones: [],
+    medicionActual: {},
+    loading_mediciones: false
   },
 
   /**
    *
    * == GETTERS
-   *
    * Funciones reutilizables que obtienen datos parciales del state.
    * Evita dependencias.
    *
    */
   getters: {
-    tomaDatosActual(state) {
-      return state.tomaDatosActual;
+    mediciones(state) {
+      return state.mediciones;
     },
-    tomaDatos(state) {
-      return state.tomaDatos;
+    medicionActual(state) {
+      return state.medicionActual;
     },
-    loading_tomaDatos(state) {
-      return state.loading_tomaDatos;
+    loading_mediciones(state) {
+      return state.loading_mediciones;
     }
   },
 
   /**
    *
    * == MUTATIONS
-   *
    * Funciones encargadas de cambiar el STATE de la Aplicación.
    * Operaciones síncronas.
    *
    */
   mutations: {
-
-    setprocesoActual_duracion(state, payload) {
-      //////////
-      state.procesoActual.dataprocesoActual.duracion = payload;
+    set_medicionActual(state, payload) {
+      state.medicionActual = payload;
     },
-    setTomaDatosActual(state, payload) {
-      state.tomaDatosActual = payload;
+    set_mediciones(state, payload) {
+      state.mediciones = payload;
     },
-    setLoadedTomaDatos(state, payload) {
-      state.tomaDatos = payload;
+    set_loading_mediciones(state, payload) {
+      state.loading_mediciones = payload;
     },
-    setLoadingTomaDatos(state, payload) {
-      state.loading_tomaDatos = payload;
-    },
-    pushTomaDatos(state, payload) {
-      state.tomaDatos.push(payload);
-    },
-    setprocesoActualConfigurado(state, payload) {
-      ///////
-      state.procesoActual.configurado = payload;
-    },
-    setprocesoActualDashboard(state, payload) {
-      ///////////
-      state.procesoActual.dashboard = payload;
+    push_mediciones(state, payload) {
+      state.mediciones.push(payload);
     }
   },
   /**
    *
    * == ACTIONS
-   *
    * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
    * Operaciones asíncronas.
    *
    */
   actions: {
     cargar_tomaDatos({ commit }, payload) {
-      commit("setLoadingTomaDatos", true);
+      commit("set_loading_mediciones", true);
+
 
       firebase
         .database()
@@ -100,29 +84,40 @@ export const moduloMediciones = {
             obj[key].id = key;
             tomaDatos.push(obj[key]);
           }
-          commit("setLoadedTomaDatos", tomaDatos);
-          commit("setLoadingTomaDatos", false);
+          commit("set_mediciones", tomaDatos);
+          commit("set_loading_mediciones", false);
         })
         .catch(error => {
           console.log(error);
-          commit("setLoadingTomaDatos", false);
+          commit("set_loading_mediciones", false);
         });
     },
     // Guardar los Proyectos en FIREBASE
-    crear_TomaDatos({ commit, getters }, payload) {
+    crear_medicion({ commit, getters }, payload) {
+
+      var proyectosRef = firebase
+      .database()
+      .ref(
+        "datos-proyecto/" +
+          payload.proyecto_uid +
+          "/" +
+          payload.idproceso +
+          "/tomaDatos/"
+      );
+      
       firebase
         .database()
         .ref(
-          "datos-proyecto/" +
+          "procesos/" +
             payload.proyecto_uid +
             "/" +
-            payload.idproceso +
-            "/tomaDatos/"
+            payload.proceso_uid +
+            "/medicion/"
         )
-        .push(payload.tomaDatos)
+        .push(payload.medicion)
         .then(data => {
           payload.tomaDatos.id = data.key;
-          commit("pushTomaDatos", payload.tomaDatos);
+          commit("push_mediciones", payload.tomaDatos);
         })
         .catch(error => {
           console.log(error);
@@ -137,12 +132,13 @@ export const moduloMediciones = {
         .database()
         .ref(
           "datos-proyecto/" +
-          payload.proyecto_uid +
-          "/" +
-          payload.idproceso +
-          "/tomaDatos/" +
-          payload.idTomaDatos +
-          "/datos")
+            payload.proyecto_uid +
+            "/" +
+            payload.idproceso +
+            "/tomaDatos/" +
+            payload.idTomaDatos +
+            "/datos"
+        )
         .once("value")
         .then(data => {
           const tomaDatosActual = [];
@@ -153,7 +149,7 @@ export const moduloMediciones = {
             tomaDatosActual.push(obj[key]);
           }
 
-          commit("setTomaDatosActual", tomaDatosActual);
+          commit("set_medicionActual", tomaDatosActual);
 
           // commit("setLoadedprocesos", procesos);
           commit("setLoading", false);

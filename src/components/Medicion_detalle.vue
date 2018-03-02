@@ -9,8 +9,8 @@
       procesoActual() {
         return this.$store.state.procesoActual;
       },
-      pytActual() {
-        return this.$store.state.pytActual;
+      proyectoActual() {
+        return this.$store.state.proyectoActual;
       }
     },
     created() {

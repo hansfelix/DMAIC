@@ -1,4 +1,4 @@
-//Importación de librerías
+
 import * as firebase from "firebase";
 
 export const moduloConfiguracion = {
@@ -10,7 +10,24 @@ export const moduloConfiguracion = {
    */
   state: {
     texturas: [{}],
-    loading_texturas: false
+    loading_texturas: false,
+    menuItems: [
+      {
+        icon: "home",
+        title: "Inicio",
+        url: "/Inicio"
+      },
+      {
+        icon: "domain",
+        title: "Proyectos",
+        url: "/Proyectos"
+      },
+      {
+        icon: "person",
+        title: "Mi perfil",
+        url: "/Profile"
+      }
+    ]
   },
 
   /**
@@ -23,6 +40,9 @@ export const moduloConfiguracion = {
   getters: {
     texturas(state) {
       return state.texturas;
+    },
+    menuItems(state){
+      return state. menuItems;
     }
   },
 
@@ -85,7 +105,6 @@ export const moduloConfiguracion = {
               //
               console.log(error);
             });
-
         });
     },
 

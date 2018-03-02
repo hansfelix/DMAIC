@@ -22,7 +22,7 @@
               <h1 display-3 class="tittle_H">Definición</h1>
               <p>Se muestra la configuración que tiene la medición del proceso 
                 <strong>"{{procesoActual.dataprocesoActual.nombreProceso}}"</strong> 
-                en el proyecto <strong>{{pytActual.cr}} - {{pytActual.nombrePyt}} </strong>.
+                en el proyecto <strong>{{proyectoActual.cr}} - {{proyectoActual.nombrePyt}} </strong>.
               </p>
             </v-flex>
           
@@ -367,7 +367,7 @@
 
                 <v-flex v-for="tomaDato in tomaDatos" :key="tomaDato.id" :v-if="!loading_tomaDatos">
                   <p>{{tomaDato.nombre}}</p>
-                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +procesoActual.id +'/' + tomaDato.id">
+                  <v-btn ripple color="primary" :to="'/TomaDatos/' +proyectoActual.id +'/' +procesoActual.id +'/' + tomaDato.id">
                       tomar datos
                     <v-icon right dark>update</v-icon>
                   </v-btn>
@@ -377,14 +377,14 @@
                     <v-icon right dark>update</v-icon>
                   </v-btn>
 
-                  <v-btn ripple color="primary" :to="'/Reporte/' +pytActual.id +'/' +procesoActual.id +'/' + tomaDato.id" >
+                  <v-btn ripple color="primary" :to="'/Reporte/' +proyectoActual.id +'/' +procesoActual.id +'/' + tomaDato.id" >
                       ver reporte
                     <v-icon right dark>update</v-icon>
                   </v-btn>
 
                 </v-flex>
 
-                <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +procesoActual.id" >
+                <v-btn ripple color="primary" :to="'/TomaDatos/' +proyectoActual.id +'/' +procesoActual.id" >
                     Iniciar toma de datos
                   <v-icon right dark>update</v-icon>
                 </v-btn>
@@ -401,7 +401,7 @@
             Generar reporte
             </v-btn>
 
-             <v-btn ripple color="primary" :to="'/Reporte/' +pytActual.id +'/' +procesoActual.id ">
+             <v-btn ripple color="primary" :to="'/Reporte/' +proyectoActual.id +'/' +procesoActual.id ">
             Ver reporte
             </v-btn> 
             
@@ -688,8 +688,8 @@ export default {
     procesoActual() {
       return this.$store.getters.procesoActual;
     },
-    pytActual() {
-      return this.$store.getters.pytActual;
+    proyectoActual() {
+      return this.$store.getters.proyectoActual;
     },
     actividades() {
       return this.$store.getters.actividades;
@@ -713,14 +713,14 @@ export default {
   methods: {
     completarConfiguracion() {
       const obj = {
-        proyecto_uid: this.$store.state.pytActual.id,
+        proyecto_uid: this.$store.state.proyectoActual.id,
         idproceso: this.$store.getters.procesoActual.id
       };
       this.$store.dispatch("actualizar_proceso_configurado", obj);
     },
     anadirObrero() {
       const obj = {
-        proyecto_uid: this.pytActual.id,
+        proyecto_uid: this.proyectoActual.id,
         idproceso: this.procesoActual.id,
         obrero: {
           nombre: this.txt_nombreObrero
@@ -735,7 +735,7 @@ export default {
 
       for (var i = 0; i < numObreros; i++) {
         const obj = {
-          proyecto_uid: this.pytActual.id,
+          proyecto_uid: this.proyectoActual.id,
           idproceso: this.procesoActual.id,
           obrero: {
             nombre: prefijo + (i + 1)
@@ -747,7 +747,7 @@ export default {
     },
     borrarObrero(idObrero, index) {
       const obj = {
-        proyecto_uid: this.pytActual.id,
+        proyecto_uid: this.proyectoActual.id,
         idproceso: this.procesoActual.id,
         index: index,
         obrero: {
@@ -758,7 +758,7 @@ export default {
     },
     anadirActividad() {
       const obj = {
-        proyecto_uid: this.pytActual.id,
+        proyecto_uid: this.proyectoActual.id,
         idproceso: this.procesoActual.id,
         actividad: {
           nombre: this.dialogs.dialog_actividades.txt_nombreActividad,
@@ -780,7 +780,7 @@ export default {
 
       for (var i = 0; i < seleccionado.lista.length; i++) {
         const obj = {
-          proyecto_uid: this.pytActual.id,
+          proyecto_uid: this.proyectoActual.id,
           idproceso: this.procesoActual.id,
           actividad: {
             nombre: seleccionado.lista[i].nombre,

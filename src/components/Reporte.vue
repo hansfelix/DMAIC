@@ -79,7 +79,7 @@
                               </tr>
                               <tr>
                                 <td class="bold greycell">Proyecto</td>
-                                <td>{{pytActual.nombrePyt}}</td>
+                                <td>{{proyectoActual.nombrePyt}}</td>
                               </tr>
                               <tr>
                                 <td class="bold greycell">Proceso</td>
@@ -379,8 +379,8 @@ export default {
     };
   },
   computed: {
-    pytActual() {
-      return this.$store.getters.pytActual;
+    proyectoActual() {
+      return this.$store.getters.proyectoActual;
     },
     reporte() {
       return this.$store.getters.reporte;

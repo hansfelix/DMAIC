@@ -1,4 +1,4 @@
-//Importación de librerías
+
 import * as firebase from "firebase";
 
 // dmaic-b6e44

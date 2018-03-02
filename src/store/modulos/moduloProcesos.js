@@ -1,4 +1,4 @@
-//Importación de librerías
+
 import * as firebase from "firebase";
 
 export const moduloProcesos = {
@@ -85,11 +85,11 @@ export const moduloProcesos = {
      * @author Hans Felix
      * @created 20/02/0218
      */
-    cargar_procesos({ commit }, payload) {
+    cargar_procesos({ commit }, proyecto_uid) {
       commit("set_loading_procesos", true);
-      firebase
-        .database()
-        .ref("procesos/" + payload.proyecto_uid)
+
+      var procesosRef = firebase.database().ref("procesos/" + proyecto_uid);
+      procesosRef
         .once("value")
         .then(data => {
           const procesos = [];
@@ -121,9 +121,7 @@ export const moduloProcesos = {
       commit("setLoading", true);
       firebase
         .database()
-        .ref(
-          "procesos/" + payload.proyecto_uid + "/" + payload.idproceso + "/"
-        )
+        .ref("procesos/" + payload.proyecto_uid + "/" + payload.idproceso + "/")
         .once("value")
         .then(data => {
           //const key = data.key;

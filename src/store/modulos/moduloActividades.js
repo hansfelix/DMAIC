@@ -1,4 +1,4 @@
-//Importación de librerías
+
 import * as firebase from "firebase";
 
 export const moduloActividades = {

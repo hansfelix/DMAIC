@@ -1,4 +1,4 @@
-//Importación de librerías
+
 import * as firebase from "firebase";
 
 // dmaic-b6e44
@@ -20,8 +20,9 @@ export const moduloProyectos = {
    */
   state: {
     proyectos: [],
-    pytActual: null,
-    loading_proyectos: false
+    proyectoActual: null,
+    loading_proyectos: false,
+    loading_proyectoActual: true
   },
 
   /**
@@ -32,14 +33,17 @@ export const moduloProyectos = {
    *
    */
   getters: {
-    pytActual(state) {
-      return state.pytActual;
+    proyectoActual(state) {
+      return state.proyectoActual;
     },
     proyectos(state) {
       return state.proyectos;
     },
     loading_proyectos(state) {
       return state.loading_proyectos;
+    },
+    loading_proyectoActual(state) {
+      return state.loading_proyectoActual;
     }
   },
 
@@ -51,24 +55,17 @@ export const moduloProyectos = {
    *
    */
   mutations: {
-    setLoadedPytActual(state, payload) {
-      var proyecto_uid = payload.proyecto_uid;
-
-      var result = state.proyectos.filter(function(obj) {
-        return obj.id == proyecto_uid;
-      });
-
-      if (result.length >= 1) {
-        state.pytActual = result[0];
-      } else {
-        state.pytActual = null;
-      }
+    set_proyectoActual(state, payload) {
+      state.proyectoActual = payload;
     },
-    setLoadedProyectos(state, payload) {
+    set_proyectos(state, payload) {
       state.proyectos = payload;
     },
     setLoadingProyectos(state, payload) {
       state.loading_proyectos = payload;
+    },
+    set_loading_proyectoActual(state, payload) {
+      state.loading_proyectoActual = payload;
     },
     actualizar_proyecto(state, proyecto) {
       var proyecto_uidBorrar = state.proyectos.findIndex(function(item) {
@@ -98,8 +95,23 @@ export const moduloProyectos = {
    *
    */
   actions: {
-    loadPytActual({ commit }, payload) {
-      commit("setLoadedPytActual", payload);
+    /**
+     * @description Cargar el proyecto actual indicando el uid_proyecto  🔥
+     * @param { commit }
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
+    cargar_proyectoActual({ commit, state }, proyecto_uid) {
+      commit("set_loading_proyectoActual", true);
+
+      var result = state.proyectos.findIndex(function(obj) {
+        return obj.id == proyecto_uid;
+      });
+
+      var proyectoActual = state.proyectos[result];
+      commit("set_proyectoActual", proyectoActual);
+      commit("set_loading_proyectoActual", false);
     },
 
     /**
@@ -110,12 +122,8 @@ export const moduloProyectos = {
      * @created 20/02/0218
      */
     cargar_proyectos({ commit }) {
-      //set LoadingProyectos
       commit("setLoadingProyectos", true);
-      //Llamada a Firebase
-      //Obtiene los proyectos, el id lo pone como propiedad del objeto
       var proyectosRef = firebase.database().ref("proyectos");
-
 
       proyectosRef.on("child_added", data => {
         const proyecto = data.val();
@@ -127,24 +135,21 @@ export const moduloProyectos = {
         commit("setLoadingProyectos", false);
       });
 
-
       proyectosRef.on("child_changed", data => {
         const proyecto = data.val();
-        proyecto.id = data.key;   
+        proyecto.id = data.key;
 
         //añadir cada proyecto al state
         commit("actualizar_proyecto", proyecto);
       });
 
-
-      proyectosRef.on('child_removed', data =>{
+      proyectosRef.on("child_removed", data => {
         const proyecto = data.val();
-        proyecto.id = data.key;   
+        proyecto.id = data.key;
 
         //eliminar el proyecto del state
         commit("eliminar_proyecto", proyecto);
       });
-
     },
 
     /**
@@ -173,7 +178,7 @@ export const moduloProyectos = {
             proyectos.push(obj[key]);
           }
           //cargar los proyectos al state
-          commit("setLoadedProyectos", proyectos);
+          commit("set_proyectos", proyectos);
           //set LoadingProyectos
           commit("setLoadingProyectos", false);
         })
@@ -233,8 +238,8 @@ export const moduloProyectos = {
         .database()
         .ref("proyectos/" + proyecto_uid)
         .set(proyecto)
-        .then(data => {        
-          console.log("se actualizó el proyecto:", proyecto)
+        .then(data => {
+          console.log("se actualizó el proyecto:", proyecto);
         })
         .catch(error => {
           console.log(error);
