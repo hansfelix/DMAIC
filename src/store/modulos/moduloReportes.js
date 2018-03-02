@@ -93,9 +93,9 @@ export const moduloReportes = {
         .database()
         .ref(
           "datos-proyecto/" +
-            payload.idPyt +
+            payload.proyecto_uid +
             "/" +
-            payload.idMedicion +
+            payload.idproceso +
             "/tomaDatos/" +
             payload.idTomaDatos +
             "/reporte"
@@ -120,9 +120,9 @@ export const moduloReportes = {
         .database()
         .ref(
           "datos-proyecto/" +
-            payload.idPyt +
+            payload.proyecto_uid +
             "/" +
-            payload.idMedicion +
+            payload.idproceso +
             "/tomaDatos/" +
             payload.idTomaDatos +
             "/reporte"
@@ -136,7 +136,7 @@ export const moduloReportes = {
 
           commit("setLoadingReporte", false);
 
-          // commit("setLoadedMediciones", mediciones);
+          // commit("setLoadedprocesos", procesos);
           // commit("setLoading", false);
         })
         .catch(error => {
@@ -154,9 +154,9 @@ export const moduloReportes = {
         .database()
         .ref(
           "datos-proyecto/" +
-            payload.idPyt +
+            payload.proyecto_uid +
             "/" +
-            payload.idMedicion +
+            payload.idproceso +
             "/tomaDatos/" +
             payload.idTomaDatos +
             "/reporte"

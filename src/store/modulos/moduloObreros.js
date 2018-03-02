@@ -67,7 +67,7 @@ export const moduloObreros = {
       commit("setLoading_anadirObrero", false);
       firebase
         .database()
-        .ref("datos-proyecto/" + obj.idPyt + "/" + obj.idMedicion + "/obreros/")
+        .ref("datos-proyecto/" + obj.proyecto_uid + "/" + obj.idproceso + "/obreros/")
         .push(obj.obrero)
         .then(data => {
           const key = data.key;
@@ -86,13 +86,13 @@ export const moduloObreros = {
     },
     // LOAD UN OBRERO
     loadObreros({ commit, getters }, obj) {
-      // const medicion = {
+      // const proceso = {
       //   cr: payload.cr,
       //   nombrePyt: payload.nombrePyt
       // };
       firebase
         .database()
-        .ref("datos-proyecto/" + obj.idPyt + "/" + obj.idMedicion + "/obreros/")
+        .ref("datos-proyecto/" + obj.proyecto_uid + "/" + obj.idproceso + "/obreros/")
         .once("value")
         .then(data => {
           const obreros = [];
@@ -116,9 +116,9 @@ export const moduloObreros = {
         .database()
         .ref(
           "datos-proyecto/" +
-            obj.idPyt +
+            obj.proyecto_uid +
             "/" +
-            obj.idMedicion +
+            obj.idproceso +
             "/obreros/" +
             obj.obrero.idObrero
         )

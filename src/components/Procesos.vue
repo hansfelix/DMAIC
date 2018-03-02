@@ -22,14 +22,13 @@
         </v-flex>
         <v-flex xs12 md3 class="text-xs-center text-md-right">
           <v-btn color="secondary" dark @click.stop="dialog = true">
-            Añadir Medición
+            Añadir Proceso
             <v-icon right dark>queue</v-icon>
           </v-btn>
         </v-flex>
       </v-layout>
 
-      <!-- dialog New Medicion -->
-
+      <!-- dialog New proceso -->
       <template fluid style="min-height: 0;" grid-list-lg>
         <v-layout row justify-center>
           <v-dialog v-model="dialog" max-width="500px">
@@ -67,7 +66,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue darken-1" flat @click.native="dialog = false">Cerrar</v-btn>
-                  <v-btn color="blue darken-1" flat @click.native="onCreateMedicion()">Añadir</v-btn>
+                  <v-btn color="blue darken-1" flat @click.native="crearProceso()">Añadir</v-btn>
                 </v-card-actions>
               </v-card>
             </v-form>
@@ -82,26 +81,83 @@
           <!-- progress -->
           <v-layout>
             <v-flex s12 class="text-xs-center">
-              <v-progress-linear v-bind:indeterminate="true" v-if="loadingMediciones"></v-progress-linear>
+              <v-progress-linear v-bind:indeterminate="true" v-if="loading_procesos"></v-progress-linear>
             </v-flex>
           </v-layout>
 
-          <!-- Lista de mediciones -->
-          <v-card v-if="!loadingMediciones">
+          <!-- Lista de Procesos -->
+          <template>
+            <v-expansion-panel v-if="!loading_procesos">
+              <v-expansion-panel-content v-for="proceso in procesos" :key="proceso.id">
+                <div slot="header">
+                  <h3>{{ proceso.nombreProceso }}</h3>
+                  <span>{{ proceso.herramientaUsada }}</span>
+                </div>
+                <v-card>
+                  <v-card-text class="grey lighten-3">
+                    <v-layout>
+                      <v-flex s12 class="text-xs-right">
+                        <v-btn color="secondary" right>Nueva Medición</v-btn>
+                      </v-flex>
+                    </v-layout>
+
+                    <!-- Lista de procesos dentro del proceso -->
+                    <v-layout>
+                      <v-flex s12 class="text-xs-center">
+                        <v-list two-line subheader>
+                          <v-list-tile v-for="proceso in proceso.procesos" :key="proceso.id" avatar class="procesoItem" :to="'/proceso_configuracion/' +pytActual.id +'/' +proceso.id">
+                            <!-- <v-list-tile-avatar>
+                          <v-icon v-bind:class="proceso.dashboard ? 'green lighten-1 white--text':'grey lighten-1 white--text'">{{ proceso.dashboard ? "assessment":"input" }}</v-icon>
+                        </v-list-tile-avatar> -->
+                            <v-list-tile-content>
+                              <v-list-tile-title>{{ proceso.nombreProceso }}</v-list-tile-title>
+                              <v-list-tile-sub-title>{{ proceso.herramientaUsada }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+
+                            <v-list-tile-action v-if="proceso.dashboard">
+                              <v-tooltip top>
+                                <v-btn slot="activator" icon ripple :to="'/Reporte/' +pytActual.id +'/' +proceso.id ">
+                                  <v-icon color="grey lighten-1">insert_drive_file</v-icon>
+                                </v-btn>
+                                <span>Ver Reporte</span>
+                              </v-tooltip>
+                            </v-list-tile-action>
+
+                            <v-list-tile-action>
+                              <v-tooltip top>
+                                <v-btn slot="activator" icon ripple :to="'/proceso_configuracion/' +pytActual.id +'/' +proceso.id">
+                                  <v-icon color="grey lighten-1">settings</v-icon>
+                                </v-btn>
+                                <span>Configuración</span>
+                              </v-tooltip>
+                            </v-list-tile-action>
+                          </v-list-tile>
+
+                        </v-list>
+                      </v-flex>
+                    </v-layout>
+                  </v-card-text>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </template>
+
+
+          <!-- <v-card v-if="!loading_procesos">
             <v-list two-line subheader>
-              <v-list-tile v-for="medicion in mediciones" v-bind:key="medicion.id" avatar class="medicionItem" :to="'/Medicion_configuracion/' +pytActual.id +'/' +medicion.id">
+              <v-list-tile v-for="proceso in procesos" :key="proceso.id" avatar class="procesoItem" :to="'/proceso_configuracion/' +pytActual.id +'/' +proceso.id">
                 <v-list-tile-avatar>
-                  <v-icon v-bind:class="medicion.dashboard ? 'green lighten-1 white--text':'grey lighten-1 white--text'">{{ medicion.dashboard ? "assessment":"input" }}</v-icon>
+                  <v-icon v-bind:class="proceso.dashboard ? 'green lighten-1 white--text':'grey lighten-1 white--text'">{{ proceso.dashboard ? "assessment":"input" }}</v-icon>
                 </v-list-tile-avatar>
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ medicion.nombreProceso }}</v-list-tile-title>
-                  <v-list-tile-sub-title>{{ medicion.herramientaUsada }}</v-list-tile-sub-title>
+                  <v-list-tile-title>{{ proceso.nombreProceso }}</v-list-tile-title>
+                  <v-list-tile-sub-title>{{ proceso.herramientaUsada }}</v-list-tile-sub-title>
                 </v-list-tile-content>
 
 
-                <v-list-tile-action v-if="medicion.dashboard">
+                <v-list-tile-action v-if="proceso.dashboard">
                   <v-tooltip top>
-                    <v-btn slot="activator" icon ripple :to="'/Reporte/' +pytActual.id +'/' +medicion.id ">
+                    <v-btn slot="activator" icon ripple :to="'/Reporte/' +pytActual.id +'/' +proceso.id ">
                       <v-icon color="grey lighten-1">insert_drive_file</v-icon>
                     </v-btn>
                     <span>Ver Reporte</span>
@@ -112,7 +168,7 @@
 
                 <v-list-tile-action>
                   <v-tooltip top>
-                    <v-btn slot="activator" icon ripple :to="'/Medicion_configuracion/' +pytActual.id +'/' +medicion.id">
+                    <v-btn slot="activator" icon ripple :to="'/proceso_configuracion/' +pytActual.id +'/' +proceso.id">
                       <v-icon color="grey lighten-1">settings</v-icon>
                     </v-btn>
                     <span>Configuración</span>
@@ -121,7 +177,10 @@
               </v-list-tile>
 
             </v-list>
-          </v-card>
+          </v-card> -->
+
+
+
         </v-flex>
       </v-layout>
 
@@ -158,7 +217,7 @@ export default {
         }
       ],
       txt_tipoReporte: "",
-      txt_idMedicion: "",
+      txt_idproceso: "",
       txt_metrados: "",
       txt_hhReal: "",
       txt_nroObreros: "",
@@ -184,7 +243,7 @@ export default {
           url: "/Proyectos"
         },
         {
-          text: "Mediciones",
+          text: "procesos",
           disabled: true,
           url: "/"
         }
@@ -193,16 +252,21 @@ export default {
   },
   computed: {
     // getters importados de vuex
-    ...mapGetters(["pytActual", "loading_proyectos", "mediciones"])
+    ...mapGetters([
+      "pytActual",
+      "loading_proyectos",
+      "procesos",
+      "loading_procesos"
+    ])
   },
   created() {
-    var idPyt = this.$route.params.idPyt;
+    var proyecto_uid = this.$route.params.proyecto_uid;
     const payload = {
-      idPyt: idPyt,
+      proyecto_uid: proyecto_uid,
       Proyectos: this.$store.state.Proyectos
     };
-    this.$store.dispatch("loadMediciones", payload);
-    // this.$router.push("/Mediciones");
+    this.$store.dispatch("cargar_procesos", payload);
+    // this.$router.push("/procesos");
 
     this.$store.dispatch("loadPytActual", payload);
   },
@@ -210,13 +274,13 @@ export default {
     console.log("se destruyo");
   },
   methods: {
-    onCreateMedicion() {
+    crearProceso() {
       // verificar si el formulario esta llenado correctamente
       if (this.$refs.form.validate()) {
-        var idPyt = this.$route.params.idPyt;
+        var proyecto_uid = this.$route.params.proyecto_uid;
         const payload = {
-          idPyt: idPyt,
-          medicion: {
+          proyecto_uid: proyecto_uid,
+          proceso: {
             nombreProceso: this.txt_nombreProceso,
             herramientaUsada: this.txt_herramientaUsada.text,
             ingenieroCampo: this.txt_ingenieroCampo,
@@ -229,8 +293,8 @@ export default {
           }
         };
 
-        // Crear medicion
-        this.$store.dispatch("createMedicion", payload);
+        // Crear proceso
+        this.$store.dispatch("crear_proceso", payload);
 
         // reiniciar formulario
         this.$refs.form.reset();
@@ -244,12 +308,12 @@ export default {
 </script>
 
 <style scoped>
-.medicionItem {
+.procesoItem {
   background-color: rgb(255, 255, 255);
   transition: 0.2s ease;
 }
 
-.medicionItem:hover {
+.procesoItem:hover {
   background-color: rgb(241, 241, 241);
   transition: 0.2s ease;
 }

@@ -21,7 +21,7 @@
             <v-flex xs12 md12 align-center>
               <h1 display-3 class="tittle_H">Definición</h1>
               <p>Se muestra la configuración que tiene la medición del proceso 
-                <strong>"{{medicionActual.dataMedicionActual.nombreProceso}}"</strong> 
+                <strong>"{{procesoActual.dataprocesoActual.nombreProceso}}"</strong> 
                 en el proyecto <strong>{{pytActual.cr}} - {{pytActual.nombrePyt}} </strong>.
               </p>
             </v-flex>
@@ -35,7 +35,7 @@
                       <v-card-title primary-title>  
                         <v-layout row wrap>
                           <v-flex xs6>
-                            <p>Duración de la medición: {{medicionActual.dataMedicionActual.duracion}} seg.</p>
+                            <p>Duración de la medición: {{procesoActual.dataprocesoActual.duracion}} seg.</p>
                           </v-flex> 
                             <!-- Dialog Datos Generales -->
                           <template>
@@ -367,7 +367,7 @@
 
                 <v-flex v-for="tomaDato in tomaDatos" :key="tomaDato.id" :v-if="!loading_tomaDatos">
                   <p>{{tomaDato.nombre}}</p>
-                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id +'/' + tomaDato.id">
+                  <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +procesoActual.id +'/' + tomaDato.id">
                       tomar datos
                     <v-icon right dark>update</v-icon>
                   </v-btn>
@@ -377,14 +377,14 @@
                     <v-icon right dark>update</v-icon>
                   </v-btn>
 
-                  <v-btn ripple color="primary" :to="'/Reporte/' +pytActual.id +'/' +medicionActual.id +'/' + tomaDato.id" >
+                  <v-btn ripple color="primary" :to="'/Reporte/' +pytActual.id +'/' +procesoActual.id +'/' + tomaDato.id" >
                       ver reporte
                     <v-icon right dark>update</v-icon>
                   </v-btn>
 
                 </v-flex>
 
-                <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +medicionActual.id" >
+                <v-btn ripple color="primary" :to="'/TomaDatos/' +pytActual.id +'/' +procesoActual.id" >
                     Iniciar toma de datos
                   <v-icon right dark>update</v-icon>
                 </v-btn>
@@ -397,11 +397,11 @@
             <p>Dé click en el botón de abajo para generar/ver el reporte.</p>
             <v-spacer></v-spacer>    
 
-            <v-btn ripple color="primary" @click="openDialogGenerarReporte(medicionActual.id)">
+            <v-btn ripple color="primary" @click="openDialogGenerarReporte(procesoActual.id)">
             Generar reporte
             </v-btn>
 
-             <v-btn ripple color="primary" :to="'/Reporte/' +pytActual.id +'/' +medicionActual.id ">
+             <v-btn ripple color="primary" :to="'/Reporte/' +pytActual.id +'/' +procesoActual.id ">
             Ver reporte
             </v-btn> 
             
@@ -435,7 +435,7 @@
                             ></v-select>
                           </v-flex>
 <!-- 
-                          <v-text-field label="HH" id="txt_idMedicion" v-model="txt_idMedicion" v-if="false"></v-text-field> -->
+                          <v-text-field label="HH" id="txt_idproceso" v-model="txt_idproceso" v-if="false"></v-text-field> -->
 
                           <v-flex xs12 md6>
                             <v-text-field label="Metrados en m3" id="txt_metrados" v-model="txt_metrados" hint="Ej: 30" required></v-text-field>
@@ -633,7 +633,7 @@ export default {
       idTomaDatos: "",
       showanadirActividad: false,
       showanadirObrero: false,
-      showEditarDatosMedicion: false,
+      showEditarDatosproceso: false,
       duracion: "",
       txt_nombreObrero: "",
 
@@ -650,7 +650,7 @@ export default {
       txt_tipoReporte: {
         text: "Automático"
       },
-      txt_idMedicion: "",
+      txt_idproceso: "",
       txt_metrados: "",
       txt_hhReal: "",
       txt_nroObreros: "",
@@ -669,7 +669,7 @@ export default {
           url: "/Proyectos"
         },
         {
-          text: "Mediciones",
+          text: "procesos",
           disabled: false,
           url: "/"
         },
@@ -685,8 +685,8 @@ export default {
     obreros() {
       return this.$store.getters.obreros;
     },
-    medicionActual() {
-      return this.$store.getters.medicionActual;
+    procesoActual() {
+      return this.$store.getters.procesoActual;
     },
     pytActual() {
       return this.$store.getters.pytActual;
@@ -713,15 +713,15 @@ export default {
   methods: {
     completarConfiguracion() {
       const obj = {
-        idPyt: this.$store.state.pytActual.id,
-        idMedicion: this.$store.getters.medicionActual.id
+        proyecto_uid: this.$store.state.pytActual.id,
+        idproceso: this.$store.getters.procesoActual.id
       };
-      this.$store.dispatch("actualizar_medicion_configurado", obj);
+      this.$store.dispatch("actualizar_proceso_configurado", obj);
     },
     anadirObrero() {
       const obj = {
-        idPyt: this.pytActual.id,
-        idMedicion: this.medicionActual.id,
+        proyecto_uid: this.pytActual.id,
+        idproceso: this.procesoActual.id,
         obrero: {
           nombre: this.txt_nombreObrero
         }
@@ -735,8 +735,8 @@ export default {
 
       for (var i = 0; i < numObreros; i++) {
         const obj = {
-          idPyt: this.pytActual.id,
-          idMedicion: this.medicionActual.id,
+          proyecto_uid: this.pytActual.id,
+          idproceso: this.procesoActual.id,
           obrero: {
             nombre: prefijo + (i + 1)
           }
@@ -747,8 +747,8 @@ export default {
     },
     borrarObrero(idObrero, index) {
       const obj = {
-        idPyt: this.pytActual.id,
-        idMedicion: this.medicionActual.id,
+        proyecto_uid: this.pytActual.id,
+        idproceso: this.procesoActual.id,
         index: index,
         obrero: {
           idObrero: idObrero
@@ -758,8 +758,8 @@ export default {
     },
     anadirActividad() {
       const obj = {
-        idPyt: this.pytActual.id,
-        idMedicion: this.medicionActual.id,
+        proyecto_uid: this.pytActual.id,
+        idproceso: this.procesoActual.id,
         actividad: {
           nombre: this.dialogs.dialog_actividades.txt_nombreActividad,
           TipoActividad: this.dialogs.dialog_actividades.txt_tipoActividad.text,
@@ -780,8 +780,8 @@ export default {
 
       for (var i = 0; i < seleccionado.lista.length; i++) {
         const obj = {
-          idPyt: this.pytActual.id,
-          idMedicion: this.medicionActual.id,
+          proyecto_uid: this.pytActual.id,
+          idproceso: this.procesoActual.id,
           actividad: {
             nombre: seleccionado.lista[i].nombre,
             TipoActividad: seleccionado.lista[i].TipoActividad,
@@ -799,8 +799,8 @@ export default {
     },
     actualizarDuracion() {
       const payload = {
-        idPyt: this.$route.params.idPyt,
-        idMedicion: this.$route.params.idMedicion,
+        proyecto_uid: this.$route.params.proyecto_uid,
+        idproceso: this.$route.params.idproceso,
         nuevaDuracion: this.duracion
       };
       this.$store.dispatch("actualizarDuracion", payload);
@@ -808,8 +808,8 @@ export default {
     },
     crearTomaDatos() {
       const payload = {
-        idPyt: this.$route.params.idPyt,
-        idMedicion: this.$route.params.idMedicion,
+        proyecto_uid: this.$route.params.proyecto_uid,
+        idproceso: this.$route.params.idproceso,
         tomaDatos: {
           nombre: "Hans"
         }
@@ -819,8 +819,8 @@ export default {
     },
     openDialogGenerarReporte(idTomaDatos) {
       const payload = {
-        idPyt: this.$route.params.idPyt,
-        idMedicion: this.$route.params.idMedicion,
+        proyecto_uid: this.$route.params.proyecto_uid,
+        idproceso: this.$route.params.idproceso,
         nuevaDuracion: this.duracion
       };
 
@@ -829,13 +829,13 @@ export default {
       //
       this.idTomaDatos = idTomaDatos;
 
-      this.$store.dispatch("loadMedicionActual", payload);
-      // this.txt_idMedicion = idMedicion;
+      this.$store.dispatch("loadprocesoActual", payload);
+      // this.txt_idproceso = idproceso;
     },
     onCalcularData() {
       const payload = {
-        idPyt: this.$route.params.idPyt,
-        idMedicion: this.$route.params.idMedicion,
+        proyecto_uid: this.$route.params.proyecto_uid,
+        idproceso: this.$route.params.idproceso,
         idTomaDatos: this.idTomaDatos,
         reporte: {
           tipoReporte: this.txt_tipoReporte.text,
@@ -846,8 +846,8 @@ export default {
         }
       };
       console.log(
-        this.$route.params.idPyt,
-        this.$route.params.idMedicion,
+        this.$route.params.proyecto_uid,
+        this.$route.params.idproceso,
         this.idTomaDatos,
         this.txt_tipoReporte.text,
         this.txt_metrados,
@@ -858,10 +858,10 @@ export default {
 
       // var totalIntervaloHoras = ;
 
-      var idPyt = this.$route.params.idPyt;
-      var idMedicion = this.medicionActual.id;
+      var proyecto_uid = this.$route.params.proyecto_uid;
+      var idproceso = this.procesoActual.id;
       var idTomaDatos = this.idTomaDatos;
-      var totalIntervaloHoras = this.medicionActual.dataMedicionActual
+      var totalIntervaloHoras = this.procesoActual.dataprocesoActual
         .totalIntervaloHoras;
 
       //inputs
@@ -904,9 +904,9 @@ export default {
         .database()
         .ref(
           "datos-proyecto/" +
-            this.$route.params.idPyt +
+            this.$route.params.proyecto_uid +
             "/" +
-            this.$route.params.idMedicion +
+            this.$route.params.idproceso +
             "/tomaDatos/" +
             this.idTomaDatos +
             "/datos/"
@@ -1160,8 +1160,8 @@ export default {
           };
 
           const payload = {
-            idPyt: idPyt,
-            idMedicion: idMedicion,
+            proyecto_uid: proyecto_uid,
+            idproceso: idproceso,
             idTomaDatos: idTomaDatos,
             reporte: reporte
           };
@@ -1169,23 +1169,23 @@ export default {
           this.$store.dispatch("crear_reporte", payload);
 
           const payload2 = {
-            idPyt: idPyt,
-            idMedicion: idMedicion,
+            proyecto_uid: proyecto_uid,
+            idproceso: idproceso,
             idTomaDatos: idTomaDatos,
             dashboard: true
           };
 
-          this.$store.dispatch("actualizar_medicion_dashboard", payload2);
+          this.$store.dispatch("actualizar_proceso_dashboard", payload2);
         });
     }
   },
   created() {
     const payload = {
-      idPyt: this.$route.params.idPyt,
-      idMedicion: this.$route.params.idMedicion
+      proyecto_uid: this.$route.params.proyecto_uid,
+      idproceso: this.$route.params.idproceso
     };
-    this.$store.dispatch("loadMedicionActual", payload).then(() => {
-      // console.log(this.$store.state.medicionActual.dataMedicionActual.duracion)
+    this.$store.dispatch("loadprocesoActual", payload).then(() => {
+      // console.log(this.$store.state.procesoActual.dataprocesoActual.duracion)
     });
 
     this.$store.dispatch("loadObreros", payload);
@@ -1194,7 +1194,7 @@ export default {
 
     this.$store.dispatch("cargar_tomaDatos", payload);
     //llenar la duración
-    //this.duracion = this.$store.state.medicionActual.dataMedicionActual.duracion;
+    //this.duracion = this.$store.state.procesoActual.dataprocesoActual.duracion;
   }
 };
 </script>

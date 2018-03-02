@@ -27,13 +27,13 @@ function findGetParameter(parameterName) {
 }
 
 var cr = findGetParameter("cr");
-var medicion = findGetParameter("medicion");
+var proceso = findGetParameter("proceso");
 
 
-var pathInicialObreros = "obreros/" + cr + "/" + medicion + "/";
-var pathInicialActividades = "actividades/" + cr + "/" + medicion + "/";
-var pathDatosMedicion = "mediciones/" + cr + "/" + medicion + "/";
-var pathInicial = "mediciones-registro/" + cr + "/" + medicion + "/";
+var pathInicialObreros = "obreros/" + cr + "/" + proceso + "/";
+var pathInicialActividades = "actividades/" + cr + "/" + proceso + "/";
+var pathDatosproceso = "procesos/" + cr + "/" + proceso + "/";
+var pathInicial = "procesos-registro/" + cr + "/" + proceso + "/";
 
 var duracion;
 var HOUR;
@@ -44,7 +44,7 @@ var isPaused = false;
 $('select').material_select();
 
 
-firebase.database().ref(pathDatosMedicion).on('value', function (data) {
+firebase.database().ref(pathDatosproceso).on('value', function (data) {
     duracion = data.val().duracion;
     intervalo = Number(duracion) * 1000;//60000;
 });

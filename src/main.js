@@ -109,7 +109,7 @@ new Vue({
         this.$router.push("/LogIn")
       }
     });
-    // this.$store.dispatch("setAutenticado"); // esta arriba en autoDignIn
-    this.$store.dispatch("cargar_proyectos");
+    // this.$store.dispatch("set_autenticado"); // esta arriba en autoDignIn
+    //this.$store.dispatch("cargar_proyectos");
   }
 });

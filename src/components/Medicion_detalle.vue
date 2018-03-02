@@ -6,16 +6,16 @@
 <script>
   export default {
     computed: {
-      medicionActual() {
-        return this.$store.state.medicionActual;
+      procesoActual() {
+        return this.$store.state.procesoActual;
       },
       pytActual() {
         return this.$store.state.pytActual;
       }
     },
     created() {
-      var idPyt = this.$route.params.idPyt;
-      var idMedicion = this.$route.params.idMedicion;
+      var proyecto_uid = this.$route.params.proyecto_uid;
+      var idproceso = this.$route.params.idproceso;
     }
   };
 

@@ -52,10 +52,10 @@ export const moduloProyectos = {
    */
   mutations: {
     setLoadedPytActual(state, payload) {
-      var idPyt = payload.idPyt;
+      var proyecto_uid = payload.proyecto_uid;
 
       var result = state.proyectos.filter(function(obj) {
-        return obj.id == idPyt;
+        return obj.id == proyecto_uid;
       });
 
       if (result.length >= 1) {
@@ -70,15 +70,23 @@ export const moduloProyectos = {
     setLoadingProyectos(state, payload) {
       state.loading_proyectos = payload;
     },
-    actualizarProyecto(state, proyecto) {
-      var idPytBorrar = state.proyectos.findIndex(function(item) {
+    actualizar_proyecto(state, proyecto) {
+      var proyecto_uidBorrar = state.proyectos.findIndex(function(item) {
         return item.id === proyecto.id;
       });
-
-      state.proyectos.splice(idPytBorrar, 1, proyecto);
+      state.proyectos.splice(proyecto_uidBorrar, 1, proyecto);
+    },
+    eliminar_proyecto(state, proyecto) {
+      var proyecto_uidBorrar = state.proyectos.findIndex(function(item) {
+        return item.id === proyecto.id;
+      });
+      state.proyectos.splice(proyecto_uidBorrar, 1);
     },
     createProyecto(state, payload) {
-      state.proyectos.push(payload);
+      state.proyectos.unshift(payload);
+    },
+    push_proyecto(state, payload) {
+      state.proyectos.unshift(payload);
     }
   },
 
@@ -106,27 +114,37 @@ export const moduloProyectos = {
       commit("setLoadingProyectos", true);
       //Llamada a Firebase
       //Obtiene los proyectos, el id lo pone como propiedad del objeto
-      firebase
-        .database()
-        .ref("proyectos")
-        .once("value")
-        .then(data => {
-          const proyectos = [];
-          const obj = data.val();
-          for (let key in obj) {
-            obj[key].id = key;
-            proyectos.push(obj[key]);
-          }
-          //cargar los proyectos al state
-          commit("setLoadedProyectos", proyectos);
-          //set LoadingProyectos
-          commit("setLoadingProyectos", false);
-        })
-        .catch(error => {
-          console.log(error);
-          //set LoadingProyectos
-          commit("setLoadingProyectos", false);
-        });
+      var proyectosRef = firebase.database().ref("proyectos");
+
+
+      proyectosRef.on("child_added", data => {
+        const proyecto = data.val();
+        proyecto.id = data.key;
+
+        //añadir cada proyecto al state
+        commit("push_proyecto", proyecto);
+        //set LoadingProyectos
+        commit("setLoadingProyectos", false);
+      });
+
+
+      proyectosRef.on("child_changed", data => {
+        const proyecto = data.val();
+        proyecto.id = data.key;   
+
+        //añadir cada proyecto al state
+        commit("actualizar_proyecto", proyecto);
+      });
+
+
+      proyectosRef.on('child_removed', data =>{
+        const proyecto = data.val();
+        proyecto.id = data.key;   
+
+        //eliminar el proyecto del state
+        commit("eliminar_proyecto", proyecto);
+      });
+
     },
 
     /**
@@ -184,12 +202,11 @@ export const moduloProyectos = {
         .push(proyecto)
         .then(data => {
           proyecto.id = data.key;
-          commit("createProyecto", proyecto);
 
           // escribir ultimaModificacion
           const ultimaModificacion = {
             proyecto_uid: data.key,
-            medicion_uid: "",
+            proceso_uid: "",
             tomaDato_uid: "",
             tipo: "proyecto",
             accion: "Has creado el proyecto " + proyecto.nombrePyt,
@@ -200,7 +217,28 @@ export const moduloProyectos = {
         .catch(error => {
           console.log(error);
         });
-      // Reach out to firebase and store it
+    },
+
+    /**
+     * @description Actualiza un proyecto en FIREBASE 🔥
+     * @param { commit } proyecto
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
+    actualizar_proyecto({ commit }, proyecto) {
+      var proyecto_uid = proyecto.id;
+      delete proyecto.id;
+      firebase
+        .database()
+        .ref("proyectos/" + proyecto_uid)
+        .set(proyecto)
+        .then(data => {        
+          console.log("se actualizó el proyecto:", proyecto)
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
 
     /**
@@ -210,18 +248,16 @@ export const moduloProyectos = {
      * @author Hans Felix
      * @created 20/02/0218
      */
-    actualizarProyecto({ commit }, proyecto) {
-      var idPyt = proyecto.id;
-      delete proyecto.id;
+    actualizar_proyecto_anadirUsuario({ commit, dispatch }, payload) {
       firebase
         .database()
-        .ref("proyectos/" + idPyt)
-        .set(proyecto)
+        .ref("proyectos/" + payload.proyecto_uid + "/users/" + payload.user_uid)
+        .set(true)
         .then(data => {
-          proyecto.id = idPyt;
-
-          commit("actualizarProyecto", proyecto);
+          //proyecto.id = proyecto_uid;
+          //commit("actualizar_proyecto", proyecto);
           // commit("createProyecto", proyecto);
+          // dispatch("cargar_proyectos");
         })
         .catch(error => {
           console.log(error);

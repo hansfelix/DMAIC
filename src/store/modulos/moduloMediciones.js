@@ -2,7 +2,7 @@
 import * as firebase from "firebase";
 
 export const moduloMediciones = {
-  /**
+   /**
    *
    * == STATE
    *
@@ -10,9 +10,9 @@ export const moduloMediciones = {
    *
    */
   state: {
-    mediciones: [{}],
-    medicionActual: {},
-    loading_mediciones: false
+    tomaDatos: [{ad:"a"}],
+    tomaDatosActual: {},
+    loading_tomaDatos: false
   },
 
   /**
@@ -24,14 +24,14 @@ export const moduloMediciones = {
    *
    */
   getters: {
-    mediciones(state) {
-      return state.mediciones;
+    tomaDatosActual(state) {
+      return state.tomaDatosActual;
     },
-    loading_mediciones(state) {
-      return state.loading_mediciones;
+    tomaDatos(state) {
+      return state.tomaDatos;
     },
-    medicionActual(state) {
-      return state.medicionActual;
+    loading_tomaDatos(state) {
+      return state.loading_tomaDatos;
     }
   },
 
@@ -44,43 +44,32 @@ export const moduloMediciones = {
    *
    */
   mutations: {
-    setLoadedMedicionActual(state, payload) {
-      var idMedicion = payload.idMedicion;
 
-      var result = state.mediciones.filter(function(obj) {
-        return obj.id == idMedicion;
-      });
-
-      if (result.length >= 1) {
-        state.medicionActual = result[0];
-      } else {
-        state.medicionActual = null;
-      }
+    setprocesoActual_duracion(state, payload) {
+      //////////
+      state.procesoActual.dataprocesoActual.duracion = payload;
     },
-
-    setMedicionActual_duracion(state, payload) {
-      state.medicionActual.dataMedicionActual.duracion = payload;
+    setTomaDatosActual(state, payload) {
+      state.tomaDatosActual = payload;
     },
-    setMedicionActual(state, payload) {
-      state.medicionActual = payload;
+    setLoadedTomaDatos(state, payload) {
+      state.tomaDatos = payload;
     },
-    setLoadedMediciones(state, payload) {
-      state.mediciones = payload;
+    setLoadingTomaDatos(state, payload) {
+      state.loading_tomaDatos = payload;
     },
-    setLoadingMediciones(state, payload) {
-      state.loading_mediciones = payload;
+    pushTomaDatos(state, payload) {
+      state.tomaDatos.push(payload);
     },
-    pushMedicion(state, payload) {
-      state.mediciones.push(payload);
+    setprocesoActualConfigurado(state, payload) {
+      ///////
+      state.procesoActual.configurado = payload;
     },
-    setMedicionActualConfigurado(state, payload) {
-      state.medicionActual.configurado = payload;
-    },
-    setMedicionActualDashboard(state, payload) {
-      state.medicionActual.dashboard = payload;
+    setprocesoActualDashboard(state, payload) {
+      ///////////
+      state.procesoActual.dashboard = payload;
     }
   },
-
   /**
    *
    * == ACTIONS
@@ -90,129 +79,91 @@ export const moduloMediciones = {
    *
    */
   actions: {
-    loadMediciones({ commit }, payload) {
-      commit("setLoadingMediciones", true);
+    cargar_tomaDatos({ commit }, payload) {
+      commit("setLoadingTomaDatos", true);
 
       firebase
         .database()
-        .ref("mediciones/" + payload.idPyt)
+        .ref(
+          "datos-proyecto/" +
+            payload.proyecto_uid +
+            "/" +
+            payload.idproceso +
+            "/tomaDatos/"
+        )
         .once("value")
         .then(data => {
-          const mediciones = [];
+          const tomaDatos = [];
           const obj = data.val();
 
           for (let key in obj) {
             obj[key].id = key;
-            mediciones.push(obj[key]);
+            tomaDatos.push(obj[key]);
           }
-          commit("setLoadedMediciones", mediciones);
-          commit("setLoadingMediciones", false);
+          commit("setLoadedTomaDatos", tomaDatos);
+          commit("setLoadingTomaDatos", false);
         })
         .catch(error => {
           console.log(error);
-          commit("setLoadingMediciones", false);
+          commit("setLoadingTomaDatos", false);
         });
     },
     // Guardar los Proyectos en FIREBASE
-    createMedicion({ commit, getters }, payload) {
-      // const medicion = {
-      //   cr: payload.cr,
-      //   nombrePyt: payload.nombrePyt
-      // };
+    crear_TomaDatos({ commit, getters }, payload) {
       firebase
         .database()
-        .ref("mediciones/" + payload.idPyt)
-        .push(payload.medicion)
+        .ref(
+          "datos-proyecto/" +
+            payload.proyecto_uid +
+            "/" +
+            payload.idproceso +
+            "/tomaDatos/"
+        )
+        .push(payload.tomaDatos)
         .then(data => {
-          payload.medicion.id = data.key;
-          commit("pushMedicion", payload.medicion);
+          payload.tomaDatos.id = data.key;
+          commit("pushTomaDatos", payload.tomaDatos);
         })
         .catch(error => {
           console.log(error);
         });
       // Reach out to firebase and store it
     },
-    loadMedicionActual({ commit }, payload) {
+    cargar_tomaDatosActual({ commit }, payload) {
+      ////////////////
       console.log("cargando medición actual");
       commit("setLoading", true);
       firebase
         .database()
-        .ref("mediciones/" + payload.idPyt + "/" + payload.idMedicion + "/")
+        .ref(
+          "datos-proyecto/" +
+          payload.proyecto_uid +
+          "/" +
+          payload.idproceso +
+          "/tomaDatos/" +
+          payload.idTomaDatos +
+          "/datos")
         .once("value")
         .then(data => {
-          //const key = data.key;
-          const medicion = {
-            id: data.key,
-            dataMedicionActual: data.val()
-          };
+          const tomaDatosActual = [];
+          const obj = data.val();
 
-          commit("setMedicionActual", medicion);
+          for (let key in obj) {
+            obj[key].id = key;
+            tomaDatosActual.push(obj[key]);
+          }
 
-          // commit("setLoadedMediciones", mediciones);
+          commit("setTomaDatosActual", tomaDatosActual);
+
+          // commit("setLoadedprocesos", procesos);
           commit("setLoading", false);
 
-          console.log("se cargo medición actual", medicion);
+          console.log("se cargo medición actual", tomaDatosActual);
         })
         .catch(error => {
           console.log(error);
         });
       // Reach out to firebase and store it
-    },
-    actualizar_medicion_configurado({ commit }, payload) {
-      console.log("actualizando configruacion actual");
-      commit("setLoading", true);
-      firebase
-        .database()
-        .ref(
-          "mediciones/" +
-            payload.idPyt +
-            "/" +
-            payload.idMedicion +
-            "/configurado"
-        )
-        .set(true)
-        .then(data => {
-          //const key = data.key;
-          // const medicion = {
-          //   id: data.key,
-          //   dataMedicionActual: data.val()
-          // };
-
-          // commit("setMedicionActual", medicion);
-
-          // // commit("setLoadedMediciones", mediciones);
-          // commit("setLoading", false);
-
-          commit("setMedicionActualConfigurado", true);
-          console.log("configruacion actualizada ");
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    //
-    //
-    //
-    actualizar_medicion_dashboard({ commit }, payload) {
-      console.log("actualizando configruacion actual");
-      // commit("setLoading", true);
-      firebase
-        .database()
-        .ref(
-          "mediciones/" +
-            payload.idPyt +
-            "/" +
-            payload.idMedicion +
-            "/dashboard"
-        )
-        .set(true)
-        .then(data => {
-          commit("setMedicionActualDashboard", payload.dashboard);
-          // console.log("configruacion actualizada ");
-        })
-        .catch(error => {
-          console.log(error);
-        });
     }
   }
 };

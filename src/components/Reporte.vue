@@ -13,7 +13,7 @@
           </v-breadcrumbs>
         </v-flex>
 
-        <!-- Mediciones -->
+        <!-- procesos -->
         <template>
           <v-tabs left>
             <v-tabs-bar>
@@ -83,23 +83,23 @@
                               </tr>
                               <tr>
                                 <td class="bold greycell">Proceso</td>
-                                <td>{{medicionActual.dataMedicionActual.nombreProceso}}</td>
+                                <td>{{procesoActual.dataprocesoActual.nombreProceso}}</td>
                               </tr>
                               <tr>
                                 <td class="bold greycell">Herramienta Usada</td>
-                                <td>{{medicionActual.dataMedicionActual.herramientaUsada}}</td>
+                                <td>{{procesoActual.dataprocesoActual.herramientaUsada}}</td>
                               </tr>
                               <tr>
                                 <td class="bold greycell">Fecha de Medición</td>
-                                <td>{{medicionActual.dataMedicionActual.fecha}}</td>
+                                <td>{{procesoActual.dataprocesoActual.fecha}}</td>
                               </tr>
                               <tr>
                                 <td class="bold greycell">Ingeniero de Campo</td>
-                                <td>{{medicionActual.dataMedicionActual.ingenieroCampo}}</td>
+                                <td>{{procesoActual.dataprocesoActual.ingenieroCampo}}</td>
                               </tr>
                               <tr>
                                 <td class="bold greycell">Jefe de Grupo</td>
-                                <td>{{medicionActual.dataMedicionActual.jefeGrupo}}</td>
+                                <td>{{procesoActual.dataprocesoActual.jefeGrupo}}</td>
                               </tr>
                             </tbody>
                           </table>
@@ -356,7 +356,7 @@ export default {
           url: "/Proyectos"
         },
         {
-          text: "Mediciones",
+          text: "procesos",
           disabled: true,
           url: "/"
         }
@@ -388,8 +388,8 @@ export default {
     loadingReporte() {
       return this.$store.getters.LoadingReporte;
     },
-    medicionActual() {
-      return this.$store.getters.medicionActual;
+    procesoActual() {
+      return this.$store.getters.procesoActual;
     },
     tomaDatosActual() {
       return this.$store.getters.tomaDatosActual;
@@ -450,8 +450,8 @@ export default {
     },
     actualizarNota() {
       const payload = {
-        idPyt: this.$route.params.idPyt,
-        idMedicion: this.$route.params.idMedicion,
+        proyecto_uid: this.$route.params.proyecto_uid,
+        idproceso: this.$route.params.idproceso,
         nota: this.txt_nota
       };
       this.$store.dispatch("actualizar_reporte_nota", payload);
@@ -461,12 +461,12 @@ export default {
 
   created() {
     const payload = {
-      idPyt: this.$route.params.idPyt,
-      idMedicion: this.$route.params.idMedicion,
+      proyecto_uid: this.$route.params.proyecto_uid,
+      idproceso: this.$route.params.idproceso,
       idTomaDatos: this.$route.params.idTomaDatos
     };
     this.$store.dispatch("cargar_reporte", payload);
-    this.$store.dispatch("loadMedicionActual", payload);
+    this.$store.dispatch("loadprocesoActual", payload);
     this.$store.dispatch("cargar_tomaDatosActual", payload);
   }
 };

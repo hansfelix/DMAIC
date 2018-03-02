@@ -12,7 +12,7 @@ import * as firebase from "firebase";
 // │       └── ultimasModificaciones
 // │           └── { ultimaModificacion_uid }
 // │               └── { proyecto_uid }
-// │               └── { medicion_uid }
+// │               └── { proceso_uid }
 // │               └── { tomaDato_uid }
 // │               └── tipo
 // │               └── fecha
@@ -27,11 +27,14 @@ export const moduloUsuarios = {
    *
    */
   state: {
-    authApp: null,
-    ErrorIngreso: false,
     users: [],
     user: null,
-    loading_user: false,
+    usersBusqueda: [],
+    administrador: false,
+    authApp: null,
+    ErrorIngreso: false,
+    loadingUser: false,
+    loadingUsers: false,
     autenticado: false
   },
 
@@ -49,11 +52,20 @@ export const moduloUsuarios = {
     users(state) {
       return state.users;
     },
-    ErrorIngreso(state) {
-      return state.ErrorIngreso;
+    usersBusqueda(state) {
+      return state.usersBusqueda;
+    },
+    administrador(state) {
+      return state.administrador;
     },
     autenticado(state) {
       return state.autenticado;
+    },
+    ErrorIngreso(state) {
+      return state.ErrorIngreso;
+    },
+    loadingUsers(state) {
+      return state.loadingUsers;
     }
   },
 
@@ -65,20 +77,36 @@ export const moduloUsuarios = {
    *
    */
   mutations: {
-    setLoadingUser(state, payload) {
-      state.loading_user = payload;
-    },
-    setUser(state, payload) {
+    // User
+    //============
+    set_user(state, payload) {
       state.user = payload;
     },
-    setUsers(state, payload) {
+    set_users(state, payload) {
       state.users = payload;
     },
-    setAutenticado(state, payload) {
+    set_userBusqueda(state, payload) {
+      state.usersBusqueda = payload;
+    },
+    set_administrador(state, payload) {
+      state.administrador = payload;
+    },
+    set_autenticado(state, payload) {
       state.autenticado = payload;
     },
-    setAuthApp(state, payload) {
+    set_loadingUser(state, payload) {
+      state.loadingUser = payload;
+    },
+    set_authApp(state, payload) {
       state.authApp = payload;
+    },
+    set_loadingUsers(state, payload) {
+      state.loadingUsers = payload;
+    },
+    // Push
+    //=====
+    push_users(state, payload) {
+      state.users.push(payload);
     }
   },
 
@@ -109,7 +137,7 @@ export const moduloUsuarios = {
         },
         "Secondary"
       );
-      commit("setAuthApp", authApp);
+      commit("set_authApp", authApp);
     },
 
     /**
@@ -120,13 +148,13 @@ export const moduloUsuarios = {
      * @created 20/02/0218
      */
     signUserIn({ commit }, payload) {
-      commit("setLoadingUser", true);
+      commit("set_loadingUser", true);
       commit("setErrorIngreso", false);
       firebase
         .auth()
         .signInWithEmailAndPassword(payload.email, payload.password)
         .then(user => {
-          commit("setLoadingUser", false);
+          commit("set_loadingUser", false);
           console.log(user.uid);
           //Sacar datos de BD
           firebase
@@ -137,8 +165,13 @@ export const moduloUsuarios = {
               console.log(data.val());
               const newUser = data.val();
               newUser.id = user.uid;
-              commit("setUser", newUser);
-              commit("setAutenticado", true);
+              commit("set_user", newUser);
+              commit("set_autenticado", true);
+
+              //Verificar si es administrador
+              if (newUser.administrador == true) {
+                commit("set_administrador", true);
+              }
             })
             .catch(error => {
               console.log(error);
@@ -166,21 +199,29 @@ export const moduloUsuarios = {
         .ref("users/" + user.uid)
         .once("value")
         .then(data => {
-          console.log(data.val());
+          console.log(
+            "se ha auto-autentificado al siguiente usuario:",
+            data.val()
+          );
           const newUser = data.val();
           newUser.id = user.uid;
-          commit("setUser", newUser);
-          commit("setAutenticado", true);
+          commit("set_user", newUser);
+          commit("set_autenticado", true);
+
+          //Verificar si es administrador
+          if (newUser.administrador == true) {
+            commit("set_administrador", true);
+          }
         })
         .catch(error => {
           console.log(error);
-          commit("setLoadingMediciones", false);
+          commit("setLoadingprocesos", false);
         });
     },
     // FIREBASE AUTH
     // SET AUTENTICADO
-    setAutenticado({ commit }) {
-      commit("setAutenticado", true);
+    set_autenticado({ commit }) {
+      commit("set_autenticado", true);
     },
 
     /**
@@ -192,8 +233,8 @@ export const moduloUsuarios = {
      */
     logout({ commit }) {
       firebase.auth().signOut();
-      commit("setUser", null);
-      commit("setAutenticado", false);
+      commit("set_user", null);
+      commit("set_autenticado", false);
     },
 
     /**
@@ -234,7 +275,7 @@ export const moduloUsuarios = {
             .catch(error => {
               console.log(error);
             });
-          // commit("setUser", newUser);
+          // commit("set_user", newUser);
         })
         .catch(error => {
           // commit("setLoading", false);
@@ -251,7 +292,7 @@ export const moduloUsuarios = {
      * @created 20/02/0218
      */
     cargar_usuarios({ commit, dispatch }) {
-      // commit("setLoadingMediciones", true);
+      commit("set_loadingUsers", true);
       firebase
         .database()
         .ref("users/")
@@ -263,14 +304,71 @@ export const moduloUsuarios = {
             obj.id = key;
             users.push(obj[key]);
           }
-          commit("setUsers", users);
-          // commit("setLoadingMediciones", false);
-
-
+          commit("set_users", users);
+          commit("set_loadingUsers", false);
         })
         .catch(error => {
           console.log(error);
-          commit("setLoadingMediciones", false);
+          commit("set_loadingUsers", false);
+        });
+    },
+
+    /**
+     * @description Carga los usuarios registrados en el sistema.
+     * @param { commit } user
+     * @returns -
+     * @author Hans Felix
+     * @created 01/03/0218
+     */
+    cargar_usuarios_ByUid({ commit, dispatch }, arrayUidUsers) {
+      commit("set_loadingUsers", true);
+      for (var i = 0; i < arrayUidUsers.length; i++) {
+        firebase
+          .database()
+          .ref("users/" + arrayUidUsers[i])
+          .once("value")
+          .then(data => {
+            const obj = data.val();
+            obj.id = data.key;
+            commit("push_users", obj);
+            commit("set_loadingUsers", false);
+          })
+          .catch(error => {
+            console.log(error);
+            commit("set_loadingUsers", false);
+          });
+      }
+    },
+
+    /**
+     * @description Carga los usuarios registrados en el sistema.
+     * @param { commit } user
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
+    cargar_usuarios_busqueda({ commit, dispatch }, queryText) {
+      commit("set_loadingUsers", true);
+      firebase
+        .database()
+        .ref("users/")
+        .orderByChild("nombre")
+        .startAt(queryText)
+        .endAt(queryText + "\uf8ff")
+        .once("value")
+        .then(data => {
+          const users = [];
+          const obj = data.val();
+          for (let key in obj) {
+            obj[key].id = key;
+            users.push(obj[key]);
+          }
+          commit("set_userBusqueda", users);
+          commit("set_loadingUsers", false);
+        })
+        .catch(error => {
+          console.log(error);
+          commit("set_loadingUsers", false);
         });
     },
 
@@ -281,12 +379,12 @@ export const moduloUsuarios = {
      * @author Hans Felix
      * @created 20/02/0218
      */
-    escribir_ultimaModificacion({ commit, getters },ultimaModificacion) {
+    escribir_ultimaModificacion({ commit, getters }, ultimaModificacion) {
       var user = getters.user;
 
       firebase
         .database()
-        .ref("users/" + user.id+ "/ultimasModificaciones")
+        .ref("users/" + user.id + "/ultimasModificaciones")
         .push(ultimaModificacion)
         .then(data => {
           //const key = data.key;

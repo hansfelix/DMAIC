@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Proyectos from '@/components/Proyectos'
-import Mediciones from '@/components/Mediciones'
+import Procesos from '@/components/Procesos'
 import Medicion_detalle from '@/components/Medicion_detalle'
 import Medicion_configuracion from '@/components/Medicion_configuracion'
 import Reporte from '@/components/Reporte'
@@ -28,9 +28,9 @@ export default new Router({
       component: HelloWorld
     },
     {
-      path: '/Mediciones/:idPyt',
-      name: 'Mediciones',
-      component: Mediciones
+      path: '/procesos/:proyecto_uid',
+      name: 'procesos',
+      component: Procesos
     },
     {
       path: '/LogIn',
@@ -38,12 +38,12 @@ export default new Router({
       component: LogIn
     },
     {
-      path: '/Medicion_configuracion/:idPyt/:idMedicion',
-      name: 'Medicion_configuracion',
+      path: '/proceso_configuracion/:proyecto_uid/:idproceso',
+      name: 'proceso_configuracion',
       component: Medicion_configuracion
     },
     {
-      path: '/Reporte/:idPyt/:idMedicion/:idTomaDatos',
+      path: '/Reporte/:proyecto_uid/:idproceso/:idTomaDatos',
       name: 'Reporte',
       component: Reporte
     },
@@ -58,7 +58,7 @@ export default new Router({
       component: Configuracion
     },
     {
-      path: '/TomaDatos/:idPyt/:idMedicion/:idTomaDatos',
+      path: '/TomaDatos/:proyecto_uid/:idproceso/:idTomaDatos',
       name: 'TomaDatos',
       component: TomaDatos
     },

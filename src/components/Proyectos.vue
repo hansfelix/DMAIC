@@ -18,15 +18,15 @@
           <h1 display-3 class="tittle_H">Proyectos</h1>
 
           <!-- Adminstrador -->
-          <span v-if="user.administrador">Se listan a los proyectos resgistrados, para añadir uno nuevo, de click en el botón
+          <span v-if="administrador">Se listan a los proyectos resgistrados, para añadir uno nuevo, de click en el botón
             <strong>AÑADIR PROYECTO</strong>:</span>
           <!-- Ususario de Proyecto -->
-          <span v-if="!user.administrador">Se listan los proyectos en el que se encuentra registrado. dé click en alguno para ver su información.</span>
+          <span v-if="!administrador">Se listan los proyectos en el que se encuentra registrado. dé click en alguno para ver su información.</span>
 
         </v-flex>
 
         <!-- Se muestra solo si es administrador -->
-        <v-flex xs12 md4 class="text-xs-center text-md-right" v-if="user.administrador">
+        <v-flex xs12 md4 class="text-xs-center text-md-right" v-if="administrador">
           <v-btn color="secondary" dark @click.stop="dialog = true; txt_nombrePyt =''; txt_cr=''">
             Añadir Proyecto
             <v-icon right dark>queue</v-icon>
@@ -45,11 +45,11 @@
       <!-- PROYECTOS CARGADOS -->
       <v-layout row wrap>
         <v-flex xs12 md3 v-for="proyecto in proyectos" :key="proyecto.id" v-if="!loading_proyectos">
-          <v-card>
+          <v-card class="card-proyecto">
 
-            <router-link :to="'/Mediciones/' + proyecto.id">
+            <router-link :to="'/procesos/' + proyecto.id">
               <v-card-title primary-title>
-                <div class="blue-grey--text darken-1"> 
+                <div class="blue-grey--text darken-1">
                   <h2 class="headline mb-0 card_tittle-CR">{{proyecto.cr}}</h2>
                   <div class="grey--text two-lines">{{proyecto.nombrePyt}}</div>
                 </div>
@@ -58,12 +58,15 @@
             <v-divider></v-divider>
 
             <v-card-actions>
-              <v-btn flat color="primary" :to="'/Mediciones/' + proyecto.id">VER MEDICIONES</v-btn>
+              <v-btn flat color="primary" :to="'/procesos/' + proyecto.id">PROCESOS</v-btn>
               <v-spacer></v-spacer>
-              <v-btn icon @click="openDialog_anadirUsuarios(proyecto)">
+              <v-btn icon @click="opendialog_anadirUsuarios(proyecto)" v-if="administrador">
+                <v-icon color="primary">group_add</v-icon>
+              </v-btn>
+              <v-btn icon @click="opendialog_verUsuarios(proyecto)">
                 <v-icon color="primary">group</v-icon>
               </v-btn>
-              <v-btn icon @click="editarProyecto(proyecto)">
+              <v-btn icon @click="opendialog_editarProyecto(proyecto)">
                 <v-icon color="primary"> mode_edit</v-icon>
               </v-btn>
             </v-card-actions>
@@ -75,7 +78,7 @@
         <template>
           <v-layout row justify-center>
             <v-dialog v-model="dialog" max-width="500px">
-              <form @submit.prevent="onCreateProyecto">
+              <v-form v-model="valid" ref="form">
                 <v-card>
                   <v-card-title>
                     <span class="headline">Nuevo Proyecto</span>
@@ -84,10 +87,11 @@
                     <v-container grid-list-md>
                       <v-layout wrap>
                         <v-flex xs12>
-                          <v-text-field label="CR" id="txt_cr" v-model="txt_cr" hint="Ej: 3028" required></v-text-field>
+                          <v-text-field label="CR" v-model="txt_cr" hint="Ej: 3028" :rules="[v => !!v || 'Rellene este campo']" required></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                          <v-text-field label="Nombre" id="txt_nombrePyt" v-model="txt_nombrePyt" hint="Ej: Descolmatación del río Piura" required></v-text-field>
+                          <v-text-field label="Nombre" v-model="txt_nombrePyt" hint="Ej: Descolmatación del río Piura" :rules="[v => !!v || 'Rellene este campo']"
+                            required></v-text-field>
                         </v-flex>
 
                         <v-flex xs12>
@@ -99,11 +103,11 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click.native="dialog = false">Cerrar</v-btn>
-                    <v-btn color="blue darken-1" flat @click.native="dialog = false" type="submit">Añadir</v-btn>
+                    <v-btn color="secondary" flat @click.native="dialog = false">Cerrar</v-btn>
+                    <v-btn color="secondary" flat @click.native="crearProyecto()">Añadir</v-btn>
                   </v-card-actions>
                 </v-card>
-              </form>
+              </v-form>
             </v-dialog>
           </v-layout>
         </template>
@@ -112,7 +116,6 @@
         <template>
           <v-layout row justify-center>
             <v-dialog v-model="dialog_editarProyecto" max-width="500px">
-              <form @submit.prevent="onCreateProyecto">
                 <v-card>
                   <v-card-title>
                     <span class="headline">Editar Proyecto</span>
@@ -121,10 +124,10 @@
                     <v-container grid-list-md>
                       <v-layout wrap>
                         <v-flex xs12>
-                          <v-text-field label="CR" id="txt_cr" v-model="txt_cr" hint="Ej: 3028" required></v-text-field>
+                          <v-text-field label="CR" v-model="txt_cr" hint="Ej: 3028" required></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                          <v-text-field label="Nombre" id="txt_nombrePyt" v-model="txt_nombrePyt" hint="Ej: Descolmatación del río Piura" required></v-text-field>
+                          <v-text-field label="Nombre" v-model="txt_nombrePyt" hint="Ej: Descolmatación del río Piura" required></v-text-field>
                         </v-flex>
 
                         <v-flex xs12 sm6 md6>
@@ -140,48 +143,96 @@
                     <v-btn color="blue darken-1" flat @click="actualizarProyecto()">Actualizar</v-btn>
                   </v-card-actions>
                 </v-card>
-              </form>
             </v-dialog>
           </v-layout>
         </template>
 
-        <!-- dialog AÑADIR USUSARIO -->
+        <!-- dialog VER USUARIOS -->
         <template>
           <v-layout row justify-center>
-            <v-dialog v-model="dialog_anadirUsuario" max-width="600px">
-              <form @submit.prevent="onCreateProyecto">
+            <v-dialog v-model="dialog_verUsuarios" max-width="600px">
+              <v-card>
+                <v-card-title>
+                  <span class="headline">Usuarios</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container grid-list-md>
+                    <v-layout wrap>
+                      <!-- progress LOADING PROYECTOS-->
+                      <v-flex xs12 class="text-xs-center" v-if="loading_proyectos">
+                        <v-progress-linear v-bind:indeterminate="true"></v-progress-linear>
+                      </v-flex>
+
+                      <v-flex xs12>
+
+                        <div fill-height v-if="noUsers">
+                          Aún no hay usuarios registrados en este proyecto
+                        </div>
+
+                        <v-list two-line v-if="!loadingUsers">
+                          <div v-for="(user, index) in users" :key="index">
+                            <v-list-tile avatar>
+                              <v-list-tile-avatar>
+                                <img :src="user.foto">
+                              </v-list-tile-avatar>
+                              <v-list-tile-content>
+                                <v-list-tile-title v-html="user.nombre"></v-list-tile-title>
+                                <v-list-tile-sub-title v-html="user.correo"></v-list-tile-sub-title>
+                              </v-list-tile-content>
+                            </v-list-tile>
+                          </div>
+                        </v-list>
+
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="secondary" flat @click.native="dialog_verUsuarios = false">Cerrar</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-layout>
+        </template>
+
+        <!-- dialog AÑADIR USUARIOS -->
+        <template>
+          <v-layout row justify-center>
+            <v-dialog v-model="dialog_anadirUsuarios" max-width="600px">
                 <v-card>
                   <v-card-title>
-                    <span class="headline">Usuarios</span>
+                    <span class="headline">Añadir usuarios</span>
                   </v-card-title>
                   <v-card-text>
                     <v-container grid-list-md>
                       <v-layout wrap>
-                        <v-flex xs12>
-                          <v-text-field label="CR" id="txt_cr" v-model="txt_cr" hint="Ej: 3028" required></v-text-field>
+                        <v-flex xs12 md9>
+                          <v-text-field label="Busqueda por nombre" v-model="txt_busqueda" hint="Ej: Seiko Yong" required></v-text-field>
                         </v-flex>
-                        <v-flex xs12>
+                        <v-flex xs12 md3 class="pt-3">
+                          <v-btn block dark color="secondary" @click="buscarUsuarios()">Buscar</v-btn>
+                        </v-flex>
 
-                          <v-list two-line v-if="dialog_anadirUsuario">
-                            <v-subheader>Usuarios</v-subheader>
-                            <template v-for="(item, index) in proyecto">
-                              <v-divider :key="index"></v-divider>
-                              <v-list-tile avatar :key="index">
+                        <v-flex xs12>
+                          <v-list two-line v-if="!loadingUsers">
+                            <div v-for="(user, index) in usersBusqueda" :key="index">
+                              <v-list-tile avatar>
                                 <v-list-tile-avatar>
-                                  <img :src="item.users.foto">
+                                  <img :src="user.foto">
                                 </v-list-tile-avatar>
                                 <v-list-tile-content>
-                                  <v-list-tile-title v-html="item.users.nombre"></v-list-tile-title>
-                                  <v-list-tile-sub-title v-html="item.users.nombre"></v-list-tile-sub-title>
+                                  <v-list-tile-title v-html="user.nombre"></v-list-tile-title>
+                                  <v-list-tile-sub-title v-html="user.correo"></v-list-tile-sub-title>
                                 </v-list-tile-content>
+                                <v-list-tile-action>
+                                  <v-btn icon @click="anadirUsuario(user.id)">
+                                    <v-icon>person_add</v-icon>
+                                  </v-btn>
+                                </v-list-tile-action>
                               </v-list-tile>
-                            </template>
+                            </div>
                           </v-list>
-
-                        </v-flex>
-
-                        <v-flex xs12 sm6 md6>
-                          <small>*Campos obligatorios</small>
                         </v-flex>
 
                       </v-layout>
@@ -189,11 +240,9 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click.native="dialog_anadirUsuario = false">Cerrar</v-btn>
-                    <v-btn color="blue darken-1" flat @click="anadirUsuario()">Añadir</v-btn>
+                    <v-btn color="secondary" flat @click.native="dialog_anadirUsuarios = false">Cerrar</v-btn>
                   </v-card-actions>
                 </v-card>
-              </form>
             </v-dialog>
           </v-layout>
         </template>
@@ -227,14 +276,21 @@ export default {
         }
       ],
       items: [],
-      search: null,
+      // search: null,
       select: [],
 
       //Dialog
+      //Validación del formulario
+      valid: true,
       dialog: false,
       dialog_editarProyecto: false,
 
-      dialog_anadirUsuario: false,
+      dialog_verUsuarios: false,
+      noUsers: false,
+
+      dialog_anadirUsuarios: false,
+      txt_busqueda: "",
+
       proyecto: {},
 
       txt_nombrePyt: "",
@@ -262,12 +318,32 @@ export default {
    */
   computed: {
     // getters importados de vuex
-    ...mapGetters(["proyectos", "loading_proyectos", "user"])
+    ...mapGetters([
+      "proyectos",
+      "loading_proyectos",
+      "user",
+      "users",
+      "administrador",
+      "usersBusqueda",
+      "loadingUsers"
+    ])
   },
 
   watch: {
-    search(val) {
-      val && this.querySelections(val);
+    user(val) {
+      if (val != undefined) {
+        const user = val;
+        const uid = user.id; // uid del usuario
+        const administrador = user.administrador; // true o false
+
+        if (administrador) {
+          //Si es administrador carga todo los proyectos
+          this.$store.dispatch("cargar_proyectos");
+        } else {
+          //Si no es administrador solo carga lo filtrado por el id
+          this.$store.dispatch("cargar_proyectosByUid", user.id);
+        }
+      }
     }
   },
 
@@ -277,18 +353,17 @@ export default {
    *
    */
   methods: {
-    onCreateProyecto() {
-      // if (!this.formIsValid) {
-      //   return;
-      // }
-      const proyecto = {
-        cr: this.txt_cr,
-        nombrePyt: this.txt_nombrePyt
-      };
-      this.$store.dispatch("crear_proyecto", proyecto);
-      this.$router.push("/proyectos");
+    crearProyecto() {
+      if (this.$refs.form.validate()) {
+        const proyecto = {
+          cr: this.txt_cr,
+          nombrePyt: this.txt_nombrePyt
+        };
+        this.$store.dispatch("crear_proyecto", proyecto);
+        this.dialog = false;
+      }
     },
-    editarProyecto(proyecto) {
+    opendialog_editarProyecto(proyecto) {
       this.dialog_editarProyecto = true;
 
       this.txt_nombrePyt = proyecto.nombrePyt;
@@ -301,9 +376,7 @@ export default {
         nombrePyt: this.txt_nombrePyt,
         cr: this.txt_cr
       };
-      console.log(newPyt);
-      this.$store.dispatch("actualizarProyecto", newPyt);
-
+      this.$store.dispatch("actualizar_proyecto", newPyt);
       this.dialog_editarProyecto = false;
     },
 
@@ -314,21 +387,41 @@ export default {
      * @author Hans Felix
      * @created 20/02/0218
      */
-    openDialog_anadirUsuarios(proyecto) {
+    opendialog_verUsuarios(proyecto) {
       this.proyecto = proyecto;
-      this.dialog_anadirUsuario = true;
+      this.dialog_verUsuarios = true;
+      this.noUsers = false;
+
+      //Limpiar los users
+      this.$store.commit("set_users", []);
+
+      //Obtiene un arreglo con los keys (uids) del objeto
+      if (proyecto.users) {
+        const arrayUidUsers = Object.keys(proyecto.users);
+        this.$store.dispatch("cargar_usuarios_ByUid", arrayUidUsers);
+      } else {
+        this.noUsers = true;
+      }
     },
-    querySelections(v) {
-      this.loading = true;
-      // Simulated ajax query
-      setTimeout(() => {
-        this.items = this.states.filter(e => {
-          return (
-            (e.nombre || "").toLowerCase().indexOf((v || "").toLowerCase()) > -1
-          );
-        });
-        this.loading = false;
-      }, 500);
+    opendialog_anadirUsuarios(proyecto) {
+      this.$store.commit("set_userBusqueda", []);
+      this.proyecto = proyecto;
+      this.dialog_anadirUsuarios = true;
+    },
+    buscarUsuarios() {
+      this.$store.dispatch("cargar_usuarios_busqueda", this.txt_busqueda);
+    },
+    anadirUsuario(user_uid) {
+      const payload = {
+        user_uid: user_uid,
+        proyecto_uid: this.proyecto.id
+      };
+
+      this.$store.dispatch("actualizar_proyecto_anadirUsuario", payload);
+
+      // Dismiss Dialog anadirUsuarios
+      this.dialog_anadirUsuarios = false;
+      this.txt_busqueda = "";
     }
   },
 
@@ -337,20 +430,30 @@ export default {
    * == CREATED
    *
    */
-  created() {
-    //Cargar proyectos, según rol
-    //========================================
-    const user = this.$store.getters.user;
-    const uid = user.id; // uid del usuario
-    const administrador = user.administrador; // true o false
+  created() {},
 
-    if (administrador) {
-      //Si es administrador carga todo los proyectos
-      this.$store.dispatch("cargar_proyectos");
-    } else {
-      //Si no es administrador solo carga lo filtrado por el id
-      this.$store.dispatch("cargar_proyectosByUid", user.id);
-    }
+  /**
+   *
+   * == MOUNTED
+   *
+   */
+  mounted() {
+    let self = this;
+
+    //Detecta si presiona enter en un diálogo
+    window.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        if (self.dialog == true) {
+          self.crearProyecto();
+        }
+        if (self.dialog_editarProyecto == true) {
+          self.actualizarProyecto();
+        }
+        if (self.dialog_anadirUsuarios == true) {
+          self.buscarUsuarios();
+        }
+      }
+    });
   }
 };
 </script>
@@ -358,10 +461,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.card {
+.card.card-proyecto {
   transition: all 0.2s ease;
+  border-top: 2px solid #ffffff;
 }
-.card:hover {
+
+.card.card-proyecto:hover {
+  border-top: 2px solid #5c6bc0;
   box-shadow: 0px 2px 6px 1px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
   transition: all 0.2s ease;

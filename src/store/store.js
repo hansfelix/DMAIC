@@ -5,11 +5,11 @@ import * as firebase from "firebase";
 //Importación de modulos
 import { moduloActividades } from "./modulos/moduloActividades";
 import { moduloReportes } from "./modulos/moduloReportes";
-import { moduloMediciones } from "./modulos/moduloMediciones";
+import { moduloProcesos } from "./modulos/moduloProcesos";
 import { moduloObreros } from "./modulos/moduloObreros";
 import { moduloProyectos } from "./modulos/moduloProyectos";
 import { moduloUsuarios } from "./modulos/moduloUsuarios";
-import { moduloTomaDatos } from "./modulos/moduloTomaDatos";
+import { moduloMediciones } from "./modulos/moduloMediciones";
 import { moduloConfiguracion } from "./modulos/moduloConfiguracion";
 
 Vue.use(Vuex);
@@ -71,9 +71,9 @@ export const store = new Vuex.Store({
         .database()
         .ref(
           "datos-proyecto/" +
-            payload.idPyt +
+            payload.proyecto_uid +
             "/" +
-            payload.idMedicion +
+            payload.idproceso +
             "/reporte/"
         )
         .set(payload.reporte)
@@ -88,24 +88,24 @@ export const store = new Vuex.Store({
     },
     //LOAD REPORTE
 
-    //ACTUALIZAR MEDICION - DURACION
+    //ACTUALIZAR proceso - DURACION
     actualizarDuracion({ commit }, payload) {
       commit("setLoading", true);
       firebase
         .database()
         .ref(
-          "mediciones/" + payload.idPyt + "/" + payload.idMedicion + "/duracion"
+          "procesos/" + payload.proyecto_uid + "/" + payload.idproceso + "/duracion"
         )
         .set(payload.nuevaDuracion)
         .then(data => {
           //const key = data.key;
-          // const medicion = {
+          // const proceso = {
           //   id: data.key,
-          //   dataMedicionActual: data.val()
+          //   dataprocesoActual: data.val()
           // };
-          commit("setMedicionActual_duracion", payload.nuevaDuracion);
+          commit("setprocesoActual_duracion", payload.nuevaDuracion);
 
-          // commit("setLoadedMediciones", mediciones);
+          // commit("setLoadedprocesos", procesos);
           commit("setLoading", false);
         })
         .catch(error => {
@@ -125,11 +125,11 @@ export const store = new Vuex.Store({
   modules: {
     mod_actividades: moduloActividades,
     mod_reportes: moduloReportes,
-    mod_mediciones: moduloMediciones,
+    mod_procesos: moduloProcesos,
     mod_obreros: moduloObreros,
     mod_proyectos: moduloProyectos,
     mod_usuarios: moduloUsuarios,
-    mod_tomaDatos: moduloTomaDatos,
+    mod_mediciones: moduloMediciones,
     mod_configracion: moduloConfiguracion
   }
 });

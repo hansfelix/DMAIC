@@ -77,7 +77,7 @@ export const moduloActividades = {
       firebase
         .database()
         .ref(
-          "datos-proyecto/" + obj.idPyt + "/" + obj.idMedicion + "/actividades/"
+          "datos-proyecto/" + obj.proyecto_uid + "/" + obj.idproceso + "/actividades/"
         )
         .push(obj.actividad)
         .then(data => {
@@ -94,11 +94,11 @@ export const moduloActividades = {
     //CARGAR ACTIVIDADES
     //
     cargar_actividades({ commit }, obj) {
-      // commit("setLoadingMediciones", true);
+      // commit("setLoadingprocesos", true);
       firebase
         .database()
         .ref(
-          "datos-proyecto/" + obj.idPyt + "/" + obj.idMedicion + "/actividades/"
+          "datos-proyecto/" + obj.proyecto_uid + "/" + obj.idproceso + "/actividades/"
         )
         .once("value")
         .then(data => {
@@ -111,11 +111,11 @@ export const moduloActividades = {
             actividades.push(obj[key]);
           }
           commit("setActividades", actividades);
-          // commit("setLoadingMediciones", false);
+          // commit("setLoadingprocesos", false);
         })
         .catch(error => {
           console.log(error);
-          //   commit("setLoadingMediciones", false);
+          //   commit("setLoadingprocesos", false);
         });
     }
   }
