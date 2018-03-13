@@ -18,7 +18,6 @@ export const store = new Vuex.Store({
   /**
    *
    * == STATE
-   *
    * State(estado) general de la Aplicación.
    *
    */
@@ -30,7 +29,6 @@ export const store = new Vuex.Store({
   /**
    *
    * == GETTERS
-   *
    * Funciones reutilizables que obtienen datos parciales del state.
    * Evita dependencias.
    *
@@ -40,7 +38,6 @@ export const store = new Vuex.Store({
   /**
    *
    * == MUTATIONS
-   *
    * Funciones encargadas de cambiar el STATE de la Aplicación.
    * Operaciones síncronas.
    *
@@ -60,7 +57,6 @@ export const store = new Vuex.Store({
   /**
    *
    * == ACTIONS
-   *
    * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
    * Operaciones asíncronas.
    *
@@ -118,7 +114,6 @@ export const store = new Vuex.Store({
   /**
    *
    * == MODULES
-   *
    * Modularización de la aplicación para un mejor orden.
    *
    */
