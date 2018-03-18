@@ -16,7 +16,7 @@
         <v-flex xs12 md9 align-center v-if="!loading_proyectoActual">
           <h1 display-3 class="tittle_H">Procesos</h1>
           <p>Se listan los procesos que tiene del proyecto
-            <strong>{{proyectoActual.cr}} - {{proyectoActual.nombrePyt}} </strong>, para añadir una nueva medición de click en el botón
+            <strong>{{proyectoActual.cr}} - {{proyectoActual.nombrePyt}} </strong>, para añadir un nuevo proceso de click en el botón
             <strong>AÑADIR PROCESO</strong>:</p>
           <v-spacer></v-spacer>
         </v-flex>

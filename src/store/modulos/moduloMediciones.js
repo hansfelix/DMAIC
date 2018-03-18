@@ -1,4 +1,3 @@
-
 import * as firebase from "firebase";
 var varx = "x";
 export const moduloMediciones = {
@@ -62,7 +61,9 @@ export const moduloMediciones = {
    *
    */
   actions: {
-    cargar_tomaDatos({ commit }, payload) {
+    cargar_tomaDatos({
+      commit
+    }, payload) {
       commit("set_loading_mediciones", true);
 
 
@@ -70,10 +71,10 @@ export const moduloMediciones = {
         .database()
         .ref(
           "datos-proyecto/" +
-            payload.proyecto_uid +
-            "/" +
-            payload.idproceso +
-            "/tomaDatos/"
+          payload.proyecto_uid +
+          "/" +
+          payload.idproceso +
+          "/tomaDatos/"
         )
         .once("value")
         .then(data => {
@@ -92,27 +93,37 @@ export const moduloMediciones = {
           commit("set_loading_mediciones", false);
         });
     },
-    // Guardar los Proyectos en FIREBASE
-    crear_medicion({ commit, getters }, payload) {
+
+    /**
+     * @description Crea un medición en FIREBASE 🔥
+     * @param { commit }
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
+    crear_medicion({
+      commit,
+      getters
+    }, payload) {
 
       var proyectosRef = firebase
-      .database()
-      .ref(
-        "datos-proyecto/" +
+        .database()
+        .ref(
+          "datos-proyecto/" +
           payload.proyecto_uid +
           "/" +
           payload.idproceso +
           "/tomaDatos/"
-      );
-      
+        );
+
       firebase
         .database()
         .ref(
           "procesos/" +
-            payload.proyecto_uid +
-            "/" +
-            payload.proceso_uid +
-            "/medicion/"
+          payload.proyecto_uid +
+          "/" +
+          payload.proceso_uid +
+          "/medicion/"
         )
         .push(payload.medicion)
         .then(data => {
@@ -124,7 +135,9 @@ export const moduloMediciones = {
         });
       // Reach out to firebase and store it
     },
-    cargar_tomaDatosActual({ commit }, payload) {
+    cargar_tomaDatosActual({
+      commit
+    }, payload) {
       ////////////////
       console.log("cargando medición actual");
       commit("setLoading", true);
@@ -132,12 +145,12 @@ export const moduloMediciones = {
         .database()
         .ref(
           "datos-proyecto/" +
-            payload.proyecto_uid +
-            "/" +
-            payload.idproceso +
-            "/tomaDatos/" +
-            payload.idTomaDatos +
-            "/datos"
+          payload.proyecto_uid +
+          "/" +
+          payload.idproceso +
+          "/tomaDatos/" +
+          payload.idTomaDatos +
+          "/datos"
         )
         .once("value")
         .then(data => {

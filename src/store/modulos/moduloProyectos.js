@@ -152,6 +152,7 @@ export const moduloProyectos = {
       });
     },
 
+    // cargar_proyectos({ commit }) {}, revisar
     /**
      * @description Cargar los proyectos según el Uid del usuario de FIREBASE 🔥
      * @param { commit } user_uid
