@@ -185,7 +185,10 @@
       </v-layout>
 
 
-
+    <DialogMedicion 
+    :visible="dialog_crearMedicion" 
+    v-on:close="dialog_crearMedicion=!dialog_crearMedicion">
+    </DialogMedicion>
 
     </v-container>
   </v-slide-y-transition>
@@ -193,15 +196,25 @@
 
 
 <script>
+/**
+ * Import Dependency
+ */
 import { mapGetters } from "vuex";
-import * as firebase from "firebase";
+import DialogMedicion from "./DialogMedicion.vue";
 
+/**
+ * Export
+ */
 export default {
+  components: {
+    DialogMedicion
+  },
   data() {
     return {
       //Validación del formulario
       valid: true,
 
+      dialog_crearMedicion: true,
       dialog_generarReporte: false,
       dialog: false,
       txt_herramientaUsada: "",
@@ -306,7 +319,7 @@ export default {
     // - this.$store.getters.proyectos.length = 0 no hay proyectos FALSE
     // - this.$store.getters.proyectos.length != 0 si hay proyectos TRUE
     // si no hya proyectos lo carga del watch
-    if ( this.$store.getters.proyectos.length ) {
+    if (this.$store.getters.proyectos.length) {
       this.$store.dispatch("cargar_proyectoActual", proyecto_uid);
     }
     this.$store.dispatch("cargar_procesos", proyecto_uid);
