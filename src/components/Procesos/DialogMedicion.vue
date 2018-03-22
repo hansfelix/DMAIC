@@ -1,6 +1,6 @@
 <template fluid style="min-height: 0;" grid-list-lg>
   <v-layout row justify-center>
-    <v-dialog v-model="this.visible" max-width="500px" @keydown.esc="cerrarDialog">
+    <v-dialog v-model="show" max-width="500px" @keydown.esc="show = false">
       <v-form v-model="valid" ref="form" @submit.prevent="crearMedicion()">
         <v-card>
           <v-card-title>
@@ -21,7 +21,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="cerrarDialog()">Cerrar</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="show = false">Cerrar</v-btn>
             <v-btn color="blue darken-1" flat type="submit">Añadir</v-btn>
           </v-card-actions>
         </v-card>
@@ -31,45 +31,64 @@
 </template>
 
 <script>
+/**
+ * Export
+ */
+export default {
+  props: ["visible", "proyecto_uid", "proceso_uid"],
+
   /**
-   * Export
+   * Data
    */
-  export default {
-    props: ["visible", "proyecto_uid","proceso_uid"],
-    data() {
-      return {
-        // Formulario
-        txt_nombreMedicion: "",
-        valid: true
-      };
-    },
-    methods: {
-      crearMedicion() {
-        if (this.$refs.form.validate()) {
+  data() {
+    return {
+      // Formulario
+      txt_nombreMedicion: "",
+      valid: true
+    };
+  },
 
-        }
-        console.log(this.proyecto_uid,this.proceso_uid);
-      },
-      cerrarDialog() {
-        console.log("cerradi")
-        this.$emit("close");
+  /**
+   * Methods
+   */
+  methods: {
+    crearMedicion() {
+      if (this.$refs.form.validate()) {
       }
+      console.log(this.proyecto_uid, this.proceso_uid);
     },
+  },
 
-    /**
-     * Mounted
-     */
-    mounted() {
-      let self = this;
-      //Detecta si presiona enter en un diálogo
-      window.addEventListener("keyup", function (event) {
-        if (event.keyCode === 13) {
-          if (self.visible == true) {
-            self.crearMedicion();
-          }
+  /**
+   * Computed
+   */
+  computed: {
+    show: {
+      get() {
+        return this.visible;
+      },
+      set(value) {
+        if (!value) {
+          this.$emit("close");
         }
-      });
+      }
     }
-  };
+  },
 
+
+  /**
+   * Mounted
+   */
+  mounted() {
+    let self = this;
+    //Detecta si presiona enter en un diálogo
+    window.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        if (self.visible == true) {
+          self.crearMedicion();
+        }
+      }
+    });
+  }
+};
 </script>
