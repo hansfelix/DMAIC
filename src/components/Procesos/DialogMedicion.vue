@@ -1,6 +1,6 @@
 <template fluid style="min-height: 0;" grid-list-lg>
   <v-layout row justify-center>
-    <v-dialog v-model="this.visible" max-width="500px">
+    <v-dialog v-model="this.visible" max-width="500px" @keydown.esc="cerrarDialog">
       <v-form v-model="valid" ref="form" @submit.prevent="crearMedicion()">
         <v-card>
           <v-card-title>
@@ -9,7 +9,7 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                  
+
                 <v-flex xs12 md12>
                   <v-text-field label="Nombre de la medición" v-model="txt_nombreMedicion" hint="Ej: Armado de gaviones" :rules="[v => !!v || 'Rellene este campo']"
                     required></v-text-field>
@@ -35,7 +35,7 @@
    * Export
    */
   export default {
-    props: ["visible", "idMedi", "options"],
+    props: ["visible", "proyecto_uid","proceso_uid"],
     data() {
       return {
         // Formulario
@@ -48,7 +48,7 @@
         if (this.$refs.form.validate()) {
 
         }
-        console.log("s");
+        console.log(this.proyecto_uid,this.proceso_uid);
       },
       cerrarDialog() {
         console.log("cerradi")

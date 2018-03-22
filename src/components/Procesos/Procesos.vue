@@ -185,10 +185,9 @@
       </v-layout>
 
 
-    <DialogMedicion 
-    :visible="dialog_crearMedicion" 
-    v-on:close="dialog_crearMedicion=!dialog_crearMedicion">
-    </DialogMedicion>
+      <!-- Dialog Crear Medición -->
+      <DialogMedicion :visible="dialog_crearMedicion" :proyecto_uid="this.proyecto_uid" :proceso_uid="this.proceso_uid" v-on:close="dialog_crearMedicion=!dialog_crearMedicion">
+      </DialogMedicion>
 
     </v-container>
   </v-slide-y-transition>
@@ -196,177 +195,182 @@
 
 
 <script>
-/**
- * Import Dependency
- */
-import { mapGetters } from "vuex";
-import DialogMedicion from "./DialogMedicion.vue";
-
-/**
- * Export
- */
-export default {
-  components: {
-    DialogMedicion
-  },
-  data() {
-    return {
-      //Validación del formulario
-      valid: true,
-
-      dialog_crearMedicion: true,
-      dialog_generarReporte: false,
-      dialog: false,
-      txt_herramientaUsada: "",
-      txt_ingenieroCampo: "",
-      txt_jefeGrupo: "",
-      txt_nombreProceso: "",
-      itemsHerramientaUsada: [
-        {
-          text: "Carta Balance"
-        },
-        {
-          text: "Estudio de Tiempos"
-        }
-      ],
-      txt_tipoReporte: "",
-      txt_idproceso: "",
-      txt_metrados: "",
-      txt_hhReal: "",
-      txt_nroObreros: "",
-      txt_ratioPrevisto: "",
-
-      itemsTipoReporte: [
-        {
-          text: "Manual"
-        },
-        {
-          text: "Automático"
-        }
-      ],
-      itemsBreadCumb: [
-        {
-          text: "Inicio",
-          disabled: false,
-          url: ""
-        },
-        {
-          text: "Proyectos",
-          disabled: false,
-          url: "/Proyectos"
-        },
-        {
-          text: "procesos",
-          disabled: true,
-          url: "/"
-        }
-      ]
-    };
-  },
-  computed: {
-    // getters importados de vuex
-    ...mapGetters([
-      "procesos",
-      "loading_procesos",
-      "proyectos",
-      "proyectoActual",
-      "loading_proyectos",
-      "loading_proyectoActual"
-    ])
-  },
-  methods: {
-    crearProceso() {
-      // verificar si el formulario esta llenado correctamente
-      if (this.$refs.form.validate()) {
-        var proyecto_uid = this.$route.params.proyecto_uid;
-        const payload = {
-          proyecto_uid: proyecto_uid,
-          proceso: {
-            nombreProceso: this.txt_nombreProceso,
-            herramientaUsada: this.txt_herramientaUsada.text,
-            ingenieroCampo: this.txt_ingenieroCampo,
-            jefeGrupo: this.txt_jefeGrupo,
-            fecha: new Date().toLocaleDateString(),
-            duracion: 60,
-            dashboard: false,
-            tomaDatos: false,
-            configurado: false
-          }
-        };
-        // Crear proceso
-        this.$store.dispatch("crear_proceso", payload);
-        // reiniciar formulario
-        this.$refs.form.reset();
-        // cerrar dialogo
-        this.dialog = false;
-      }
-    },
-    anadirMedicion(proceso_uid) {
-      console.log(proceso_uid);
-    }
-  },
-  watch: {
-    proyectos(val) {
-      if (val != undefined) {
-        var proyecto_uid = this.$route.params.proyecto_uid;
-        this.$store.dispatch("cargar_proyectoActual", proyecto_uid);
-      }
-    }
-  },
-  created() {
-    var proyecto_uid = this.$route.params.proyecto_uid;
-    // Si se han cargado los proyectos, se carga el proyecto actual
-    // - this.$store.getters.proyectos.length = 0 no hay proyectos FALSE
-    // - this.$store.getters.proyectos.length != 0 si hay proyectos TRUE
-    // si no hya proyectos lo carga del watch
-    if (this.$store.getters.proyectos.length) {
-      this.$store.dispatch("cargar_proyectoActual", proyecto_uid);
-    }
-    this.$store.dispatch("cargar_procesos", proyecto_uid);
-  },
+  /**
+   * Import Dependency
+   */
+  import {
+    mapGetters
+  } from "vuex";
+  import DialogMedicion from "./DialogMedicion.vue";
 
   /**
-   *
-   * == MOUNTED
-   *
+   * Export
    */
-  mounted() {
-    let self = this;
+  export default {
+    components: {
+      DialogMedicion
+    },
+    data() {
+      return {
+        //Validación del formulario
+        valid: true,
 
-    //Detecta si presiona enter en un diálogo
-    window.addEventListener("keyup", function(event) {
-      if (event.keyCode === 13) {
-        if (self.dialog == true) {
-          self.crearProceso();
+        dialog_crearMedicion: false,
+        proyecto_uid: '',
+        proceso_uid: '',
+
+
+        dialog_generarReporte: false,
+        dialog: false,
+        txt_herramientaUsada: "",
+        txt_ingenieroCampo: "",
+        txt_jefeGrupo: "",
+        txt_nombreProceso: "",
+        itemsHerramientaUsada: [{
+            text: "Carta Balance"
+          },
+          {
+            text: "Estudio de Tiempos"
+          }
+        ],
+        txt_tipoReporte: "",
+        txt_idproceso: "",
+        txt_metrados: "",
+        txt_hhReal: "",
+        txt_nroObreros: "",
+        txt_ratioPrevisto: "",
+
+        itemsTipoReporte: [{
+            text: "Manual"
+          },
+          {
+            text: "Automático"
+          }
+        ],
+        itemsBreadCumb: [{
+            text: "Inicio",
+            disabled: false,
+            url: ""
+          },
+          {
+            text: "Proyectos",
+            disabled: false,
+            url: "/Proyectos"
+          },
+          {
+            text: "procesos",
+            disabled: true,
+            url: "/"
+          }
+        ]
+      };
+    },
+    computed: {
+      // getters importados de vuex
+      ...mapGetters([
+        "procesos",
+        "loading_procesos",
+        "proyectos",
+        "proyectoActual",
+        "loading_proyectos",
+        "loading_proyectoActual"
+      ])
+    },
+    methods: {
+      crearProceso() {
+        // verificar si el formulario esta llenado correctamente
+        if (this.$refs.form.validate()) {
+          var proyecto_uid = this.$route.params.proyecto_uid;
+          const payload = {
+            proyecto_uid: proyecto_uid,
+            proceso: {
+              nombreProceso: this.txt_nombreProceso,
+              herramientaUsada: this.txt_herramientaUsada.text,
+              ingenieroCampo: this.txt_ingenieroCampo,
+              jefeGrupo: this.txt_jefeGrupo,
+              fecha: new Date().toLocaleDateString(),
+              duracion: 60,
+              dashboard: false,
+              tomaDatos: false,
+              configurado: false
+            }
+          };
+          // Crear proceso
+          this.$store.dispatch("crear_proceso", payload);
+          // reiniciar formulario
+          this.$refs.form.reset();
+          // cerrar dialogo
+          this.dialog = false;
+        }
+      },
+      anadirMedicion(proceso_uid) {
+        this.proceso_uid = proceso_uid,
+          this.dialog_crearMedicion = true;
+        console.log(proceso_uid);
+      }
+    },
+    watch: {
+      proyectos(val) {
+        if (val != undefined) {
+          this.proyecto_uid = this.$route.params.proyecto_uid;
+          this.$store.dispatch("cargar_proyectoActual", this.proyecto_uid);
         }
       }
-    });
-  }
-};
+    },
+    created() {
+      this.proyecto_uid = this.$route.params.proyecto_uid;
+      // Si se han cargado los proyectos, se carga el proyecto actual
+      // - this.$store.getters.proyectos.length = 0 no hay proyectos FALSE
+      // - this.$store.getters.proyectos.length != 0 si hay proyectos TRUE
+      // si no hya proyectos lo carga del watch
+      if (this.$store.getters.proyectos.length) {
+        this.$store.dispatch("cargar_proyectoActual", this.proyecto_uid);
+      }
+      this.$store.dispatch("cargar_procesos", this.proyecto_uid);
+    },
+
+    /**
+     * Mounted
+     */
+    mounted() {
+      let self = this;
+
+      //Detecta si presiona enter en un diálogo
+      window.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+          if (self.dialog == true) {
+            self.crearProceso();
+          }
+        }
+      });
+    }
+  };
+
 </script>
 
 <style scoped>
-.procesoItem {
-  background-color: rgb(255, 255, 255);
-  transition: 0.2s ease;
-}
+  .procesoItem {
+    background-color: rgb(255, 255, 255);
+    transition: 0.2s ease;
+  }
 
-.procesoItem:hover {
-  background-color: rgb(241, 241, 241);
-  transition: 0.2s ease;
-}
+  .procesoItem:hover {
+    background-color: rgb(241, 241, 241);
+    transition: 0.2s ease;
+  }
 
-h1,
-h2 {
-  font-weight: normal;
-}
+  h1,
+  h2 {
+    font-weight: normal;
+  }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 
-.list__tile:hover {
-  background-color: rgb(245, 245, 245);
-}
+  .list__tile:hover {
+    background-color: rgb(245, 245, 245);
+  }
+
 </style>
