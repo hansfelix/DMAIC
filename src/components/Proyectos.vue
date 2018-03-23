@@ -1,5 +1,4 @@
 <template>
-  <v-slide-y-transition mode="out-in">
     <v-container fluid grid-list-lg>
       <v-layout row align-center wrap>
 
@@ -250,7 +249,6 @@
       </v-layout>
 
     </v-container>
-  </v-slide-y-transition>
 </template>
 
 <script>

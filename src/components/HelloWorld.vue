@@ -1,5 +1,4 @@
 <template>
-  <v-slide-y-transition mode="out-in">
     <v-container fluid grid-list-xl>
       <v-layout row wrap id="home">
         <v-flex xs12 sm9 class="flex_cont">
@@ -103,7 +102,6 @@
         </v-flex>
       </v-layout>
     </v-container>
-  </v-slide-y-transition>
 </template>
 
 <script>
