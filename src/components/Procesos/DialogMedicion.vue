@@ -3,22 +3,23 @@
     <v-dialog v-model="show" max-width="500px" @keydown.esc="show = false">
       <v-form v-model="valid" ref="form" @submit.prevent="crearMedicion()">
         <v-card>
+          <!-- HEADER DIALOG -->
           <v-card-title>
             <span class="headline">Nueva Medición</span>
           </v-card-title>
+          <!-- CONTENT DIALOG -->
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-
                 <v-flex xs12 md12>
-                  <v-text-field label="Nombre de la medición" v-model="txt_nombreMedicion" hint="Ej: Armado de gaviones" :rules="[v => !!v || 'Rellene este campo']"
+                  <v-text-field label="Nombre de la medición" v-model="nombreMedicion" hint="Ej: Armado de gaviones" :rules="[v => !!v || 'Rellene este campo']"
                     required></v-text-field>
                 </v-flex>
-
               </v-layout>
               <small>*Campos obligatorios</small>
             </v-container>
           </v-card-text>
+          <!-- FOOTER DIALOG -->
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="show = false">Cerrar</v-btn>
@@ -43,7 +44,7 @@ export default {
   data() {
     return {
       // Formulario
-      txt_nombreMedicion: "",
+      nombreMedicion: "",
       valid: true
     };
   },
@@ -54,9 +55,17 @@ export default {
   methods: {
     crearMedicion() {
       if (this.$refs.form.validate()) {
+          console.log(this.proyecto_uid, this.proceso_uid);
+          const payload = {
+            proyecto_uid : this.proyecto_uid,
+            proceso_uid : this.proceso_uid,
+            medicion:{
+                nombreMedicion :this.nombreMedicion
+            }
+          }
+          this.$store.dispatch("crear_medicion",payload)
       }
-      console.log(this.proyecto_uid, this.proceso_uid);
-    },
+    }
   },
 
   /**
@@ -74,7 +83,6 @@ export default {
       }
     }
   },
-
 
   /**
    * Mounted

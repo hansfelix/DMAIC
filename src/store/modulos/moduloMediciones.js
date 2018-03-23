@@ -1,11 +1,9 @@
 import * as firebase from "firebase";
-var varx = "x";
+import {path_medicion} from '../paths.js';
 export const moduloMediciones = {
   /**
-   *
    * == STATE
    * State(estado) general de la Aplicación.
-   *
    */
   state: {
     mediciones: [],
@@ -14,11 +12,9 @@ export const moduloMediciones = {
   },
 
   /**
-   *
    * == GETTERS
    * Funciones reutilizables que obtienen datos parciales del state.
    * Evita dependencias.
-   *
    */
   getters: {
     mediciones(state) {
@@ -33,11 +29,9 @@ export const moduloMediciones = {
   },
 
   /**
-   *
    * == MUTATIONS
    * Funciones encargadas de cambiar el STATE de la Aplicación.
    * Operaciones síncronas.
-   *
    */
   mutations: {
     set_medicionActual(state, payload) {
@@ -54,28 +48,21 @@ export const moduloMediciones = {
     }
   },
   /**
-   *
    * == ACTIONS
    * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
    * Operaciones asíncronas.
-   *
    */
   actions: {
-    cargar_tomaDatos({
+    cargar_medicion({
       commit
     }, payload) {
-      commit("set_loading_mediciones", true);
 
+      commit("set_loading_mediciones", true);
+      let path = path_medicion(payload);
 
       firebase
         .database()
-        .ref(
-          "datos-proyecto/" +
-          payload.proyecto_uid +
-          "/" +
-          payload.idproceso +
-          "/tomaDatos/"
-        )
+        .ref(path)
         .once("value")
         .then(data => {
           const tomaDatos = [];
@@ -94,6 +81,8 @@ export const moduloMediciones = {
         });
     },
 
+
+
     /**
      * @description Crea un medición en FIREBASE 🔥
      * @param { commit }
@@ -106,35 +95,21 @@ export const moduloMediciones = {
       getters
     }, payload) {
 
-      var proyectosRef = firebase
-        .database()
-        .ref(
-          "datos-proyecto/" +
-          payload.proyecto_uid +
-          "/" +
-          payload.idproceso +
-          "/tomaDatos/"
-        );
+      let path = path_medicion(payload);
 
       firebase
         .database()
-        .ref(
-          "procesos/" +
-          payload.proyecto_uid +
-          "/" +
-          payload.proceso_uid +
-          "/medicion/"
-        )
+        .ref(path)
         .push(payload.medicion)
         .then(data => {
           payload.tomaDatos.id = data.key;
-          commit("push_mediciones", payload.tomaDatos);
+          commit("push_mediciones", payload.medicion);
         })
         .catch(error => {
           console.log(error);
         });
-      // Reach out to firebase and store it
     },
+
     cargar_tomaDatosActual({
       commit
     }, payload) {
