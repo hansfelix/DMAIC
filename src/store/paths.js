@@ -19,5 +19,5 @@ export function path_medicion_deproceso(payload) {
 // │         └── { medicion_uid } <=========
 // └── ...
 export function path_medicion(payload) {
-  return "medicion/" + payload.proyecto_uid + "/" + payload.proceso_uid
+  return "mediciones/" + payload.proyecto_uid + "/" + payload.proceso_uid
 }

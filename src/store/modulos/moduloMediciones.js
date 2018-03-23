@@ -1,7 +1,5 @@
 import * as firebase from "firebase";
-import {
-  path_medicion_deproceso
-} from '../paths.js';
+import {} from '../paths.js';
 export const moduloMediciones = {
   /**
    * == STATE
@@ -10,7 +8,7 @@ export const moduloMediciones = {
   state: {
     mediciones: [],
     medicionActual: {},
-    loading_mediciones: false,    
+    loading_mediciones: false,
     loading_medicionActual: false
   },
 
@@ -52,6 +50,9 @@ export const moduloMediciones = {
     set_loading_medicionActual(state, payload) {
       state.loading_medicionActual = payload;
     },
+    /**
+     * mutations personalizados
+     */
     push_mediciones(state, payload) {
       state.mediciones.push(payload);
     }
@@ -89,11 +90,11 @@ export const moduloMediciones = {
             tomaDatos.push(obj[key]);
           }
           commit("set_mediciones", tomaDatos);
-          commit("set_loading_mediciones", false);
+          commit("set_loading_medicionActual", false);
         })
         .catch(error => {
           console.log(error);
-          commit("set_loading_mediciones", false);
+          commit("set_loading_medicionActual", false);
         });
     },
 
