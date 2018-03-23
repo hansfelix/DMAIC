@@ -174,4 +174,11 @@ h2 {
 .list__tile--active {
   background-color: whitesmoke;
 }
+
+::selection {
+  background: #ffb7b7; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #ffb7b7; /* Gecko Browsers */
+}
 </style>

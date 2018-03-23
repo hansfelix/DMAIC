@@ -74,7 +74,7 @@
     </template>
 
 
-    <v-layout row align-center wrap fill-height>
+    <v-layout row align-center wrap fill-height style="width: 100%;">
       <v-flex xs12 sm8 offset-sm2>
 
         <!-- progress -->
@@ -143,7 +143,7 @@
           </v-flex>
         </v-layout>
 
-        <v-flex v-if="!this.procesos.length" fill-height class="text-xs-center empty-state" style="width: 100%;">
+        <v-flex v-if="!this.procesos.length" fill-height class="text-xs-center empty-state" >
           <v-icon style="font-size: 7rem;">devices_other</v-icon>
           <h2 class="headline">Crea un nuevo proceso</h2>
           <h2 class="subheading">Para comenzar crea un nuevo proceso dando clic en el botón AÑADIR PROCESO.</h2>
