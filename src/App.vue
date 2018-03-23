@@ -61,9 +61,9 @@
 
     <!-- contenido -->
     <v-content>
-  <v-slide-y-transition mode="out-in">
-      <router-view/>
-  </v-slide-y-transition>
+      <v-slide-y-transition mode="out-in">
+        <router-view/>
+      </v-slide-y-transition>
     </v-content>
 
     <!-- FOOTER -->
@@ -72,13 +72,29 @@
         <small>- DERECHOS RESERVADOS</small>
       </span>
     </v-footer>
+
+    <!-- DIALOG INTRODUCTION -->
+    <!-- <DialogIntroduction :visible="true"></DialogIntroduction> -->
   </v-app>
 </template>
 
 <script>
+/**
+ * Import Dependency
+ */
 import { mapGetters } from "vuex";
+import DialogIntroduction from "./components/App/DialogIntroduction";
 
+/**
+ * Export
+ */
 export default {
+  /* Components */
+  components: {
+    DialogIntroduction
+  },
+
+  /* data() */
   data() {
     return {
       clipped: false,
@@ -176,9 +192,12 @@ h2 {
 }
 
 ::selection {
-  background: #ffb7b7; /* WebKit/Blink Browsers */
+  background: #ffb7b7;
+  /* WebKit/Blink Browsers */
 }
+
 ::-moz-selection {
-  background: #ffb7b7; /* Gecko Browsers */
+  background: #ffb7b7;
+  /* Gecko Browsers */
 }
 </style>
