@@ -13,10 +13,8 @@ import * as firebase from "firebase";
 
 export const moduloProyectos = {
   /**
-   *
    * == STATE
    * State(estado) general de la Aplicación.
-   *
    */
   state: {
     proyectos: [],
@@ -26,11 +24,9 @@ export const moduloProyectos = {
   },
 
   /**
-   *
    * == GETTERS
    * Funciones reutilizables que obtienen datos parciales del state.
    * Evita dependencias.
-   *
    */
   getters: {
     proyectoActual(state) {
@@ -48,11 +44,9 @@ export const moduloProyectos = {
   },
 
   /**
-   *
    * == MUTATIONS
    * Funciones encargadas de cambiar el STATE de la Aplicación.
    * Operaciones síncronas.
-   *
    */
   mutations: {
     set_proyectoActual(state, payload) {
@@ -88,11 +82,9 @@ export const moduloProyectos = {
   },
 
   /**
-   *
    * == ACTIONS
    * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
    * Operaciones asíncronas.
-   *
    */
   actions: {
     /**

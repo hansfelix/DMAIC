@@ -473,11 +473,18 @@
 
 
 <script>
+/**
+ * Import Dependency
+ */
+import { mapGetters } from "vuex";
 import * as firebase from "firebase";
+
+/**
+ * Export
+ */
 export default {
   data() {
     return {
-   
       dialogs: {
         dialog_datosGenerales: {
           show: false
@@ -682,33 +689,18 @@ export default {
     };
   },
   computed: {
-    obreros() {
-      return this.$store.getters.obreros;
-    },
-    procesoActual() {
-      return this.$store.getters.procesoActual;
-    },
-    proyectoActual() {
-      return this.$store.getters.proyectoActual;
-    },
-    actividades() {
-      return this.$store.getters.actividades;
-    },
-    actividadesTP() {
-      return this.$store.getters.actividadesTP;
-    },
-    actividadesTC() {
-      return this.$store.getters.actividadesTC;
-    },
-    actividadesTNC() {
-      return this.$store.getters.actividadesTNC;
-    },
-    tomaDatos() {
-      return this.$store.getters.tomaDatos;
-    },
-    loading_tomaDatos() {
-      return this.$store.getters.loading_tomaDatos;
-    }
+    // getters importados de vuex
+    ...mapGetters([
+      "procesoActual",
+      "proyectoActual",
+      "obreros",
+      "actividades",
+      "actividadesTP",
+      "actividadesTC",
+      "actividadesTNC",
+      "tomaDatos",
+      "loading_tomaDatos"
+    ])
   },
   methods: {
     completarConfiguracion() {

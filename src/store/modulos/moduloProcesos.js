@@ -3,10 +3,8 @@ import * as firebase from "firebase";
 
 export const moduloProcesos = {
   /**
-   *
    * == STATE
    * State(estado) general de la Aplicación.
-   *
    */
   state: {
     procesos: [{}],
@@ -15,11 +13,9 @@ export const moduloProcesos = {
   },
 
   /**
-   *
    * == GETTERS
    * Funciones reutilizables que obtienen datos parciales del state.
    * Evita dependencias.
-   *
    */
   getters: {
     procesos(state) {
@@ -34,11 +30,9 @@ export const moduloProcesos = {
   },
 
   /**
-   *
    * == MUTATIONS
    * Funciones encargadas de cambiar el STATE de la Aplicación.
    * Operaciones síncronas.
-   *
    */
   mutations: {
     // Setters
@@ -71,11 +65,9 @@ export const moduloProcesos = {
   },
 
   /**
-   *
    * == ACTIONS
    * Funciones encargadas de cambiar el STATE de la Aplicación (No lo hacen directamente, sino mediante mutations).
    * Operaciones asíncronas.
-   *
    */
   actions: {
     /**

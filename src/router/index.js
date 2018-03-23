@@ -4,7 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Proyectos from '@/components/Proyectos'
 import Procesos from '@/components/Procesos/Procesos.vue'
 import Medicion_detalle from '@/components/Medicion_detalle'
-import Medicion_configuracion from '@/components/Medicion_configuracion'
+import Medicion from '@/components/Medicion'
 import Reporte from '@/components/Reporte'
 import TomaDatos from '@/components/TomaDatos'
 import LogIn from '@/components/LogIn'
@@ -39,9 +39,9 @@ export default new Router({
       component: LogIn
     },
     {
-      path: '/proceso_configuracion/:proyecto_uid/:idproceso',
-      name: 'proceso_configuracion',
-      component: Medicion_configuracion
+      path: '/Medicion/:proyecto_uid/:idproceso',
+      name: 'Medicion',
+      component: Medicion
     },
     {
       path: '/Reporte/:proyecto_uid/:idproceso/:idTomaDatos',

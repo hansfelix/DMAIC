@@ -1,3 +1,5 @@
+// No implementado aun
+// Revisar de ahi
 <template>
   <v-layout>
     <v-flex s12 class="text-xs-center">
@@ -19,7 +21,7 @@
               <v-layout>
                 <v-flex s12 class="text-xs-center">
                   <v-list two-line subheader>
-                    <v-list-tile v-for="(medicion,index) in proceso.mediciones" :key="index" avatar class="procesoItem" :to="'/Medicion_configuracion/' +proyectoActual.id +'/' +proceso.id">
+                    <v-list-tile v-for="(medicion,index) in proceso.mediciones" :key="index" avatar class="procesoItem" :to="'/Medicion/' +proyectoActual.id +'/' +proceso.id">
                       <!-- <v-list-tile-avatar>
                           <v-icon v-bind:class="proceso.dashboard ? 'green lighten-1 white--text':'grey lighten-1 white--text'">{{ proceso.dashboard ? "assessment":"input" }}</v-icon>
                         </v-list-tile-avatar> -->
@@ -55,14 +57,30 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-flex>
+
+
+    <!-- Dialog Crear Medición -->
+    <DialogMedicion :visible="dialog_crearMedicion" :proyecto_uid="this.proyecto_uid" :proceso_uid="this.proceso_uid" v-on:close="dialog_crearMedicion=!dialog_crearMedicion">
+    </DialogMedicion>
+
   </v-layout>
 </template>
 
 <script>
 /**
+ * Import Dependency
+ */
+import { mapGetters } from "vuex";
+import DialogMedicion from "./DialogMedicion.vue";
+
+/**
  * Export
  */
 export default {
+  components: {
+    DialogMedicion
+  },
+
   props: ["procesos"],
 
   /**
@@ -79,37 +97,12 @@ export default {
   /**
    * Methods
    */
-  methods: {
-    crearMedicion() {
-      if (this.$refs.form.validate()) {
-          console.log(this.proyecto_uid, this.proceso_uid);
-          const payload = {
-            proyecto_uid : this.proyecto_uid,
-            proceso_uid : this.proceso_uid,
-            medicion:{
-                nombreMedicion :this.nombreMedicion
-            }
-          }
-          this.$store.dispatch("crear_medicion",payload)
-      }
-    }
-  },
+  methods: {},
 
   /**
    * Computed
    */
-  computed: {
-    show: {
-      get() {
-        return this.visible;
-      },
-      set(value) {
-        if (!value) {
-          this.$emit("close");
-        }
-      }
-    }
-  },
+  computed: {},
 
   /**
    * Mounted

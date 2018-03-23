@@ -77,14 +77,14 @@
     <v-layout row align-center wrap fill-height style="width: 100%;">
       <v-flex xs12 sm8 offset-sm2>
 
-        <!-- progress -->
+        <!-- PROGRESS -->
         <v-layout>
           <v-flex s12 class="text-xs-center">
             <v-progress-linear v-bind:indeterminate="true" v-if="loading_procesos"></v-progress-linear>
           </v-flex>
         </v-layout>
 
-        <!-- Lista de Procesos -->
+        <!-- LISTA DE PROYECTOS -->
         <v-layout>
           <v-flex s12 class="text-xs-center">
             <v-expansion-panel v-if="!loading_procesos">
@@ -105,7 +105,7 @@
                     <v-layout>
                       <v-flex s12 class="text-xs-center">
                         <v-list two-line subheader>
-                          <v-list-tile v-for="(medicion,index) in proceso.mediciones" :key="index" avatar class="procesoItem" :to="'/Medicion_configuracion/' +proyectoActual.id +'/' +proceso.id">
+                          <v-list-tile v-for="(medicion,index) in proceso.mediciones" :key="index" avatar class="procesoItem" :to="'/Medicion/' +proyectoActual.id +'/' +proceso.id">
                             <!-- <v-list-tile-avatar>
                           <v-icon v-bind:class="proceso.dashboard ? 'green lighten-1 white--text':'grey lighten-1 white--text'">{{ proceso.dashboard ? "assessment":"input" }}</v-icon>
                         </v-list-tile-avatar> -->
@@ -149,7 +149,7 @@
           <h2 class="headline">Crea un nuevo proceso</h2>
           <h2 class="subheading">Para comenzar crea un nuevo proceso dando clic en el botón AÑADIR PROCESO.</h2>
         </v-flex>
-        
+
       </v-flex>
     </v-layout>
 

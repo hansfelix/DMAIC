@@ -1,5 +1,7 @@
 import * as firebase from "firebase";
-import {path_medicion} from '../paths.js';
+import {
+  path_medicion_deproceso
+} from '../paths.js';
 export const moduloMediciones = {
   /**
    * == STATE
@@ -8,7 +10,8 @@ export const moduloMediciones = {
   state: {
     mediciones: [],
     medicionActual: {},
-    loading_mediciones: false
+    loading_mediciones: false,    
+    loading_medicionActual: false
   },
 
   /**
@@ -25,6 +28,9 @@ export const moduloMediciones = {
     },
     loading_mediciones(state) {
       return state.loading_mediciones;
+    },
+    loading_medicionActual(state) {
+      return state.loading_medicionActual;
     }
   },
 
@@ -34,14 +40,17 @@ export const moduloMediciones = {
    * Operaciones síncronas.
    */
   mutations: {
-    set_medicionActual(state, payload) {
-      state.medicionActual = payload;
-    },
     set_mediciones(state, payload) {
       state.mediciones = payload;
     },
+    set_medicionActual(state, payload) {
+      state.medicionActual = payload;
+    },
     set_loading_mediciones(state, payload) {
       state.loading_mediciones = payload;
+    },
+    set_loading_medicionActual(state, payload) {
+      state.loading_medicionActual = payload;
     },
     push_mediciones(state, payload) {
       state.mediciones.push(payload);
@@ -53,11 +62,18 @@ export const moduloMediciones = {
    * Operaciones asíncronas.
    */
   actions: {
+    /**
+     * @description Carga la medición seleccionada de FIREBASE 🔥
+     * @param { commit }
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
     cargar_medicion({
       commit
     }, payload) {
 
-      commit("set_loading_mediciones", true);
+      commit("set_loading_medicionActual", true);
       let path = path_medicion(payload);
 
       firebase
@@ -81,8 +97,6 @@ export const moduloMediciones = {
         });
     },
 
-
-
     /**
      * @description Crea un medición en FIREBASE 🔥
      * @param { commit }
@@ -95,7 +109,7 @@ export const moduloMediciones = {
       getters
     }, payload) {
 
-      let path = path_medicion(payload);
+      let path = path_medicion_deproceso(payload);
 
       firebase
         .database()
