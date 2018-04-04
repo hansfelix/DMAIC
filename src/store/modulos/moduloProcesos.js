@@ -51,6 +51,15 @@ export const moduloProcesos = {
     push_procesos(state, payload) {
       state.procesos.push(payload);
     },
+    push_medicion(state, payload) {
+
+      var found = state.procesos.find(function(element) {
+        return element.id == payload.proceso_uid;
+      });
+      
+      if (found.mediciones == undefined) found.mediciones = {}
+      found.mediciones[payload.medicion.id]= payload.medicion;
+    },
     // Especiales
     //======
     set_procesoActualConfigurado(state, payload) {

@@ -1,5 +1,8 @@
 import * as firebase from "firebase";
-import {} from '../paths.js';
+import {
+  path_medicion,
+  path_medicion_deproceso
+} from '../paths.js';
 export const moduloMediciones = {
   /**
    * == STATE
@@ -55,7 +58,8 @@ export const moduloMediciones = {
      */
     push_mediciones(state, payload) {
       state.mediciones.push(payload);
-    }
+    },
+
   },
   /**
    * == ACTIONS
@@ -107,22 +111,47 @@ export const moduloMediciones = {
      */
     crear_medicion({
       commit,
-      getters
+      getters,
+      rootState
     }, payload) {
 
-      let path = path_medicion_deproceso(payload);
+      return new Promise((resolve, reject) => {
 
-      firebase
-        .database()
-        .ref(path)
-        .push(payload.medicion)
-        .then(data => {
-          payload.tomaDatos.id = data.key;
-          commit("push_mediciones", payload.medicion);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        let path = path_medicion_deproceso(payload);
+
+        firebase
+          .database()
+          .ref(path)
+          .push(payload.medicion)
+          .then(data => {
+            payload.medicion.id = data.key;
+            // rootState.mod_procesos.procesos.
+            commit("push_medicion", payload,{ module: "mod_procesos" });
+            commit("push_mediciones", payload.medicion); // Verificar
+
+            //Escribir la medición en otra 
+            let path = path_medicion(payload);
+            firebase
+              .database()
+              .ref(path + "/datos")
+              .set({
+                [data.key]: payload.medicion
+              })
+              .then(data => {
+                console.log("Se escribió por segunda vez corectamente")
+                resolve("Se escribió correctamente la nueva medición")
+              })
+
+
+
+          })
+          .catch(error => {
+            console.log(error);
+            reject(error);
+          });
+
+      })
+
     },
 
     cargar_tomaDatosActual({
@@ -158,6 +187,83 @@ export const moduloMediciones = {
           commit("setLoading", false);
 
           console.log("se cargo medición actual", tomaDatosActual);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      // Reach out to firebase and store it
+    },
+
+
+    cargar_medicion({
+      commit
+    }, payload) {
+      ////////////////
+      console.log("cargando la medición");
+      commit("setLoading", true);
+
+      commit("set_loading_medicionActual", true);
+      let path = path_medicion(payload);
+
+      firebase
+        .database()
+        .ref(path)
+        .once("value")
+        .then(data => {
+          const tomaDatosActual = [];
+          const obj = data.val();
+
+          for (let key in obj) {
+            obj[key].id = key;
+            tomaDatosActual.push(obj[key]);
+          }
+
+          commit("set_medicionActual", tomaDatosActual);
+
+          // commit("setLoadedprocesos", procesos);
+          commit("setLoading", false);
+
+          console.log("se cargo medición actual", tomaDatosActual);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      // Reach out to firebase and store it
+    },
+
+        /**
+     * @description Crea un medición en FIREBASE 🔥
+     * @param { commit }
+     * @returns -
+     * @author Hans Felix
+     * @created 20/02/0218
+     */
+    cargar_medicionActual({
+      commit
+    }, payload) {
+      ////////////////
+      console.log("cargando la medición");
+      commit("setLoading", true);
+
+      commit("set_loading_medicionActual", true);
+      let path = path_medicion(payload);
+
+      firebase
+        .database()
+        .ref(path + "/datos")
+        .once("value")
+        .then(data => {
+          const tomaDatosActual = [];
+          const obj = data.val();
+          obj.id =  data.uid;
+   
+
+          commit("set_medicionActual", obj);
+
+          // commit("setLoadedprocesos", procesos);
+          commit("setLoading", false);
+
+          console.log("se cargo medición actual", obj);
         })
         .catch(error => {
           console.log(error);

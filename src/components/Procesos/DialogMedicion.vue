@@ -55,15 +55,28 @@ export default {
   methods: {
     crearMedicion() {
       if (this.$refs.form.validate()) {
-          console.log(this.proyecto_uid, this.proceso_uid);
-          const payload = {
-            proyecto_uid : this.proyecto_uid,
-            proceso_uid : this.proceso_uid,
-            medicion:{
-                nombreMedicion :this.nombreMedicion
-            }
+        console.log(this.proyecto_uid, this.proceso_uid);
+        const payload = {
+          proyecto_uid: this.proyecto_uid,
+          proceso_uid: this.proceso_uid,
+          medicion: {
+            nombreMedicion: this.nombreMedicion
           }
-          this.$store.dispatch("crear_medicion",payload)
+        };
+
+        let cont = this;
+
+        this.$store.dispatch("crear_medicion", payload).then(
+          response => {
+            console.log(response)
+            cont.$emit("close");
+          },
+          error => {
+            console.error(
+              "Got nothing from server. Prompt user to check internet connection and try again"
+            );
+          }
+        );
       }
     }
   },

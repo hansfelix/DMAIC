@@ -105,7 +105,7 @@
                     <v-layout>
                       <v-flex s12 class="text-xs-center">
                         <v-list two-line subheader>
-                          <v-list-tile v-for="(medicion,index) in proceso.mediciones" :key="index" avatar class="procesoItem" :to="'/Medicion/' +proyectoActual.id +'/' +proceso.id">
+                          <v-list-tile v-for="(medicion,index) in proceso.mediciones" :key="index" avatar class="procesoItem" :to="'/Medicion/' +proyectoActual.id +'/' +proceso.id+'/' +index ">
                             <!-- <v-list-tile-avatar>
                           <v-icon v-bind:class="proceso.dashboard ? 'green lighten-1 white--text':'grey lighten-1 white--text'">{{ proceso.dashboard ? "assessment":"input" }}</v-icon>
                         </v-list-tile-avatar> -->
@@ -116,7 +116,7 @@
 
                             <v-list-tile-action v-if="medicion.nombreMedicion">
                               <v-tooltip top>
-                                <v-btn slot="activator" icon ripple :to="'/Reporte/' +proyectoActual.id +'/' +proceso.id ">
+                                <v-btn slot="activator" icon ripple :to="'/Reporte/' +proyectoActual.id +'/' +proceso.id +'/' +medicion.id ">
                                   <v-icon color="grey lighten-1">insert_drive_file</v-icon>
                                 </v-btn>
                                 <span>Ver Reporte</span>
@@ -125,7 +125,7 @@
 
                             <v-list-tile-action>
                               <v-tooltip top>
-                                <v-btn slot="activator" icon ripple :to="'/proceso_configuracion/' +proyectoActual.id +'/' +proceso.id">
+                                <v-btn slot="activator" icon ripple :to="'/medicion/' +proyectoActual.id +'/' +proceso.id">
                                   <v-icon color="grey lighten-1">settings</v-icon>
                                 </v-btn>
                                 <span>Configuración</span>

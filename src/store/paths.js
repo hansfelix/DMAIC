@@ -21,3 +21,5 @@ export function path_medicion_deproceso(payload) {
 export function path_medicion(payload) {
   return "mediciones/" + payload.proyecto_uid + "/" + payload.proceso_uid
 }
+
+

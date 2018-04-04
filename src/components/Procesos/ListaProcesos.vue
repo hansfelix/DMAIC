@@ -41,7 +41,7 @@
 
                       <v-list-tile-action>
                         <v-tooltip top>
-                          <v-btn slot="activator" icon ripple :to="'/proceso_configuracion/' +proyectoActual.id +'/' +proceso.id">
+                          <v-btn slot="activator" icon ripple :to="'/medicion/' +proyectoActual.id +'/' +proceso.id">
                             <v-icon color="grey lighten-1">settings</v-icon>
                           </v-btn>
                           <span>Configuración</span>

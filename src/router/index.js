@@ -24,6 +24,11 @@ export default new Router({
       component: Proyectos
     },
     {
+      path: '/',
+      name: 'HelloWorld',
+      component: HelloWorld
+    },
+    {
       path: '/Inicio',
       name: 'HelloWorld',
       component: HelloWorld
@@ -39,7 +44,7 @@ export default new Router({
       component: LogIn
     },
     {
-      path: '/Medicion/:proyecto_uid/:idproceso',
+      path: '/Medicion/:proyecto_uid/:idproceso/:medicion_uid',
       name: 'Medicion',
       component: Medicion
     },
@@ -59,7 +64,7 @@ export default new Router({
       component: Configuracion
     },
     {
-      path: '/TomaDatos/:proyecto_uid/:idproceso/:idTomaDatos',
+      path: '/TomaDatos/:proyecto_uid/:idproceso/:medicion_uid',
       name: 'TomaDatos',
       component: TomaDatos
     },

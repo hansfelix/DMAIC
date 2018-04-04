@@ -1,0 +1,35 @@
+[debug] [2018-04-04T15:47:52.737Z] ----------------------------------------------------------------------
+[debug] [2018-04-04T15:47:52.741Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\hfelix\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase deploy
+[debug] [2018-04-04T15:47:52.742Z] CLI Version:   3.17.4
+[debug] [2018-04-04T15:47:52.742Z] Platform:      win32
+[debug] [2018-04-04T15:47:52.742Z] Node Version:  v8.9.1
+[debug] [2018-04-04T15:47:52.743Z] Time:          Wed Apr 04 2018 10:47:52 GMT-0500 (Hora est. Pacífico, Sudamérica)
+[debug] [2018-04-04T15:47:52.744Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-04-04T15:47:52.769Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-04-04T15:47:52.770Z] > authorizing via signed-in user
+[debug] [2018-04-04T15:47:52.775Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-04-04T15:47:52.775Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/f9VmM6CSU1OlhLHny4_u-qm6JywlrSg9EpjGCbjSfWMXIeNEwUvz7m_T-ZPq5DDx',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Wed Apr 04 2018 10:47:52 GMT-0500 (Hora est. Pacífico, Sudamérica)
+[debug] [2018-04-04T15:47:53.455Z] <<< HTTP RESPONSE 200
+[debug] [2018-04-04T15:47:53.482Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/dmaic-b6e44  
+  
+ Wed Apr 04 2018 10:47:53 GMT-0500 (Hora est. Pacífico, Sudamérica)
+[debug] [2018-04-04T15:47:54.663Z] <<< HTTP RESPONSE 200
+[debug] [2018-04-04T15:47:54.664Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/dmaic-b6e44/tokens  
+  
+ Wed Apr 04 2018 10:47:54 GMT-0500 (Hora est. Pacífico, Sudamérica)
+[debug] [2018-04-04T15:47:55.357Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'dmaic-b6e44'...
+[info] 
+[info] i  deploying hosting
+[info] i  hosting: preparing dist directory for upload...
+[debug] [2018-04-04T15:47:58.150Z] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/dmaic-b6e44/uploads/-L9GKzcAwWprEqGj1M6f?fileCount=25&message=  
+  
+ Wed Apr 04 2018 10:47:58 GMT-0500 (Hora est. Pacífico, Sudamérica)
