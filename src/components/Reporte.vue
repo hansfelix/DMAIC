@@ -333,7 +333,7 @@
 <script>
 import NgaPieChart from "../Charts/NgaPieChart";
 import NgaBarChart from "../Charts/NgaBarChart";
-import {} from "../pdf/html2pdf.bundle.min";
+//import {} from "../pdf/html2pdf.bundle.min";
 export default {
   components: {
     NgaPieChart,
