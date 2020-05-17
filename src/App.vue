@@ -1,8 +1,16 @@
 <template>
   <v-app>
     <!-- Navigation Drawer -->
-    <v-navigation-drawer persistent :mini-variant="miniVariant" :clipped="clipped" v-model="drawer" enable-resize-watcher fixed
-      app v-if="this.autenticado">
+    <v-navigation-drawer
+      persistent
+      :mini-variant="miniVariant"
+      :clipped="clipped"
+      v-model="drawer"
+      enable-resize-watcher
+      fixed
+      app
+      v-if="this.autenticado"
+    >
       <v-layout class="text-xs-center background_navigationDrawer" align-end justify-end>
         <v-toolbar flat class="transparent" align-end justify-end>
           <v-list class="pa-0 transparent " align-end justify-end>
@@ -11,9 +19,9 @@
                 <img :src="user.foto" class="avatar_navigationDrawer elevation-3" />
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <h4>{{user.nombre}}</h4>
+                <h4>{{ user.nombre }}</h4>
                 <v-list-tile-title class="navDrawer_email">
-                  <small>{{user.correo}}</small>
+                  <small>{{ user.correo }}</small>
                 </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -46,7 +54,6 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
-
     </v-navigation-drawer>
 
     <!-- ToolBar -->
@@ -62,13 +69,14 @@
     <!-- contenido -->
     <v-content>
       <v-slide-y-transition mode="out-in">
-        <router-view/>
+        <router-view />
       </v-slide-y-transition>
     </v-content>
 
     <!-- FOOTER -->
     <v-footer :fixed="fixed" app>
-      <span>&copy; COSAPI 2018
+      <span
+        >&copy; COSAPI 2018
         <small>- DERECHOS RESERVADOS</small>
       </span>
     </v-footer>

@@ -4,9 +4,6 @@ import App from "./App";
 import router from "./router";
 import * as firebase from "firebase";
 import { store } from "./store/store";
-import NgaPieChart from './Charts/NgaPieChart';
-import NgaBarChart from './Charts/NgaBarChart';
-import VueFrame from 'vue-frame'
 
 Vue.config.productionTip = false;
 
