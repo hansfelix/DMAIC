@@ -37,6 +37,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^4.13.1",
     "prettier": "^1.19.1",
+    "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
