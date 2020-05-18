@@ -1,7 +1,7 @@
 import Vue from "vue";
+import router from './router'
 import './plugins/vuetify'
 import App from "./App";
-import router from "./router";
 import * as firebase from "firebase";
 import { store } from "./store/store";
 
@@ -12,8 +12,10 @@ new Vue({
   el: "#app",
   router,
   store,
+
   components: { App },
   template: "<App/>",
+
   created() {
     firebase.initializeApp({
       apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
